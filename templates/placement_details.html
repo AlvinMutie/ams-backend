@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Placement Details - Student - JKUAT</title>
+  <link rel="stylesheet" href="../dashboard-styles.css">
+  <link rel="stylesheet" href="../shared/theme-styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .placement-form {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    
+    .form-section {
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .form-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+    
+    .section-title {
+      color: #333;
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .form-group label {
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      transition: border-color 0.3s ease;
+      font-family: inherit;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #0057b8;
+    }
+    
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+    
+    .btn-primary {
+      background: #0057b8;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+      font-size: 1rem;
+      margin-right: 15px;
+    }
+    
+    .btn-primary:hover {
+      background: #004494;
+    }
+    
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+      font-size: 1rem;
+    }
+    
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+    
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 15px;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #f0f0f0;
+    }
+    
+    .status-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+    
+    .status-pending {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeaa7;
+    }
+    
+    .status-approved {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .status-rejected {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    
+    .info-box {
+      background: #e9f0fa;
+      border: 1px solid #b3d9ff;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .info-box h4 {
+      color: #0057b8;
+      margin: 0 0 10px 0;
+      font-size: 1rem;
+    }
+    
+    .info-box p {
+      color: #666;
+      margin: 0;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-actions {
+        flex-direction: column;
+      }
+      
+      .btn-primary,
+      .btn-secondary {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Mobile Menu Toggle -->
+  <button class="menu-toggle" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <img src="https://www.jkuat.ac.ke/wp-content/uploads/2020/01/jkuat-logo.png" alt="JKUAT" height="40">
+    </div>
+    <div class="top-bar-center">
+      Jomo Kenyatta University of Agriculture and Technology
+    </div>
+    <div class="top-bar-right">
+      <div class="utility-controls">
+        <!-- Theme Toggle -->
+        
+        
+        <!-- Google Translate will be added here by theme-utils.js -->
+      </div>
+      
+      <div class="notification-bell" onclick="toggleNotifications()">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge">3</span>
+      </div>
+      <div class="user-menu">
+        <span>Hi, Kyalo Mwangi</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Left Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="https://www.jkuat.ac.ke/wp-content/uploads/2020/01/jkuat-logo.png" alt="JKUAT Logo">
+    </div>
+    
+    <div class="sidebar-menu">
+      <a href="dashboard.html" class="menu-item">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="placement_details.html" class="menu-item active">
+        <i class="fas fa-map-marker-alt"></i>
+        <span>Placement Details</span>
+      </a>
+      <a href="logbook.html" class="menu-item">
+        <i class="fas fa-book"></i>
+        <span>Logbook</span>
+      </a>
+      <a href="return_form.html" class="menu-item">
+        <i class="fas fa-file-alt"></i>
+        <span>Return Form</span>
+      </a>
+      <a href="final_report.html" class="menu-item">
+        <i class="fas fa-chart-line"></i>
+        <span>Final Report</span>
+      </a>
+      <a href="../login.html" class="menu-item">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+    
+    <div class="sidebar-footer">
+      ©2025 - Alvin and Dominic
+    </div>
+  </div>
+
+  <!-- Notification Panel -->
+  <div class="notification-panel" id="notificationPanel">
+    <div class="notification-header">
+      <h3>Notifications</h3>
+      <button class="notification-close" onclick="toggleNotifications()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="notification-list">
+      <div class="notification-item unread">
+        <div class="notification-title">Placement Approval</div>
+        <div class="notification-message">Your placement at Microsoft Kenya has been approved by the coordinator.</div>
+        <div class="notification-time">2 hours ago</div>
+      </div>
+      <div class="notification-item unread">
+        <div class="notification-title">Logbook Reminder</div>
+        <div class="notification-message">Your industrial supervisor has requested Week 7 logbook entry.</div>
+        <div class="notification-time">4 hours ago</div>
+      </div>
+      <div class="notification-item">
+        <div class="notification-title">Assessment Due</div>
+        <div class="notification-message">Mid-term assessment form is due in 3 days.</div>
+        <div class="notification-time">1 day ago</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlay for mobile -->
+  <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="page-header">
+      <h1 class="page-title">Industrial Attachment Placement Details</h1>
+      <div class="status-indicator status-pending">
+        <i class="fas fa-clock"></i>
+        Pending Approval
+      </div>
+    </div>
+    
+    <div class="info-box">
+      <h4><i class="fas fa-info-circle"></i> Important Information</h4>
+      <p>Please fill in all the required details about your industrial attachment placement. This information will be reviewed by your coordinator and supervisors. Make sure all details are accurate and up-to-date.</p>
+    </div>
+    
+    <form class="placement-form" onsubmit="submitPlacementDetails(event)">
+      <!-- Personal Information Section -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <i class="fas fa-user"></i>
+          Personal Information
+        </h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="studentName">Full Name</label>
+            <input type="text" id="studentName" value="Sarah Kimani" readonly>
+          </div>
+          <div class="form-group">
+            <label for="studentId">Student ID</label>
+            <input type="text" id="studentId" value="SCS/2021/001" readonly>
+          </div>
+          <div class="form-group">
+            <label for="program">Program</label>
+            <input type="text" id="program" value="Bachelor of Science in Computer Science" readonly>
+          </div>
+          <div class="form-group">
+            <label for="yearOfStudy">Year of Study</label>
+            <input type="text" id="yearOfStudy" value="3rd Year" readonly>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Placement Organization Section -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <i class="fas fa-building"></i>
+          Placement Organization Details
+        </h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="organizationName">Organization Name *</label>
+            <input type="text" id="organizationName" value="Microsoft Kenya" required>
+          </div>
+          <div class="form-group">
+            <label for="organizationType">Organization Type *</label>
+            <select id="organizationType" required>
+              <option value="">Select organization type...</option>
+              <option value="technology" selected>Technology Company</option>
+              <option value="banking">Banking & Finance</option>
+              <option value="telecommunications">Telecommunications</option>
+              <option value="manufacturing">Manufacturing</option>
+              <option value="healthcare">Healthcare</option>
+              <option value="government">Government Agency</option>
+              <option value="ngo">Non-Governmental Organization</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="organizationAddress">Organization Address *</label>
+            <input type="text" id="organizationAddress" value="Westlands, Nairobi" required>
+          </div>
+          <div class="form-group">
+            <label for="organizationPhone">Organization Phone *</label>
+            <input type="tel" id="organizationPhone" value="+254 20 123 4567" required>
+          </div>
+          <div class="form-group">
+            <label for="organizationEmail">Organization Email *</label>
+            <input type="email" id="organizationEmail" value="info@microsoft.co.ke" required>
+          </div>
+          <div class="form-group">
+            <label for="organizationWebsite">Organization Website</label>
+            <input type="url" id="organizationWebsite" value="https://www.microsoft.com/ke">
+          </div>
+        </div>
+      </div>
+      
+      <!-- Assignment Details Section -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <i class="fas fa-briefcase"></i>
+          Assignment Details
+        </h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="department">Department/Division *</label>
+            <input type="text" id="department" value="Software Development" required>
+          </div>
+          <div class="form-group">
+            <label for="position">Position/Title *</label>
+            <input type="text" id="position" value="Software Engineering Intern" required>
+          </div>
+          <div class="form-group">
+            <label for="startDate">Start Date *</label>
+            <input type="date" id="startDate" value="2024-09-01" required>
+          </div>
+          <div class="form-group">
+            <label for="endDate">Expected End Date *</label>
+            <input type="date" id="endDate" value="2024-12-20" required>
+          </div>
+          <div class="form-group">
+            <label for="workingHours">Working Hours *</label>
+            <input type="text" id="workingHours" value="8:00 AM - 5:00 PM" required>
+          </div>
+          <div class="form-group">
+            <label for="stipend">Monthly Stipend (if any)</label>
+            <input type="number" id="stipend" value="25000" min="0" step="1000">
+          </div>
+        </div>
+        <div class="form-group full-width">
+          <label for="jobDescription">Job Description/Responsibilities *</label>
+          <textarea id="jobDescription" required>• Assist in software development projects using C#, .NET, and Azure technologies
+• Participate in code reviews and testing procedures
+• Collaborate with senior developers on real-world projects
+• Learn and apply software development best practices
+• Contribute to documentation and technical specifications</textarea>
+        </div>
+      </div>
+      
+      <!-- Supervisor Information Section -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <i class="fas fa-user-tie"></i>
+          Assigned Supervisor Information
+        </h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="supervisorName">Industrial Supervisor Name *</label>
+            <input type="text" id="supervisorName" value="Dr. John Smith" required>
+          </div>
+          <div class="form-group">
+            <label for="supervisorPosition">Supervisor Position *</label>
+            <input type="text" id="supervisorPosition" value="Senior Software Engineer" required>
+          </div>
+          <div class="form-group">
+            <label for="supervisorPhone">Supervisor Phone *</label>
+            <input type="tel" id="supervisorPhone" value="+254 700 123 456" required>
+          </div>
+          <div class="form-group">
+            <label for="supervisorEmail">Supervisor Email *</label>
+            <input type="email" id="supervisorEmail" value="john.smith@microsoft.co.ke" required>
+          </div>
+          <div class="form-group">
+            <label for="supervisorQualifications">Supervisor Qualifications</label>
+            <input type="text" id="supervisorQualifications" value="PhD in Computer Science, 8+ years experience">
+          </div>
+          <div class="form-group">
+            <label for="supervisorExperience">Years of Experience</label>
+            <input type="number" id="supervisorExperience" value="8" min="0" max="50">
+          </div>
+        </div>
+      </div>
+      
+      <!-- Additional Information Section -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <i class="fas fa-plus-circle"></i>
+          Additional Information
+        </h3>
+        <div class="form-group full-width">
+          <label for="learningObjectives">Learning Objectives *</label>
+          <textarea id="learningObjectives" required>• Gain hands-on experience in enterprise software development
+• Learn modern software development methodologies and tools
+• Understand the software development lifecycle in a corporate environment
+• Develop professional communication and teamwork skills
+• Apply theoretical knowledge to real-world projects</textarea>
+        </div>
+        <div class="form-group full-width">
+          <label for="challenges">Expected Challenges</label>
+          <textarea id="challenges">• Adapting to corporate work culture and processes
+• Learning new technologies and frameworks
+• Balancing academic requirements with work commitments
+• Meeting project deadlines and quality standards</textarea>
+        </div>
+        <div class="form-group full-width">
+          <label for="expectations">Expectations from the Attachment</label>
+          <textarea id="expectations">• Comprehensive understanding of software development practices
+• Professional growth and skill development
+• Networking opportunities in the tech industry
+• Potential for future employment or recommendations</textarea>
+        </div>
+      </div>
+      
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" onclick="saveAsDraft()">
+          <i class="fas fa-save"></i> Save as Draft
+        </button>
+        <button type="submit" class="btn-primary">
+          <i class="fas fa-paper-plane"></i> Submit for Approval
+        </button>
+      </div>
+    </form>
+  </div>
+  
+  <script src="../shared/theme-utils.js"></script>
+  <script>
+    // Additional page-specific functionality can be added here
+    // All theme and language functionality is handled by theme-utils.js
+  </script>
+</body>
+</html> 

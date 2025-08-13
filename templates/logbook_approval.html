@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logbook Approval - University Supervisor</title>
+  <link rel="stylesheet" href="../dashboard-styles.css">
+  <link rel="stylesheet" href="../shared/theme-styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Mobile Menu Toggle -->
+  <button class="menu-toggle" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <img src="https://www.jkuat.ac.ke/wp-content/uploads/2020/01/jkuat-logo.png" alt="JKUAT" height="40">
+    </div>
+    <div class="top-bar-center">
+      Jomo Kenyatta University of Agriculture and Technology
+    </div>
+    <div class="top-bar-right">
+      <div class="utility-controls">
+        <!-- Theme Toggle -->
+        
+        
+        <!-- Google Translate will be added here by theme-utils.js -->
+      </div>
+      
+      <div class="notification-bell" onclick="toggleNotifications()">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge">4</span>
+      </div>
+      <div class="user-menu">
+        <span>Hi, Prof. Kamau</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Left Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="https://www.jkuat.ac.ke/wp-content/uploads/2020/01/jkuat-logo.png" alt="JKUAT Logo">
+    </div>
+    
+    <div class="sidebar-menu">
+      <a href="dashboard.html" class="menu-item">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="logbook_approval.html" class="menu-item active">
+        <i class="fas fa-check-circle"></i>
+        <span>Logbook Approval</span>
+      </a>
+      <a href="assessment_forms.html" class="menu-item">
+        <i class="fas fa-clipboard-list"></i>
+        <span>Assessment Forms</span>
+      </a>
+      <a href="../shared/reporting-system.html" class="menu-item">
+        <i class="fas fa-chart-line"></i>
+        <span>Reports</span>
+      </a>
+      <a href="../login.html" class="menu-item">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+    
+    <div class="sidebar-footer">
+      ©2025 - Alvin and Dominic
+    </div>
+  </div>
+
+  <!-- Overlay for mobile -->
+  <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1 class="page-title">Logbook Approval & Review</h1>
+    
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+      <div class="welcome-text">
+        <h2>Academic Review Dashboard</h2>
+        <p>Review and approve student logbook entries, provide academic feedback, and ensure quality standards.</p>
+      </div>
+      <div class="welcome-illustration">
+        <i class="fas fa-check-circle"></i>
+      </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">12</div>
+        <div class="stat-label">Pending Reviews</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">8</div>
+        <div class="stat-label">Approved Today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">3</div>
+        <div class="stat-label">Returned for Revision</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">85.2%</div>
+        <div class="stat-label">Approval Rate</div>
+      </div>
+    </div>
+
+    <!-- Filter and Search -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Filter & Search</h3>
+        <div class="card-actions">
+          <button class="btn-secondary" onclick="clearFilters()">
+            <i class="fas fa-times"></i>
+            Clear Filters
+          </button>
+        </div>
+      </div>
+      
+      <div class="filter-section">
+        <div class="filter-row">
+          <div class="filter-group">
+            <label for="statusFilter">Status</label>
+            <select id="statusFilter" onchange="applyFilters()">
+              <option value="">All Statuses</option>
+              <option value="pending">Pending Review</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+              <option value="revision">Needs Revision</option>
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label for="programFilter">Program</label>
+            <select id="programFilter" onchange="applyFilters()">
+              <option value="">All Programs</option>
+              <option value="IT">Information Technology</option>
+              <option value="CS">Computer Science</option>
+              <option value="SE">Software Engineering</option>
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label for="weekFilter">Week</label>
+            <select id="weekFilter" onchange="applyFilters()">
+              <option value="">All Weeks</option>
+              <option value="1">Week 1</option>
+              <option value="2">Week 2</option>
+              <option value="3">Week 3</option>
+              <option value="4">Week 4</option>
+              <option value="5">Week 5</option>
+              <option value="6">Week 6</option>
+              <option value="7">Week 7</option>
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label for="searchInput">Search Student</label>
+            <input type="text" id="searchInput" placeholder="Enter student name..." onkeyup="applyFilters()">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logbook Entries -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Logbook Entries for Review</h3>
+        <div class="card-actions">
+          <button class="btn-primary" onclick="bulkApprove()">
+            <i class="fas fa-check-double"></i>
+            Bulk Approve
+          </button>
+          <button class="btn-secondary" onclick="exportData()">
+            <i class="fas fa-download"></i>
+            Export
+          </button>
+        </div>
+      </div>
+      
+      <div class="logbook-entries">
+        <div class="entry-item pending">
+          <div class="entry-header">
+            <div class="student-info">
+              <div class="student-name">Sarah Kimani</div>
+              <div class="student-details">IT - Year 3 | Week 7 | Dec 15, 2024</div>
+            </div>
+            <div class="entry-status">
+              <span class="status-badge pending">Pending Review</span>
+            </div>
+          </div>
+          
+          <div class="entry-content">
+            <div class="entry-section">
+              <h4>Activities Performed</h4>
+              <p>Implemented advanced database optimization techniques including query optimization, index creation, and performance tuning. Conducted comprehensive testing of new security features and documented API endpoints for external integration.</p>
+            </div>
+            
+            <div class="entry-section">
+              <h4>Learning Outcomes</h4>
+              <p>Gained expertise in database performance analysis, security implementation best practices, and API documentation standards. Developed strong problem-solving skills through debugging complex system issues.</p>
+            </div>
+          </div>
+          
+          <div class="entry-actions">
+            <button class="btn-primary" onclick="approveEntry('sarah-7')">
+              <i class="fas fa-check"></i>
+              Approve
+            </button>
+            <button class="btn-secondary" onclick="requestRevision('sarah-7')">
+              <i class="fas fa-edit"></i>
+              Request Revision
+            </button>
+            <button class="btn-secondary" onclick="addComment('sarah-7')">
+              <i class="fas fa-comment"></i>
+              Add Comment
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .filter-section {
+      padding: 20px 0;
+    }
+    
+    .filter-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .filter-group label {
+      font-weight: 600;
+      color: #495057;
+      font-size: 0.9rem;
+    }
+    
+    .filter-group select,
+    .filter-group input {
+      padding: 10px 15px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+    
+    .filter-group select:focus,
+    .filter-group input:focus {
+      outline: none;
+      border-color: #1e4d2b;
+      box-shadow: 0 0 0 3px rgba(30, 77, 43, 0.1);
+    }
+    
+    .logbook-entries {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+    
+    .entry-item {
+      border: 1px solid #e9ecef;
+      border-radius: 12px;
+      padding: 25px;
+      background: white;
+      transition: all 0.3s ease;
+    }
+    
+    .entry-item.pending {
+      border-left: 4px solid #ffc107;
+      background: #fffbf0;
+    }
+    
+    .entry-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .student-info {
+      flex: 1;
+      min-width: 250px;
+    }
+    
+    .student-name {
+      font-weight: 700;
+      color: #1e4d2b;
+      font-size: 1.2rem;
+      margin-bottom: 5px;
+    }
+    
+    .student-details {
+      color: #6c757d;
+      font-size: 0.9rem;
+    }
+    
+    .entry-content {
+      margin-bottom: 25px;
+    }
+    
+    .entry-section {
+      margin-bottom: 20px;
+    }
+    
+    .entry-section h4 {
+      color: #1e4d2b;
+      font-size: 1rem;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    
+    .entry-section p {
+      color: #495057;
+      line-height: 1.6;
+      margin: 0;
+    }
+    
+    .entry-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
+    .entry-actions .btn-primary,
+    .entry-actions .btn-secondary {
+      padding: 10px 16px;
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 768px) {
+      .filter-row {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+      
+      .entry-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .entry-actions {
+        flex-direction: column;
+      }
+      
+      .entry-actions .btn-primary,
+      .entry-actions .btn-secondary {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .entry-item {
+        padding: 20px;
+      }
+      
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+
+  <script src="../shared/theme-utils.js"></script>
+  <script>
+    // Additional page-specific functionality can be added here
+    // All theme and language functionality is handled by theme-utils.js
+  </script>
+</body>
+</html> 

@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Analytics - Industrial Supervisor</title>
+  <link rel="stylesheet" href="../dashboard-styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <img src="https://www.jkuat.ac.ke/wp-content/uploads/2020/01/jkuat-logo.png" alt="JKUAT" height="40">
+    </div>
+    <div class="top-bar-center">
+      Jomo Kenyatta University of Agriculture and Technology
+    </div>
+    <div class="top-bar-right">
+      <div class="notification-bell">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge">3</span>
+      </div>
+      <div class="user-menu">
+        <span>Hi, Dr. Smith</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Left Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <img src="https://www.jkuat.ac.ke/wp-content/uploads/2020/01/jkuat-logo.png" alt="JKUAT Logo">
+    </div>
+    
+    <div class="sidebar-menu">
+      <a href="dashboard.html" class="menu-item">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="confirm_logbook.html" class="menu-item">
+        <i class="fas fa-check-circle"></i>
+        <span>Confirm Logbook</span>
+      </a>
+      <a href="assessment_form.html" class="menu-item">
+        <i class="fas fa-clipboard-list"></i>
+        <span>Assessment Forms</span>
+      </a>
+      <a href="analytics-dashboard.html" class="menu-item active">
+        <i class="fas fa-chart-line"></i>
+        <span>Analytics</span>
+      </a>
+      <a href="../login.html" class="menu-item">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+     
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1 class="page-title">Advanced Analytics Dashboard</h1>
+    
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+      <div class="welcome-text">
+        <h2>Student Performance Analytics</h2>
+        <p>Monitor student progress, analyze performance trends, and generate comprehensive reports with advanced analytics and predictive insights.</p>
+      </div>
+      <div class="welcome-illustration">
+        <i class="fas fa-chart-line"></i>
+      </div>
+    </div>
+
+    <!-- Analytics Overview -->
+    <div class="analytics-overview">
+      <div class="analytics-card">
+        <div class="analytics-header">
+          <h3>Overall Performance</h3>
+          <div class="score-indicator">
+            <span class="score">82.3</span>
+            <span class="score-label">/100</span>
+          </div>
+        </div>
+        <div class="score-breakdown">
+          <div class="score-item">
+            <span class="score-label">Average Score</span>
+            <span class="score-value">82.3%</span>
+          </div>
+          <div class="score-item">
+            <span class="score-label">Top Performer</span>
+            <span class="score-value">91.5%</span>
+          </div>
+          <div class="score-item">
+            <span class="score-label">Lowest Score</span>
+            <span class="score-value">68.2%</span>
+          </div>
+          <div class="score-item">
+            <span class="score-label">Standard Deviation</span>
+            <span class="score-value">±6.8%</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="analytics-card">
+        <div class="analytics-header">
+          <h3>Student Progress</h3>
+          <div class="trend-indicator positive">
+            <i class="fas fa-arrow-up"></i>
+            <span>+8.7%</span>
+          </div>
+        </div>
+        <div class="trend-breakdown">
+          <div class="trend-item">
+            <span class="trend-label">Improving</span>
+            <span class="trend-value positive">3 students</span>
+          </div>
+          <div class="trend-item">
+            <span class="trend-label">Stable</span>
+            <span class="trend-value neutral">2 students</span>
+          </div>
+          <div class="trend-item">
+            <span class="trend-label">Declining</span>
+            <span class="trend-value negative">1 student</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="analytics-card">
+        <div class="analytics-header">
+          <h3>Assessment Status</h3>
+          <div class="insight-icon">
+            <i class="fas fa-clipboard-check"></i>
+          </div>
+        </div>
+        <div class="insights-list">
+          <div class="insight-item">
+            <i class="fas fa-check-circle"></i>
+            <span>Completed: 2/3 students</span>
+          </div>
+          <div class="insight-item">
+            <i class="fas fa-clock"></i>
+            <span>Pending: 1 assessment</span>
+          </div>
+          <div class="insight-item">
+            <i class="fas fa-calendar"></i>
+            <span>Deadline: 18 days</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Analytics Grid -->
+    <div class="dashboard-grid">
+      <!-- Left Column -->
+      <div class="dashboard-left">
+        <!-- Student Performance Comparison Chart -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Student Performance Comparison</h3>
+            <div class="chart-controls">
+              <select id="comparisonMetric" onchange="updateComparisonChart()">
+                <option value="overall">Overall Score</option>
+                <option value="technical">Technical Skills</option>
+                <option value="work_ethics">Work Ethics</option>
+                <option value="learning">Learning Ability</option>
+              </select>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="studentComparisonChart" width="400" height="200"></canvas>
+          </div>
+        </div>
+
+        <!-- Performance Trends Over Time -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Performance Trends Over Time</h3>
+            <div class="chart-controls">
+              <button class="btn-secondary" onclick="exportTrendData()">
+                <i class="fas fa-download"></i>
+                Export Data
+              </button>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="performanceTrendsChart" width="400" height="300"></canvas>
+          </div>
+        </div>
+
+        <!-- Skill Gap Analysis -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Skill Gap Analysis</h3>
+          </div>
+          <div class="skill-gap-analysis">
+            <div class="skill-category">
+              <h4>Technical Skills</h4>
+              <div class="skill-metrics">
+                <div class="skill-metric">
+                  <span class="skill-label">Programming</span>
+                  <div class="skill-bar">
+                    <div class="skill-fill" style="width: 85%"></div>
+                  </div>
+                  <span class="skill-score">85%</span>
+                </div>
+                <div class="skill-metric">
+                  <span class="skill-label">Problem Solving</span>
+                  <div class="skill-bar">
+                    <div class="skill-fill" style="width: 72%"></div>
+                  </div>
+                  <span class="skill-score">72%</span>
+                </div>
+                <div class="skill-metric">
+                  <span class="skill-label">System Design</span>
+                  <div class="skill-bar">
+                    <div class="skill-fill" style="width: 68%"></div>
+                  </div>
+                  <span class="skill-score">68%</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="skill-category">
+              <h4>Soft Skills</h4>
+              <div class="skill-metrics">
+                <div class="skill-metric">
+                  <span class="skill-label">Communication</span>
+                  <div class="skill-bar">
+                    <div class="skill-fill" style="width: 78%"></div>
+                  </div>
+                  <span class="skill-score">78%</span>
+                </div>
+                <div class="skill-metric">
+                  <span class="skill-label">Teamwork</span>
+                  <div class="skill-bar">
+                    <div class="skill-fill" style="width: 82%"></div>
+                  </div>
+                  <span class="skill-score">82%</span>
+                </div>
+                <div class="skill-metric">
+                  <span class="skill-label">Leadership</span>
+                  <div class="skill-bar">
+                    <div class="skill-fill" style="width: 65%"></div>
+                  </div>
+                  <span class="skill-score">65%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="dashboard-right">
+        <!-- Student Rankings -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Student Rankings</h3>
+            <div class="chart-controls">
+              <button class="btn-secondary" onclick="exportRankings()">
+                <i class="fas fa-download"></i>
+                Export
+              </button>
+            </div>
+          </div>
+          <div class="student-rankings">
+            <div class="ranking-item top">
+              <div class="ranking-position">1</div>
+              <div class="student-info">
+                <div class="student-name">Sarah Kimani</div>
+                <div class="student-details">IT - Year 3</div>
+              </div>
+              <div class="student-score">91.5%</div>
+              <div class="score-trend positive">
+                <i class="fas fa-arrow-up"></i>
+                <span>+5.2%</span>
+              </div>
+            </div>
+            
+            <div class="ranking-item">
+              <div class="ranking-position">2</div>
+              <div class="student-info">
+                <div class="student-name">Kyalo Mwangi</div>
+                <div class="student-details">CS - Year 3</div>
+              </div>
+              <div class="student-score">85.7%</div>
+              <div class="score-trend positive">
+                <i class="fas fa-arrow-up"></i>
+                <span>+3.1%</span>
+              </div>
+            </div>
+            
+            <div class="ranking-item">
+              <div class="ranking-position">3</div>
+              <div class="student-info">
+                <div class="student-name">John Otieno</div>
+                <div class="student-details">SE - Year 3</div>
+              </div>
+              <div class="student-score">79.8%</div>
+              <div class="score-trend neutral">
+                <i class="fas fa-minus"></i>
+                <span>0%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Performance Insights -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Performance Insights</h3>
+          </div>
+          <div class="insights-list">
+            <div class="insight-item priority-high">
+              <div class="insight-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+              </div>
+              <div class="insight-content">
+                <h4>John Otieno - Declining Performance</h4>
+                <p>Performance dropped by 8% this week. Consider additional support and mentoring.</p>
+                <div class="insight-actions">
+                  <button class="btn-insight" onclick="scheduleMeeting('john')">Schedule Meeting</button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="insight-item priority-medium">
+              <div class="insight-icon">
+                <i class="fas fa-lightbulb"></i>
+              </div>
+              <div class="insight-content">
+                <h4>Sarah Kimani - Outstanding Progress</h4>
+                <p>Consistently improving performance. Consider advanced assignments and leadership opportunities.</p>
+                <div class="insight-actions">
+                  <button class="btn-insight" onclick="assignAdvancedTask('sarah')">Assign Advanced Task</button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="insight-item priority-low">
+              <div class="insight-icon">
+                <i class="fas fa-thumbs-up"></i>
+              </div>
+              <div class="insight-content">
+                <h4>Overall Team Performance</h4>
+                <p>Team average improved by 8.7%. All students showing positive learning curves.</p>
+                <div class="insight-actions">
+                  <button class="btn-insight" onclick="generateTeamReport()">Generate Report</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Predictive Analytics -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Predictive Analytics</h3>
+          </div>
+          <div class="predictive-insights">
+            <div class="prediction-item">
+              <div class="prediction-icon">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <div class="prediction-content">
+                <h4>Completion Forecast</h4>
+                <p>All students on track to complete attachments successfully by Week 12.</p>
+                <div class="prediction-confidence">
+                  <span>Confidence: 94%</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="prediction-item">
+              <div class="prediction-icon">
+                <i class="fas fa-target"></i>
+              </div>
+              <div class="prediction-content">
+                <h4>Final Score Projection</h4>
+                <p>Expected final average: 86.2% (Above university standards)</p>
+                <div class="prediction-confidence">
+                  <span>Confidence: 89%</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="prediction-item">
+              <div class="prediction-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+              </div>
+              <div class="prediction-content">
+                <h4>Risk Assessment</h4>
+                <p>Low risk of students failing. John Otieno needs monitoring for improvement.</p>
+                <div class="prediction-confidence">
+                  <span>Risk Level: Low</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Analytics Actions -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Quick Analytics Actions</h3>
+          </div>
+          <div class="quick-actions">
+            <button class="quick-action-btn" onclick="generateComprehensiveReport()">
+              <i class="fas fa-file-pdf"></i>
+              Generate Full Report
+            </button>
+            <button class="quick-action-btn" onclick="scheduleTeamReview()">
+              <i class="fas fa-users"></i>
+              Schedule Team Review
+            </button>
+            <button class="quick-action-btn" onclick="exportAllData()">
+              <i class="fas fa-download"></i>
+              Export All Data
+            </button>
+            <button class="quick-action-btn" onclick="setPerformanceTargets()">
+              <i class="fas fa-target"></i>
+              Set Performance Targets
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .analytics-overview {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .analytics-card {
+      background: white;
+      border: 1px solid #e9ecef;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .analytics-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .analytics-header h3 {
+      margin: 0;
+      color: #1e4d2b;
+      font-size: 1.1rem;
+    }
+    
+    .score-indicator {
+      display: flex;
+      align-items: baseline;
+      gap: 5px;
+    }
+    
+    .score {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1e4d2b;
+    }
+    
+    .score-label {
+      font-size: 1rem;
+      color: #6c757d;
+    }
+    
+    .score-breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .score-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #f1f3f4;
+    }
+    
+    .score-item:last-child {
+      border-bottom: none;
+    }
+    
+    .score-label {
+      font-weight: 500;
+      color: #495057;
+    }
+    
+    .score-value {
+      font-weight: 600;
+      color: #1e4d2b;
+    }
+    
+    .trend-indicator {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    
+    .trend-indicator.positive {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .trend-breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .trend-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #f1f3f4;
+    }
+    
+    .trend-item:last-child {
+      border-bottom: none;
+    }
+    
+    .trend-label {
+      font-weight: 500;
+      color: #495057;
+    }
+    
+    .trend-value {
+      font-weight: 600;
+    }
+    
+    .trend-value.positive {
+      color: #28a745;
+    }
+    
+    .trend-value.negative {
+      color: #dc3545;
+    }
+    
+    .trend-value.neutral {
+      color: #6c757d;
+    }
+    
+    .insight-icon {
+      width: 40px;
+      height: 40px;
+      background: #1e4d2b;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+    
+    .insights-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .insight-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #e9ecef;
+    }
+    
+    .insight-item i {
+      color: #6c757d;
+    }
+    
+    .insight-item span {
+      font-size: 0.9rem;
+      color: #495057;
+    }
+    
+    .chart-container {
+      position: relative;
+      height: 300px;
+      margin: 20px 0;
+    }
+    
+    .chart-controls {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .chart-controls select {
+      padding: 6px 12px;
+      border: 1px solid #e9ecef;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+    
+    .skill-gap-analysis {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+    
+    .skill-category h4 {
+      color: #1e4d2b;
+      margin-bottom: 15px;
+      font-size: 1rem;
+      border-bottom: 2px solid #e9ecef;
+      padding-bottom: 8px;
+    }
+    
+    .skill-metrics {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .skill-metric {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .skill-label {
+      min-width: 120px;
+      font-weight: 500;
+      color: #495057;
+      font-size: 0.9rem;
+    }
+    
+    .skill-bar {
+      flex: 1;
+      height: 8px;
+      background: #e9ecef;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .skill-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #1e4d2b, #28a745);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+    
+    .skill-score {
+      min-width: 40px;
+      font-weight: 600;
+      color: #1e4d2b;
+      text-align: right;
+    }
+    
+    .student-rankings {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .ranking-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border: 1px solid #e9ecef;
+      transition: all 0.3s ease;
+    }
+    
+    .ranking-item.top {
+      background: #fff8e1;
+      border-color: #ffc107;
+    }
+    
+    .ranking-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .ranking-position {
+      width: 30px;
+      height: 30px;
+      background: #1e4d2b;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    
+    .ranking-item.top .ranking-position {
+      background: #ffc107;
+      color: #212529;
+    }
+    
+    .student-info {
+      flex: 1;
+    }
+    
+    .student-name {
+      font-weight: 600;
+      color: #1e4d2b;
+      margin-bottom: 2px;
+    }
+    
+    .student-details {
+      font-size: 0.8rem;
+      color: #6c757d;
+    }
+    
+    .student-score {
+      font-weight: 700;
+      color: #1e4d2b;
+      font-size: 1.1rem;
+    }
+    
+    .score-trend {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .score-trend.positive {
+      color: #28a745;
+    }
+    
+    .score-trend.negative {
+      color: #dc3545;
+    }
+    
+    .score-trend.neutral {
+      color: #6c757d;
+    }
+    
+    .insights-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .insight-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #e9ecef;
+    }
+    
+    .insight-item.priority-high {
+      border-left-color: #dc3545;
+      background: #fff5f5;
+    }
+    
+    .insight-item.priority-medium {
+      border-left-color: #ffc107;
+      background: #fffbf0;
+    }
+    
+    .insight-item.priority-low {
+      border-left-color: #28a745;
+      background: #f0fff4;
+    }
+    
+    .insight-icon {
+      width: 40px;
+      height: 40px;
+      background: #1e4d2b;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    
+    .insight-content {
+      flex: 1;
+    }
+    
+    .insight-content h4 {
+      margin: 0 0 8px 0;
+      color: #1e4d2b;
+      font-size: 1rem;
+    }
+    
+    .insight-content p {
+      margin: 0 0 12px 0;
+      color: #6c757d;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+    
+    .insight-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .btn-insight {
+      padding: 6px 12px;
+      background: #1e4d2b;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-insight:hover {
+      background: #2d5a3d;
+      transform: translateY(-1px);
+    }
+    
+    .predictive-insights {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .prediction-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border: 1px solid #e9ecef;
+    }
+    
+    .prediction-icon {
+      width: 40px;
+      height: 40px;
+      background: #1e4d2b;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    
+    .prediction-content {
+      flex: 1;
+    }
+    
+    .prediction-content h4 {
+      margin: 0 0 8px 0;
+      color: #1e4d2b;
+      font-size: 1rem;
+    }
+    
+    .prediction-content p {
+      margin: 0 0 8px 0;
+      color: #6c757d;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+    
+    .prediction-confidence {
+      font-size: 0.8rem;
+      color: #28a745;
+      font-weight: 600;
+    }
+    
+    .quick-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .quick-action-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      color: #1e4d2b;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .quick-action-btn:hover {
+      background: #1e4d2b;
+      color: white;
+      transform: translateY(-1px);
+    }
+    
+    @media (max-width: 768px) {
+      .analytics-overview {
+        grid-template-columns: 1fr;
+      }
+      
+      .skill-metric {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      
+      .ranking-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+      }
+    }
+  </style>
+
+  <script>
+    // Initialize charts when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeStudentComparisonChart();
+      initializePerformanceTrendsChart();
+    });
+    
+    // Student Comparison Chart
+    function initializeStudentComparisonChart() {
+      const ctx = document.getElementById('studentComparisonChart').getContext('2d');
+      
+      const data = {
+        labels: ['Sarah Kimani', 'Kyalo Mwangi', 'John Otieno'],
+        datasets: [{
+          label: 'Overall Score',
+          data: [91.5, 85.7, 79.8],
+          backgroundColor: [
+            'rgba(40, 167, 69, 0.8)',
+            'rgba(30, 77, 43, 0.8)',
+            'rgba(220, 53, 69, 0.8)'
+          ],
+          borderColor: [
+            '#28a745',
+            '#1e4d2b',
+            '#dc3545'
+          ],
+          borderWidth: 2
+        }]
+      };
+      
+      const config = {
+        type: 'bar',
+        data: data,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            },
+            title: {
+              display: true,
+              text: 'Student Performance Comparison'
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              ticks: {
+                callback: function(value) {
+                  return value + '%';
+                }
+              }
+            }
+          }
+        }
+      };
+      
+      new Chart(ctx, config);
+    }
+    
+    // Performance Trends Chart
+    function initializePerformanceTrendsChart() {
+      const ctx = document.getElementById('performanceTrendsChart').getContext('2d');
+      
+      const data = {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+        datasets: [{
+          label: 'Sarah Kimani',
+          data: [75, 78, 82, 86, 89, 91.5],
+          borderColor: '#28a745',
+          backgroundColor: 'rgba(40, 167, 69, 0.1)',
+          borderWidth: 3,
+          fill: false
+        }, {
+          label: 'Kyalo Mwangi',
+          data: [68, 71, 75, 78, 82, 85.7],
+          borderColor: '#1e4d2b',
+          backgroundColor: 'rgba(30, 77, 43, 0.1)',
+          borderWidth: 3,
+          fill: false
+        }, {
+          label: 'John Otieno',
+          data: [72, 70, 73, 76, 78, 79.8],
+          borderColor: '#dc3545',
+          backgroundColor: 'rgba(220, 53, 69, 0.1)',
+          borderWidth: 3,
+          fill: false
+        }]
+      };
+      
+      const config = {
+        type: 'line',
+        data: data,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Performance Trends Over Time'
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              ticks: {
+                callback: function(value) {
+                  return value + '%';
+                }
+              }
+            }
+          }
+        }
+      };
+      
+      new Chart(ctx, config);
+    }
+    
+    // Update comparison chart based on metric selection
+    function updateComparisonChart() {
+      const metric = document.getElementById('comparisonMetric').value;
+      console.log('Updating chart for metric:', metric);
+      // In real implementation, this would update the chart with new data
+    }
+    
+    // Export trend data
+    function exportTrendData() {
+      alert('Exporting performance trend data...\nThis will be available for download shortly.');
+    }
+    
+    // Export rankings
+    function exportRankings() {
+      alert('Exporting student rankings...\nThis will be available for download shortly.');
+    }
+    
+    // Schedule meeting with specific student
+    function scheduleMeeting(student) {
+      alert('Opening meeting scheduler for ' + student + '...\nSchedule a performance review meeting.');
+    }
+    
+    // Assign advanced task to student
+    function assignAdvancedTask(student) {
+      alert('Opening task assignment for ' + student + '...\nAssign advanced or leadership tasks.');
+    }
+    
+    // Generate team report
+    function generateTeamReport() {
+      alert('Generating team performance report...\nThis will be available for download shortly.');
+    }
+    
+    // Generate comprehensive report
+    function generateComprehensiveReport() {
+      alert('Generating comprehensive analytics report...\nThis will be available for download shortly.');
+    }
+    
+    // Schedule team review
+    function scheduleTeamReview() {
+      alert('Opening team review scheduler...\nSchedule a comprehensive team performance review.');
+    }
+    
+    // Export all data
+    function exportAllData() {
+      alert('Exporting all analytics data...\nThis will be available for download shortly.');
+    }
+    
+    // Set performance targets
+    function setPerformanceTargets() {
+      alert('Opening performance target setting...\nSet specific targets for individual students and the team.');
+    }
+  </script>
+</body>
+</html> 

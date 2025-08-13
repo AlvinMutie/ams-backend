@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Approve Supervisors - Coordinator - JKUAT</title>
+  <link rel="stylesheet" href="../dashboard-styles.css">
+  <link rel="stylesheet" href="../shared/theme-styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    
+    .page-title {
+      color: #333;
+      margin: 0;
+      font-size: 2rem;
+    }
+    
+    .header-actions {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+    
+    .stats-summary {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #0057b8;
+      transition: transform 0.2s ease;
+    }
+    
+    .stat-item:hover {
+      transform: translateY(-2px);
+    }
+    
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #0057b8;
+      margin-bottom: 8px;
+    }
+    
+    .stat-label {
+      color: #666;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    
+    .filter-controls {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    
+    .filter-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      align-items: end;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .form-group label {
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+    
+    .form-group select {
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      transition: border-color 0.3s ease;
+      background: white;
+    }
+    
+    .form-group select:focus {
+      outline: none;
+      border-color: #0057b8;
+    }
+    
+    .btn-primary {
+      background: #0057b8;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-primary:hover {
+      background: #004494;
+    }
+    
+    .supervisor-applications {
+      display: grid;
+      gap: 20px;
+    }
+    
+    .application-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      overflow: hidden;
+      border: 2px solid #e0e0e0;
+      transition: all 0.3s ease;
+    }
+    
+    .application-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    }
+    
+    .application-header {
+      background: #f8f9fa;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .applicant-info h3 {
+      margin: 0;
+      font-size: 1.3rem;
+      color: #333;
+      margin-bottom: 5px;
+    }
+    
+    .applicant-info p {
+      margin: 0;
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .application-status {
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .status-pending {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeaa7;
+    }
+    
+    .status-approved {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .status-rejected {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    
+    .application-body {
+      padding: 20px;
+    }
+    
+    .application-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+    
+    .detail-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    
+    .detail-label {
+      font-weight: bold;
+      color: #333;
+      font-size: 0.9rem;
+    }
+    
+    .detail-value {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .qualifications {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 25px;
+    }
+    
+    .qualifications h4 {
+      color: #333;
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+    
+    .qualification-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .qualification-item i {
+      color: #28a745;
+      font-size: 0.8rem;
+    }
+    
+    .rejection-reason {
+      background: #fff5f5;
+      border: 1px solid #fed7d7;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .rejection-reason h5 {
+      color: #721c24;
+      margin: 0 0 10px 0;
+      font-size: 1rem;
+    }
+    
+    .rejection-reason p {
+      color: #721c24;
+      margin: 0;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    
+    .application-actions {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+    
+    .btn-approve {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-approve:hover {
+      background: #218838;
+    }
+    
+    .btn-reject {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-reject:hover {
+      background: #c82333;
+    }
+    
+    .btn-secondary:disabled {
+      background: #e9ecef;
+      color: #6c757d;
+      cursor: not-allowed;
+    }
+    
+    @media (max-width: 768px) {
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .header-actions {
+        width: 100%;
+        justify-content: flex-start;
+      }
+      
+      .filter-row {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+      
+      .application-details {
+        grid-template-columns: 1fr;
+      }
+      
+      .application-actions {
+        flex-direction: column;
+      }
+      
+      .application-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+      
+      .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Mobile Menu Toggle -->
+  <button class="menu-toggle" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <img src="https://www.jkuat.ac.ke/wp-content/uploads/2020/01/jkuat-logo.png" alt="JKUAT" height="40">
+    </div>
+    <div class="top-bar-center">
+      Jomo Kenyatta University of Agriculture and Technology
+    </div>
+    <div class="top-bar-right">
+      <div class="utility-controls">
+        <!-- Theme Toggle -->
+        
+        
+        <!-- Google Translate will be added here by theme-utils.js -->
+      </div>
+      
+      <div class="notification-bell" onclick="toggleNotifications()">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge">4</span>
+      </div>
+      <div class="user-menu">
+        <span>Hi, Dr. Coordinator</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Left Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="https://www.jkuat.ac.ke/wp-content/uploads/2020/01/jkuat-logo.png" alt="JKUAT Logo">
+    </div>
+    
+    <div class="sidebar-menu">
+      <a href="dashboard.html" class="menu-item">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="assign_clusters.html" class="menu-item">
+        <i class="fas fa-users"></i>
+        <span>Assign Clusters</span>
+      </a>
+      <a href="assign_supervisors.html" class="menu-item">
+        <i class="fas fa-user-tie"></i>
+        <span>Assign Supervisors</span>
+      </a>
+      <a href="approve_supervisors.html" class="menu-item active">
+        <i class="fas fa-check-circle"></i>
+        <span>Approve Supervisors</span>
+      </a>
+      <a href="compile_report.html" class="menu-item">
+        <i class="fas fa-chart-bar"></i>
+        <span>Compile Report</span>
+      </a>
+      <a href="communication.html" class="menu-item">
+        <i class="fas fa-comments"></i>
+        <span>Communication</span>
+      </a>
+      <a href="../login.html" class="menu-item">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+  
+  </div>
+
+  <!-- Notification Panel -->
+  <div class="notification-panel" id="notificationPanel">
+    <div class="notification-header">
+      <h3>Notifications</h3>
+      <button class="notification-close" onclick="toggleNotifications()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="notification-list">
+      <div class="notification-item unread">
+        <div class="notification-title">New industrial supervisor registered</div>
+        <div class="notification-message">Dr. Sarah Kimani from Microsoft Kenya has applied for approval</div>
+        <div class="notification-time">2 hours ago</div>
+      </div>
+      <div class="notification-item unread">
+        <div class="notification-title">Cluster assignment completed</div>
+        <div class="notification-message">Zone A cluster assignment completed for 24 students</div>
+        <div class="notification-time">4 hours ago</div>
+      </div>
+      <div class="notification-item unread">
+        <div class="notification-title">Supervisor approval</div>
+        <div class="notification-message">Supervisor approval for Sarah Kimani completed</div>
+        <div class="notification-time">1 day ago</div>
+      </div>
+      <div class="notification-item">
+        <div class="notification-title">Monthly report due</div>
+        <div class="notification-message">Monthly progress report is due in 3 days</div>
+        <div class="notification-time">2 days ago</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlay for mobile -->
+  <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="page-header">
+      <h1 class="page-title">Approve Industrial Supervisors</h1>
+      <div class="header-actions">
+        <button class="btn-primary" onclick="exportApplications()">
+          <i class="fas fa-download"></i> Export List
+        </button>
+        <button class="btn-secondary" onclick="bulkApprove()">
+          <i class="fas fa-check-double"></i> Bulk Approve
+        </button>
+      </div>
+    </div>
+    
+    <!-- Statistics Summary -->
+    <div class="stats-summary">
+      <h3 style="margin-bottom: 20px; color: #333;">Supervisor Applications Overview</h3>
+      <div class="stats-row">
+        <div class="stat-item">
+          <div class="stat-number">12</div>
+          <div class="stat-label">Pending Review</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">8</div>
+          <div class="stat-label">Approved This Month</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">3</div>
+          <div class="stat-label">Rejected This Month</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">85%</div>
+          <div class="stat-label">Approval Rate</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Filter Controls -->
+    <div class="filter-controls">
+      <h3 style="margin-bottom: 20px; color: #333;">Filter Applications</h3>
+      
+      <div class="filter-row">
+        <div class="form-group">
+          <label for="statusFilter">Status</label>
+          <select id="statusFilter" onchange="filterApplications()">
+            <option value="">All Statuses</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="specializationFilter">Specialization</label>
+          <select id="specializationFilter" onchange="filterApplications()">
+            <option value="">All Specializations</option>
+            <option value="computer_science">Computer Science</option>
+            <option value="information_technology">Information Technology</option>
+            <option value="software_engineering">Software Engineering</option>
+            <option value="data_science">Data Science</option>
+            <option value="cybersecurity">Cybersecurity</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="experienceFilter">Experience (Years)</label>
+          <select id="experienceFilter" onchange="filterApplications()">
+            <option value="">All Experience Levels</option>
+            <option value="0-2">0-2 years</option>
+            <option value="3-5">3-5 years</option>
+            <option value="5-10">5-10 years</option>
+            <option value="10+">10+ years</option>
+          </select>
+        </div>
+        
+        <button class="btn-primary" onclick="clearFilters()">
+          <i class="fas fa-times"></i> Clear Filters
+        </button>
+      </div>
+    </div>
+    
+    <!-- Supervisor Applications -->
+    <div class="supervisor-applications" id="applicationsContainer">
+      <!-- Pending Application -->
+      <div class="application-card" data-status="pending" data-specialization="computer_science" data-experience="5-10">
+        <div class="application-header">
+          <div class="applicant-info">
+            <h3>Dr. Sarah Kimani</h3>
+            <p>Senior Software Engineer at Microsoft Kenya</p>
+          </div>
+          <span class="application-status status-pending">Pending Review</span>
+        </div>
+        <div class="application-body">
+          <div class="application-details">
+            <div class="detail-group">
+              <span class="detail-label">Email</span>
+              <span class="detail-value">sarah.kimani@microsoft.com</span>
+            </div>
+            <div class="detail-group">
+              <span class="detail-label">Phone</span>
+              <span class="detail-value">+254 700 123 456</span>
+            </div>
+            <div class="detail-group">
+              <span class="detail-label">Company</span>
+              <span class="detail-value">Microsoft Kenya</span>
+            </div>
+            <div class="detail-group">
+              <span class="detail-label">Position</span>
+              <span class="detail-value">Senior Software Engineer</span>
+            </div>
+            <div class="detail-group">
+              <span class="detail-label">Experience</span>
+              <span class="detail-value">7 years in software development</span>
+            </div>
+            <div class="detail-group">
+              <span class="detail-label">Specialization</span>
+              <span class="detail-value">Computer Science, Software Engineering</span>
+            </div>
+          </div>
+          
+          <div class="qualifications">
+            <h4>Qualifications & Certifications</h4>
+            <div class="qualification-item">
+              <i class="fas fa-check-circle"></i>
+              <span>PhD in Computer Science - University of Nairobi</span>
+            </div>
+            <div class="qualification-item">
+              <i class="fas fa-check-circle"></i>
+              <span>MSc in Software Engineering - JKUAT</span>
+            </div>
+            <div class="qualification-item">
+              <i class="fas fa-check-circle"></i>
+              <span>Microsoft Certified Solutions Developer (MCSD)</span>
+            </div>
+            <div class="qualification-item">
+              <i class="fas fa-check-circle"></i>
+              <span>Previous supervision experience: 3 students</span>
+            </div>
+          </div>
+          
+          <div class="application-actions">
+            <button class="btn-secondary" onclick="viewDetails('sarah-kimani')">
+              <i class="fas fa-eye"></i> View Details
+            </button>
+            <button class="btn-approve" onclick="approveApplication('sarah-kimani')">
+              <i class="fas fa-check"></i> Approve
+            </button>
+            <button class="btn-reject" onclick="rejectApplication('sarah-kimani')">
+              <i class="fas fa-times"></i> Reject
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Approved Application -->
+      <div class="application-card" data-status="approved" data-specialization="information_technology" data-experience="10+">
+        <div class="application-header">
+          <div class="applicant-info">
+            <h3>Eng. John Otieno</h3>
+            <p>Technical Director at Safaricom PLC</p>
+          </div>
+          <span class="application-status status-approved">Approved</span>
+        </div>
+        <div class="application-body">
+          <div class="application-details">
+            <div class="detail-group">
+              <span class="detail-label">Email</span>
+              <span class="detail-value">j.otieno@safaricom.co.ke</span>
+            </div>
+            <div class="detail-group">
+              <span class="detail-label">Phone</span>
+              <span class="detail-value">+254 700 789 012</span>
+            </div>
+            <div class="detail-group">
+              <span class="detail-label">Company</span>
+              <span class="detail-value">Safaricom PLC</span>
+            </div>
+            <div class="detail-group">
+              <span class="detail-label">Position</span>
+              <span class="detail-value">Technical Director</span>
+            </div>
+            <div class="detail-group">
+              <span class="detail-label">Experience</span>
+              <span class="detail-value">15 years in IT leadership</span>
+            </div>
+            <div class="detail-group">
+              <span class="detail-label">Specialization</span>
+              <span class="detail-value">Information Technology, Telecommunications</span>
+            </div>
+          </div>
+          
+          <div class="qualifications">
+            <h4>Qualifications & Certifications</h4>
+            <div class="qualification-item">
+              <i class="fas fa-check-circle"></i>
+              <span>MSc in Information Technology - JKUAT</span>
+            </div>
+            <div class="qualification-item">
+              <i class="fas fa-check-circle"></i>
+              <span>BSc in Computer Science - University of Nairobi</span>
+            </div>
+            <div class="qualification-item">
+              <i class="fas fa-check-circle"></i>
+              <span>Project Management Professional (PMP)</span>
+            </div>
+            <div class="qualification-item">
+              <i class="fas fa-check-circle"></i>
+              <span>Previous supervision experience: 8 students</span>
+            </div>
+          </div>
+          
+          <div class="application-actions">
+            <button class="btn-secondary" onclick="viewDetails('john-otieno')">
+              <i class="fas fa-eye"></i> View Details
+            </button>
+            <button class="btn-secondary" disabled>
+              <i class="fas fa-check"></i> Approved
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Rejected Application -->
+      <div class="application-card" data-status="rejected" data-specialization="cybersecurity" data-experience="0-2">
+        <div class="application-header">
+          <div class="applicant-info">
+            <h3>Mr. David Mwangi</h3>
+            <p>Junior Developer at Startup Tech</p>
+          </div>
+          <span class="application-status status-rejected">Rejected</span>
+        </div>
+        <div class="application-body">
+          <div class="application-details">
+            <div class="detail-group">
+              <span class="detail-label">Email</span>
+              <span class="detail-value">d.mwangi@startuptech.co.ke</span>
+            </div>
+            <div class="detail-group">
+              <span class="detail-label">Phone</span>
+              <span class="detail-value">+254 700 345 678</span>
+            </div>
+            <div class="detail-group">
+              <span class="detail-label">Company</span>
+              <span class="detail-value">Startup Tech</span>
+            </div>
+            <div class="detail-group">
+              <span class="detail-label">Position</span>
+              <span class="detail-value">Junior Developer</span>
+            </div>
+            <div class="detail-group">
+              <span class="detail-label">Experience</span>
+              <span class="detail-value">1.5 years in development</span>
+            </div>
+            <div class="detail-group">
+              <span class="detail-label">Specialization</span>
+              <span class="detail-value">Cybersecurity, Web Development</span>
+            </div>
+          </div>
+          
+          <div class="qualifications">
+            <h4>Qualifications & Certifications</h4>
+            <div class="qualification-item">
+              <i class="fas fa-check-circle"></i>
+              <span>BSc in Computer Science - JKUAT</span>
+            </div>
+            <div class="qualification-item">
+              <i class="fas fa-check-circle"></i>
+              <span>Basic cybersecurity certification</span>
+            </div>
+            <div class="qualification-item">
+              <i class="fas fa-check-circle"></i>
+              <span>No previous supervision experience</span>
+            </div>
+          </div>
+          
+          <div class="rejection-reason">
+            <h5>Rejection Reason</h5>
+            <p>Insufficient professional experience and lack of previous supervision experience. Recommended to reapply after gaining more industry experience.</p>
+          </div>
+          
+          <div class="application-actions">
+            <button class="btn-secondary" onclick="viewDetails('david-mwangi')">
+              <i class="fas fa-eye"></i> View Details
+            </button>
+            <button class="btn-secondary" onclick="reconsiderApplication('david-mwangi')">
+              <i class="fas fa-redo"></i> Reconsider
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="../shared/theme-utils.js"></script>
+  <script>
+    // Additional page-specific functionality can be added here
+    // All theme and language functionality is handled by theme-utils.js
+  </script>
+</body>
+</html> 

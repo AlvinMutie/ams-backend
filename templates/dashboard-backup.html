@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard - AMS</title>
+  <link rel="stylesheet" href="../dashboard-styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <img src="https://www.jkuat.ac.ke/wp-content/uploads/2020/01/jkuat-logo.png" alt="JKUAT" height="40">
+    </div>
+    <div class="top-bar-center">
+      Jomo Kenyatta University of Agriculture and Technology
+    </div>
+    <div class="top-bar-right">
+      <div class="notification-bell">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge">0</span>
+      </div>
+      <div class="user-menu">
+        <span>Hi, Kyalo</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Left Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <img src="https://www.jkuat.ac.ke/wp-content/uploads/2020/01/jkuat-logo.png" alt="JKUAT Logo">
+    </div>
+    
+    <div class="sidebar-menu">
+      <a href="dashboard.html" class="menu-item active">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="return_form.html" class="menu-item">
+        <i class="fas fa-file-alt"></i>
+        <span>Return Form</span>
+      </a>
+      <a href="logbook.html" class="menu-item">
+        <i class="fas fa-book"></i>
+        <span>Logbook</span>
+      </a>
+      <a href="final_report.html" class="menu-item">
+        <i class="fas fa-upload"></i>
+        <span>Final Report</span>
+      </a>
+      <a href="deferral_request.html" class="menu-item">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Deferral Request</span>
+      </a>
+      <a href="download_logbook.html" class="menu-item">
+        <i class="fas fa-download"></i>
+        <span>Download Logbook</span>
+      </a>
+      <a href="../login.html" class="menu-item">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+    
+    <div class="sidebar-footer">
+      ©2025 - Alvin and Dominic
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1 class="page-title">Dashboard</h1>
+    
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+      <div class="welcome-text">
+        <h2>Welcome back, Kyalo</h2>
+        <p>We're delighted to have you. Need help on system walk through? Navigate to virtual assistant on the side menu.</p>
+      </div>
+      <div class="welcome-illustration">
+        <i class="fas fa-headset"></i>
+      </div>
+    </div>
+
+    <!-- Dashboard Grid -->
+    <div class="dashboard-grid">
+      <!-- Left Column -->
+      <div class="dashboard-left">
+        <!-- Current Attachment Status -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Current Attachment Status</h3>
+            <a href="#" class="card-link">View Details</a>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Status</th>
+                  <th>Company</th>
+                  <th>Duration</th>
+                  <th>Progress</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span style="color: #28a745;">✓ Active</span></td>
+                  <td>Tech Solutions Ltd</td>
+                  <td>3 months</td>
+                  <td>75%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Recent Logbook Entries -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Recent Logbook Entries</h3>
+            <a href="logbook.html" class="card-link">View All</a>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Activities</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Aug 12, 2024</td>
+                  <td>Database design and implementation</td>
+                  <td><span style="color: #28a745;">✓ Approved</span></td>
+                </tr>
+                <tr>
+                  <td>Aug 11, 2024</td>
+                  <td>Frontend development with React</td>
+                  <td><span style="color: #ffc107;">⏳ Pending</span></td>
+                </tr>
+                <tr>
+                  <td>Aug 10, 2024</td>
+                  <td>API integration and testing</td>
+                  <td><span style="color: #28a745;">✓ Approved</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Upcoming Deadlines -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Upcoming Deadlines</h3>
+          </div>
+          <div class="deadlines-list">
+            <div class="deadline-item">
+              <div class="deadline-date">Aug 15, 2024</div>
+              <div class="deadline-text">Weekly logbook submission</div>
+            </div>
+            <div class="deadline-item">
+              <div class="deadline-date">Aug 30, 2024</div>
+              <div class="deadline-text">Final report submission</div>
+            </div>
+            <div class="deadline-item">
+              <div class="deadline-date">Sep 5, 2024</div>
+              <div class="deadline-text">Attachment period ends</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="dashboard-right">
+        <!-- Attachment Progress -->
+        <div class="info-card info-card-blue">
+          <div class="info-card-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="info-card-content">
+            <h3>Attachment Progress</h3>
+            <div class="amount">75%</div>
+            <div class="progress-container">
+              <div class="progress-label">Current Session Progress</div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 75%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Supervisor Info -->
+        <div class="info-card info-card-purple">
+          <div class="info-card-icon">
+            <i class="fas fa-user-tie"></i>
+          </div>
+          <div class="info-card-content">
+            <h3>University Supervisor</h3>
+            <div class="program">Dr. Jane Doe</div>
+            <div style="font-size: 0.9rem; color: #6c757d;">jane.doe@itc.jkuat.ac.ke</div>
+          </div>
+        </div>
+
+        <!-- Company Info -->
+        <div class="info-card">
+          <div class="info-card-icon" style="background: #28a745;">
+            <i class="fas fa-building"></i>
+          </div>
+          <div class="info-card-content">
+            <h3>Attachment Company</h3>
+            <div class="program">Tech Solutions Ltd</div>
+            <div style="font-size: 0.9rem; color: #6c757d;">Nairobi, Kenya</div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Quick Actions</h3>
+          </div>
+          <div class="quick-actions">
+            <a href="logbook.html" class="quick-action-btn">
+              <i class="fas fa-plus"></i>
+              Add Logbook Entry
+            </a>
+            <a href="final_report.html" class="quick-action-btn">
+              <i class="fas fa-upload"></i>
+              Upload Report
+            </a>
+            <a href="deferral_request.html" class="quick-action-btn">
+              <i class="fas fa-calendar-alt"></i>
+              Request Deferral
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .deadlines-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .deadline-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #1e4d2b;
+    }
+    
+    .deadline-date {
+      font-weight: 600;
+      color: #1e4d2b;
+    }
+    
+    .deadline-text {
+      color: #495057;
+    }
+    
+    .quick-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .quick-action-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      color: #1e4d2b;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .quick-action-btn:hover {
+      background: #1e4d2b;
+      color: white;
+      transform: translateY(-1px);
+    }
+  </style>
+</body>
+</html> 

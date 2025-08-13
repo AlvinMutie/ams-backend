@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enhanced Dashboard - Student</title>
+  <link rel="stylesheet" href="../dashboard-styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Mobile Menu Toggle -->
+  <button class="menu-toggle" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <img src="https://www.jkuat.ac.ke/wp-content/uploads/2020/01/jkuat-logo.png" alt="JKUAT" height="40">
+    </div>
+    <div class="top-bar-center">
+      Jomo Kenyatta University of Agriculture and Technology
+    </div>
+    <div class="top-bar-right">
+      <div class="notification-bell" onclick="toggleNotifications()">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge">3</span>
+      </div>
+      <div class="user-menu">
+        <span>Hi, Kyalo Mwangi</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Left Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="https://www.jkuat.ac.ke/wp-content/uploads/2020/01/jkuat-logo.png" alt="JKUAT Logo">
+    </div>
+    
+    <div class="sidebar-menu">
+      <a href="dashboard-enhanced.html" class="menu-item active">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="logbook-enhanced.html" class="menu-item">
+        <i class="fas fa-book"></i>
+        <span>Logbook</span>
+      </a>
+      <a href="analytics.html" class="menu-item">
+        <i class="fas fa-chart-line"></i>
+        <span>Analytics</span>
+      </a>
+      <a href="return_form.html" class="menu-item">
+        <i class="fas fa-file-alt"></i>
+        <span>Return Form</span>
+      </a>
+      <a href="final_report.html" class="menu-item">
+        <i class="fas fa-chart-line"></i>
+        <span>Final Report</span>
+      </a>
+      <a href="deferral_request.html" class="menu-item">
+        <i class="fas fa-calendar-times"></i>
+        <span>Deferral Request</span>
+      </a>
+      <a href="download_logbook.html" class="menu-item">
+        <i class="fas fa-download"></i>
+        <span>Download Logbook</span>
+      </a>
+      <a href="../login.html" class="menu-item">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+    
+    <div class="sidebar-footer">
+      ©2025 - Alvin and Dominic
+    </div>
+  </div>
+
+  <!-- Notification Panel -->
+  <div class="notification-panel" id="notificationPanel">
+    <div class="notification-header">
+      <h3>Notifications</h3>
+      <button class="notification-close" onclick="toggleNotifications()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="notification-list">
+      <div class="notification-item unread">
+        <div class="notification-title">Logbook Entry Approved</div>
+        <div class="notification-message">Your Week 5 logbook entry has been approved by your industrial supervisor.</div>
+        <div class="notification-time">2 hours ago</div>
+      </div>
+      <div class="notification-item unread">
+        <div class="notification-title">Assessment Reminder</div>
+        <div class="notification-message">Your mid-term assessment is due in 3 days. Please complete all required forms.</div>
+        <div class="notification-time">1 day ago</div>
+      </div>
+      <div class="notification-item">
+        <div class="notification-title">Return Form Update</div>
+        <div class="notification-message">Your return form has been reviewed. Minor corrections required.</div>
+        <div class="notification-time">3 days ago</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlay for mobile -->
+  <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1 class="page-title">Student Dashboard</h1>
+    
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+      <div class="welcome-text">
+        <h2>Welcome back, Kyalo!</h2>
+        <p>Track your industrial attachment progress, manage your logbook, and stay updated with your performance metrics.</p>
+      </div>
+      <div class="welcome-illustration">
+        <i class="fas fa-graduation-cap"></i>
+      </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">85.7%</div>
+        <div class="stat-label">Overall Performance</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">6</div>
+        <div class="stat-label">Weeks Completed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">18</div>
+        <div class="stat-label">Logbook Entries</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">12</div>
+        <div class="stat-label">Days Remaining</div>
+      </div>
+    </div>
+
+    <!-- Dashboard Grid -->
+    <div class="dashboard-grid">
+      <!-- Left Column -->
+      <div class="dashboard-left">
+        <!-- Current Attachment Status -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Current Attachment Status</h3>
+            <div class="card-actions">
+              <button class="btn-secondary">
+                <i class="fas fa-eye"></i>
+                View Details
+              </button>
+            </div>
+          </div>
+          
+          <div class="progress-container">
+            <div class="progress-label">
+              <span class="progress-text">Attachment Progress</span>
+              <span class="progress-percentage">75%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 75%"></div>
+            </div>
+          </div>
+          
+          <div class="progress-container">
+            <div class="progress-label">
+              <span class="progress-text">Logbook Completion</span>
+              <span class="progress-percentage">85%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 85%"></div>
+            </div>
+          </div>
+          
+          <div class="progress-container">
+            <div class="progress-label">
+              <span class="progress-text">Assessment Score</span>
+              <span class="progress-percentage">88%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 88%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Logbook Entries -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Recent Logbook Entries</h3>
+            <div class="card-actions">
+              <button class="btn-primary">
+                <i class="fas fa-plus"></i>
+                Add Entry
+              </button>
+            </div>
+          </div>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Week</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Week 6</td>
+                  <td>Dec 15, 2024</td>
+                  <td><span class="status-badge pending">Pending</span></td>
+                  <td>
+                    <div class="action-buttons">
+                      <button class="action-btn view">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                      <button class="action-btn edit">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Week 5</td>
+                  <td>Dec 8, 2024</td>
+                  <td><span class="status-badge approved">Approved</span></td>
+                  <td>
+                    <div class="action-buttons">
+                      <button class="action-btn view">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Week 4</td>
+                  <td>Dec 1, 2024</td>
+                  <td><span class="status-badge approved">Approved</span></td>
+                  <td>
+                    <div class="action-buttons">
+                      <button class="action-btn view">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="dashboard-right">
+        <!-- Upcoming Deadlines -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Upcoming Deadlines</h3>
+          </div>
+          
+          <div class="deadline-list">
+            <div class="deadline-item urgent">
+              <div class="deadline-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+              </div>
+              <div class="deadline-content">
+                <div class="deadline-title">Final Report Submission</div>
+                <div class="deadline-date">Dec 20, 2024</div>
+                <div class="deadline-time">3 days remaining</div>
+              </div>
+            </div>
+            
+            <div class="deadline-item">
+              <div class="deadline-icon">
+                <i class="fas fa-calendar"></i>
+              </div>
+              <div class="deadline-content">
+                <div class="deadline-title">Logbook Entry (Week 7)</div>
+                <div class="deadline-date">Dec 22, 2024</div>
+                <div class="deadline-time">5 days remaining</div>
+              </div>
+            </div>
+            
+            <div class="deadline-item">
+              <div class="deadline-icon">
+                <i class="fas fa-calendar"></i>
+              </div>
+              <div class="deadline-content">
+                <div class="deadline-title">Attachment Completion</div>
+                <div class="deadline-date">Dec 27, 2024</div>
+                <div class="deadline-time">10 days remaining</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Quick Actions</h3>
+          </div>
+          
+          <div class="quick-actions">
+            <button class="btn-primary">
+              <i class="fas fa-book"></i>
+              New Logbook Entry
+            </button>
+            <button class="btn-secondary">
+              <i class="fas fa-file-alt"></i>
+              Submit Return Form
+            </button>
+            <button class="btn-secondary">
+              <i class="fas fa-chart-line"></i>
+              View Analytics
+            </button>
+            <button class="btn-secondary">
+              <i class="fas fa-download"></i>
+              Download Logbook
+            </button>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Recent Activity</h3>
+          </div>
+          
+          <div class="activity-list">
+            <div class="activity-item">
+              <div class="activity-icon">
+                <i class="fas fa-check-circle"></i>
+              </div>
+              <div class="activity-content">
+                <div class="activity-title">Logbook Entry Approved</div>
+                <div class="activity-time">2 hours ago</div>
+              </div>
+            </div>
+            
+            <div class="activity-item">
+              <div class="activity-icon">
+                <i class="fas fa-edit"></i>
+              </div>
+              <div class="activity-content">
+                <div class="activity-title">Updated Week 6 Entry</div>
+                <div class="activity-time">1 day ago</div>
+              </div>
+            </div>
+            
+            <div class="activity-item">
+              <div class="activity-icon">
+                <i class="fas fa-upload"></i>
+              </div>
+              <div class="activity-content">
+                <div class="activity-title">Submitted Return Form</div>
+                <div class="activity-time">3 days ago</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .deadline-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .deadline-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border: 1px solid #e9ecef;
+      transition: all 0.3s ease;
+    }
+    
+    .deadline-item.urgent {
+      background: #fff5f5;
+      border-color: #dc3545;
+    }
+    
+    .deadline-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .deadline-icon {
+      width: 40px;
+      height: 40px;
+      background: #1e4d2b;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+    
+    .deadline-item.urgent .deadline-icon {
+      background: #dc3545;
+    }
+    
+    .deadline-content {
+      flex: 1;
+    }
+    
+    .deadline-title {
+      font-weight: 600;
+      color: #1e4d2b;
+      margin-bottom: 5px;
+      font-size: 0.9rem;
+    }
+    
+    .deadline-date {
+      color: #6c757d;
+      font-size: 0.8rem;
+      margin-bottom: 2px;
+    }
+    
+    .deadline-time {
+      color: #adb5bd;
+      font-size: 0.7rem;
+      font-weight: 500;
+    }
+    
+    .quick-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .quick-actions .btn-primary,
+    .quick-actions .btn-secondary {
+      width: 100%;
+      justify-content: center;
+    }
+    
+    .activity-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .activity-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 12px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border: 1px solid #e9ecef;
+    }
+    
+    .activity-icon {
+      width: 35px;
+      height: 35px;
+      background: #1e4d2b;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+    
+    .activity-content {
+      flex: 1;
+    }
+    
+    .activity-title {
+      font-weight: 500;
+      color: #495057;
+      margin-bottom: 3px;
+      font-size: 0.9rem;
+    }
+    
+    .activity-time {
+      color: #adb5bd;
+      font-size: 0.8rem;
+    }
+    
+    @media (max-width: 768px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+      }
+      
+      .stat-card {
+        padding: 15px;
+      }
+      
+      .stat-number {
+        font-size: 1.5rem;
+      }
+      
+      .deadline-item,
+      .activity-item {
+        padding: 12px;
+      }
+      
+      .deadline-icon,
+      .activity-icon {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .page-title {
+        font-size: 1.5rem;
+      }
+      
+      .welcome-text h2 {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+
+  <script>
+    // Mobile sidebar functionality
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      
+      sidebar.classList.toggle('active');
+      overlay.classList.toggle('active');
+    }
+    
+    function closeSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      
+      sidebar.classList.remove('active');
+      overlay.classList.remove('active');
+    }
+    
+    // Notification panel functionality
+    function toggleNotifications() {
+      const panel = document.getElementById('notificationPanel');
+      panel.classList.toggle('active');
+    }
+    
+    // Close sidebar when clicking outside on mobile
+    document.addEventListener('click', function(event) {
+      const sidebar = document.getElementById('sidebar');
+      const menuToggle = document.querySelector('.menu-toggle');
+      
+      if (!sidebar.contains(event.target) && !menuToggle.contains(event.target)) {
+        closeSidebar();
+      }
+    });
+    
+    // Close sidebar on window resize if switching to desktop
+    window.addEventListener('resize', function() {
+      if (window.innerWidth >= 768) {
+        closeSidebar();
+      }
+    });
+    
+    // Auto-close notifications after 5 seconds
+    setTimeout(function() {
+      const panel = document.getElementById('notificationPanel');
+      if (panel.classList.contains('active')) {
+        panel.classList.remove('active');
+      }
+    }, 5000);
+  </script>
+</body>
+</html> 

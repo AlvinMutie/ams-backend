@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Industrial Supervisor</title>
+  <link rel="stylesheet" href="../dashboard-styles.css">
+  <link rel="stylesheet" href="../shared/theme-styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Mobile Menu Toggle -->
+  <button class="menu-toggle" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      Logo Section
+    </div>
+    <div class="top-bar-center">
+      Jomo Kenyatta University of Agriculture and Technology
+    </div>
+    <div class="top-bar-right">
+      <div class="utility-controls">
+        <!-- Google Translate will be added here by theme-utils.js -->
+      </div>
+      
+      <div class="notification-bell" onclick="toggleNotifications()">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge">2</span>
+      </div>
+      <div class="user-menu">
+        <span>Hi, Dr. Smith</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Left Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      Logo Section
+    </div>
+    
+    <div class="sidebar-menu">
+      <a href="dashboard.html" class="menu-item active">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="confirm_logbook.html" class="menu-item">
+        <i class="fas fa-check-circle"></i>
+        <span>Confirm Logbook</span>
+      </a>
+      <a href="assessment_form.html" class="menu-item">
+        <i class="fas fa-clipboard-list"></i>
+        <span>Assessment Forms</span>
+      </a>
+      <a href="communication.html" class="menu-item">
+        <i class="fas fa-comments"></i>
+        <span>Communication</span>
+      </a>
+      <a href="analytics-dashboard.html" class="menu-item">
+        <i class="fas fa-chart-line"></i>
+        <span>Analytics</span>
+      </a>
+      <a href="../login.html" class="menu-item">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Notification Panel -->
+  <div class="notification-panel" id="notificationPanel">
+    <div class="notification-header">
+      <h3>Notifications</h3>
+      <button class="notification-close" onclick="toggleNotifications()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="notification-list">
+      <div class="notification-item unread">
+        <div class="notification-title">New Logbook Entry</div>
+        <div class="notification-message">Sarah Kimani submitted Week 6 logbook entry for review.</div>
+        <div class="notification-time">1 hour ago</div>
+      </div>
+      <div class="notification-item unread">
+        <div class="notification-title">Assessment Due</div>
+        <div class="notification-message">John Otieno's mid-term assessment is due in 2 days.</div>
+        <div class="notification-time">3 hours ago</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlay for mobile -->
+  <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1 class="page-title">Industrial Supervisor Dashboard</h1>
+    
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+      <div class="welcome-text">
+        <h2>Welcome, Dr. Smith!</h2>
+        <p>Monitor student progress, confirm logbook entries, and provide industrial assessments for your assigned students.</p>
+      </div>
+      <div class="welcome-illustration">
+        <img src="https://via.placeholder.com/200x150/0057b8/ffffff?text=Industrial+Portal" alt="Industrial Portal" style="border-radius: 12px;">
+      </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-number">8</div>
+        <div class="stat-label">Assigned Students</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-clock"></i>
+        </div>
+        <div class="stat-number">3</div>
+        <div class="stat-label">Pending Confirmations</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="stat-number">5</div>
+        <div class="stat-label">Confirmed Today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-clipboard-list"></i>
+        </div>
+        <div class="stat-number">2</div>
+        <div class="stat-label">Assessments Due</div>
+      </div>
+    </div>
+
+    <!-- Logbook Notification Section -->
+    <div class="logbook-notification-section">
+      <div class="section-header">
+        <h3><i class="fas fa-bell"></i> Send Logbook Reminders</h3>
+        <p>Notify students to submit their weekly logbook entries</p>
+            </div>
+      
+      <div class="notification-controls">
+        <div class="control-row">
+          <div class="form-group">
+            <label for="studentSelect">Select Student</label>
+            <select id="studentSelect">
+              <option value="">Choose a student...</option>
+              <option value="sarah-kimani">Sarah Kimani - Week 7 Due</option>
+              <option value="john-otieno">John Otieno - Week 6 Due</option>
+              <option value="mike-johnson">Mike Johnson - Week 7 Due</option>
+              <option value="jane-smith">Jane Smith - Week 6 Due</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="weekSelect">Week Number</label>
+            <select id="weekSelect">
+              <option value="">Select week...</option>
+              <option value="6">Week 6</option>
+              <option value="7">Week 7</option>
+              <option value="8">Week 8</option>
+              <option value="9">Week 9</option>
+            </select>
+        </div>
+
+          <div class="form-group">
+            <label for="dueDate">Due Date</label>
+            <input type="date" id="dueDate">
+          </div>
+          
+          <button class="btn-primary" onclick="sendLogbookReminder()">
+            <i class="fas fa-paper-plane"></i> Send Reminder
+                  </button>
+      </div>
+
+        <div class="bulk-notification">
+          <h4>Bulk Notification</h4>
+          <div class="bulk-controls">
+            <button class="btn-secondary" onclick="sendBulkReminder('week7')">
+              <i class="fas fa-bell"></i> Remind All Week 7 Students
+            </button>
+            <button class="btn-secondary" onclick="sendBulkReminder('overdue')">
+              <i class="fas fa-exclamation-triangle"></i> Remind Overdue Students
+            </button>
+          </div>
+        </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+    <div class="recent-activity">
+      <h3 style="margin-bottom: 20px; color: #333;">Recent Activity</h3>
+      
+            <div class="activity-item">
+              <div class="activity-icon">
+          <i class="fas fa-check-circle" style="color: #28a745;"></i>
+              </div>
+              <div class="activity-content">
+          <div class="activity-title">Logbook confirmed for Week 6 - Sarah Kimani</div>
+                <div class="activity-time">2 hours ago</div>
+              </div>
+            </div>
+            
+            <div class="activity-item">
+              <div class="activity-icon">
+          <i class="fas fa-bell" style="color: #ffc107;"></i>
+        </div>
+        <div class="activity-content">
+          <div class="activity-title">Logbook reminder sent to John Otieno</div>
+          <div class="activity-time">4 hours ago</div>
+        </div>
+      </div>
+      
+      <div class="activity-item">
+        <div class="activity-icon">
+          <i class="fas fa-clipboard-check" style="color: #007bff;"></i>
+              </div>
+              <div class="activity-content">
+          <div class="activity-title">Assessment form completed for Mike Johnson</div>
+                <div class="activity-time">1 day ago</div>
+              </div>
+            </div>
+            
+            <div class="activity-item">
+              <div class="activity-icon">
+          <i class="fas fa-user-plus" style="color: #6c757d;"></i>
+              </div>
+              <div class="activity-content">
+          <div class="activity-title">New student assigned - Jane Smith</div>
+          <div class="activity-time">2 days ago</div>
+            </div>
+          </div>
+        </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <div class="action-card">
+        <div class="action-header">
+          <div class="action-icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <h3 class="action-title">Confirm Logbook Entries</h3>
+              </div>
+        <p class="action-description">Review and confirm student logbook entries for industrial validation.</p>
+        <a href="confirm_logbook.html" class="action-button">Review Logbooks</a>
+            </div>
+            
+      <div class="action-card">
+        <div class="action-header">
+          <div class="action-icon">
+            <i class="fas fa-clipboard-list"></i>
+          </div>
+          <h3 class="action-title">Complete Assessment Forms</h3>
+        </div>
+        <p class="action-description">Fill out industrial assessment forms and provide feedback to students.</p>
+        <a href="assessment_form.html" class="action-button">Manage Assessments</a>
+            </div>
+            
+      <div class="action-card">
+        <div class="action-header">
+          <div class="action-icon">
+            <i class="fas fa-chart-line"></i>
+            </div>
+          <h3 class="action-title">View Analytics</h3>
+        </div>
+        <p class="action-description">Access detailed analytics and progress reports for your students.</p>
+        <a href="analytics-dashboard.html" class="action-button">View Analytics</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../shared/theme-utils.js"></script>
+  <script>
+    // Additional page-specific functionality can be added here
+    // All theme and language functionality is handled by theme-utils.js
+  </script>
+</body>
+</html> 

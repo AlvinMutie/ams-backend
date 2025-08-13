@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assessment Form - Industrial Supervisor</title>
+  <link rel="stylesheet" href="../shared/theme-styles.css">
+  <link rel="stylesheet" href="../dashboard-styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <img src="https://www.jkuat.ac.ke/wp-content/uploads/2020/01/jkuat-logo.png" alt="JKUAT" height="40">
+    </div>
+    <div class="top-bar-center">
+      Jomo Kenyatta University of Agriculture and Technology
+    </div>
+    <div class="top-bar-right">
+      <div class="notification-bell">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge">2</span>
+      </div>
+      <div class="user-menu">
+        <span>Hi, Dr. Smith</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Left Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <img src="https://www.jkuat.ac.ke/wp-content/uploads/2020/01/jkuat-logo.png" alt="JKUAT Logo">
+    </div>
+    
+    <div class="sidebar-menu">
+      <a href="dashboard.html" class="menu-item">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="confirm_logbook.html" class="menu-item">
+        <i class="fas fa-check-circle"></i>
+        <span>Confirm Logbook</span>
+      </a>
+      <a href="assessment_form.html" class="menu-item active">
+        <i class="fas fa-clipboard-list"></i>
+        <span>Assessment Forms</span>
+      </a>
+      <a href="../login.html" class="menu-item">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+    
+    <div class="sidebar-footer">
+      ©2025 - Alvin and Dominic
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1 class="page-title">Student Assessment Forms</h1>
+    
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+      <div class="welcome-text">
+        <h2>Student Performance Assessment</h2>
+        <p>Evaluate your assigned students' performance during their industrial attachment. Provide comprehensive feedback on their technical skills, work ethic, and overall development.</p>
+      </div>
+      <div class="welcome-illustration">
+        <i class="fas fa-clipboard-list"></i>
+      </div>
+    </div>
+
+    <!-- Assessment Status -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Assessment Status</h3>
+      </div>
+      <div class="status-info">
+        <div class="status-item">
+          <i class="fas fa-users" style="color: #007bff;"></i>
+          <span>Total Students: 3</span>
+        </div>
+        <div class="status-item">
+          <i class="fas fa-check-circle" style="color: #28a745;"></i>
+          <span>Completed Assessments: 2</span>
+        </div>
+        <div class="status-item">
+          <i class="fas fa-clock" style="color: #ffc107;"></i>
+          <span>Pending Assessments: 1</span>
+        </div>
+        <div class="status-item">
+          <i class="fas fa-calendar" style="color: #dc3545;"></i>
+          <span>Deadline: August 30, 2024</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Assessment Forms -->
+    <div class="dashboard-grid">
+      <!-- Left Column -->
+      <div class="dashboard-left">
+        <!-- Student Assessment Form -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Assessment Form - Kyalo Mwangi</h3>
+            <div class="student-status">
+              <span class="status-badge pending">Pending</span>
+            </div>
+          </div>
+          
+          <form action="submit_assessment.php" method="POST" class="assessment-form">
+            <input type="hidden" name="student_id" value="1">
+            <input type="hidden" name="student_name" value="Kyalo Mwangi">
+            
+            <!-- Student Information -->
+            <div class="student-info-section">
+              <div class="student-avatar">K</div>
+              <div class="student-details">
+                <h4>Kyalo Mwangi</h4>
+                <p>Computer Science - Year 3</p>
+                <p>Attachment Period: May 2024 - August 2024</p>
+                <p>Company: Tech Solutions Ltd</p>
+              </div>
+            </div>
+            
+            <!-- Official Assessment Form -->
+            <div class="assessment-section">
+              <h4>ASSESSMENT FORM FOR EXTERNAL SUPERVISORS</h4>
+              <p class="form-code">Form Code: F-2-58-6-2</p>
+              
+              <div class="assessment-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>QUALITY</th>
+                      <th>MAXIMUM MARKS</th>
+                      <th>MARKS AWARDED</th>
+                      <th>REMARKS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Attendance</td>
+                      <td>5</td>
+                      <td>
+                        <input type="number" name="attendance_marks" min="0" max="5" class="marks-input">
+                      </td>
+                      <td>
+                        <input type="text" name="attendance_remarks" class="remarks-input" placeholder="Enter remarks">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Punctuality</td>
+                      <td>5</td>
+                      <td>
+                        <input type="number" name="punctuality_marks" min="0" max="5" class="marks-input">
+                      </td>
+                      <td>
+                        <input type="text" name="punctuality_remarks" class="remarks-input" placeholder="Enter remarks">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Attitude to work and interest in work</td>
+                      <td>5</td>
+                      <td>
+                        <input type="number" name="attitude_marks" min="0" max="5" class="marks-input">
+                      </td>
+                      <td>
+                        <input type="text" name="attitude_remarks" class="remarks-input" placeholder="Enter remarks">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Skill:</td>
+                      <td>5</td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td class="sub-item">a) Laboratory</td>
+                      <td></td>
+                      <td>
+                        <input type="number" name="lab_skill_marks" min="0" max="5" class="marks-input">
+                      </td>
+                      <td>
+                        <input type="text" name="lab_skill_remarks" class="remarks-input" placeholder="Enter remarks">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="sub-item">b) Plant handling</td>
+                      <td></td>
+                      <td>
+                        <input type="number" name="plant_handling_marks" min="0" max="5" class="marks-input">
+                      </td>
+                      <td>
+                        <input type="text" name="plant_handling_remarks" class="remarks-input" placeholder="Enter remarks">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="sub-item">c) Supervisory work</td>
+                      <td></td>
+                      <td>
+                        <input type="number" name="supervisory_marks" min="0" max="5" class="marks-input">
+                      </td>
+                      <td>
+                        <input type="text" name="supervisory_remarks" class="remarks-input" placeholder="Enter remarks">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Scientific and Technical knowledge</td>
+                      <td>5</td>
+                      <td>
+                        <input type="number" name="technical_knowledge_marks" min="0" max="5" class="marks-input">
+                      </td>
+                      <td>
+                        <input type="text" name="technical_knowledge_remarks" class="remarks-input" placeholder="Enter remarks">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Intelligence/quality of work</td>
+                      <td>5</td>
+                      <td>
+                        <input type="number" name="intelligence_marks" min="0" max="5" class="marks-input">
+                      </td>
+                      <td>
+                        <input type="text" name="intelligence_remarks" class="remarks-input" placeholder="Enter remarks">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Ability to learn and perform tasks</td>
+                      <td>5</td>
+                      <td>
+                        <input type="number" name="learning_ability_marks" min="0" max="5" class="marks-input">
+                      </td>
+                      <td>
+                        <input type="text" name="learning_ability_remarks" class="remarks-input" placeholder="Enter remarks">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Acceptability to learn and interaction with:</td>
+                      <td>5</td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td class="sub-item">a) Colleagues</td>
+                      <td></td>
+                      <td>
+                        <input type="number" name="colleagues_interaction_marks" min="0" max="5" class="marks-input">
+                      </td>
+                      <td>
+                        <input type="text" name="colleagues_interaction_remarks" class="remarks-input" placeholder="Enter remarks">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="sub-item">b) Subordinates</td>
+                      <td></td>
+                      <td>
+                        <input type="number" name="subordinates_interaction_marks" min="0" max="5" class="marks-input">
+                      </td>
+                      <td>
+                        <input type="text" name="subordinates_interaction_remarks" class="remarks-input" placeholder="Enter remarks">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="sub-item">c) Supervisor(s)</td>
+                      <td></td>
+                      <td>
+                        <input type="number" name="supervisor_interaction_marks" min="0" max="5" class="marks-input">
+                      </td>
+                      <td>
+                        <input type="text" name="supervisor_interaction_remarks" class="remarks-input" placeholder="Enter remarks">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Acceptance of responsibility</td>
+                      <td>5</td>
+                      <td>
+                        <input type="number" name="responsibility_marks" min="0" max="5" class="marks-input">
+                      </td>
+                      <td>
+                        <input type="text" name="responsibility_remarks" class="remarks-input" placeholder="Enter remarks">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Judgment in situation/improvision</td>
+                      <td>5</td>
+                      <td>
+                        <input type="number" name="judgment_marks" min="0" max="5" class="marks-input">
+                      </td>
+                      <td>
+                        <input type="text" name="judgment_remarks" class="remarks-input" placeholder="Enter remarks">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Dependability to Environment</td>
+                      <td>5</td>
+                      <td>
+                        <input type="number" name="dependability_marks" min="0" max="5" class="marks-input">
+                      </td>
+                      <td>
+                        <input type="text" name="dependability_remarks" class="remarks-input" placeholder="Enter remarks">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Adaptability to Environment/adjustment</td>
+                      <td>5</td>
+                      <td>
+                        <input type="number" name="adaptability_marks" min="0" max="5" class="marks-input">
+                      </td>
+                      <td>
+                        <input type="text" name="adaptability_remarks" class="remarks-input" placeholder="Enter remarks">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Organization and Planning</td>
+                      <td>5</td>
+                      <td>
+                        <input type="number" name="organization_marks" min="0" max="5" class="marks-input">
+                      </td>
+                      <td>
+                        <input type="text" name="organization_remarks" class="remarks-input" placeholder="Enter remarks">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Effective use of student's time</td>
+                      <td>5</td>
+                      <td>
+                        <input type="number" name="time_management_marks" min="0" max="5" class="marks-input">
+                      </td>
+                      <td>
+                        <input type="text" name="time_management_remarks" class="remarks-input" placeholder="Enter remarks">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Initiative/creativity</td>
+                      <td>5</td>
+                      <td>
+                        <input type="number" name="initiative_marks" min="0" max="5" class="marks-input">
+                      </td>
+                      <td>
+                        <input type="text" name="initiative_remarks" class="remarks-input" placeholder="Enter remarks">
+                      </td>
+                    </tr>
+                    <tr class="total-row">
+                      <td><strong>TOTAL</strong></td>
+                      <td><strong>75</strong></td>
+                      <td>
+                        <input type="number" name="total_marks" min="0" max="75" class="total-marks-input" readonly>
+                      </td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+                  </div>
+                </div>
+                
+            <!-- Supervisor Details -->
+            <div class="assessment-section">
+              <h4>Supervisor Details</h4>
+              <div class="supervisor-details-grid">
+                <div class="detail-item">
+                  <label for="supervisor_name">SUPERVISOR'S NAME *</label>
+                  <input type="text" id="supervisor_name" name="supervisor_name" required>
+                  </div>
+                <div class="detail-item">
+                  <label for="supervisor_signature">SIGNATURE *</label>
+                  <input type="text" id="supervisor_signature" name="supervisor_signature" required placeholder="Type your full name as signature">
+                </div>
+                <div class="detail-item">
+                  <label for="telephone_number">TELEPHONE NUMBER</label>
+                  <input type="tel" id="telephone_number" name="telephone_number">
+                  </div>
+                <div class="detail-item">
+                  <label for="assessment_date">DATE *</label>
+                  <input type="date" id="assessment_date" name="assessment_date" required>
+                </div>
+                <div class="detail-item">
+                  <label for="mobile_number">MOBILE PHONE NUMBER</label>
+                  <input type="tel" id="mobile_number" name="mobile_number">
+                  </div>
+                <div class="detail-item">
+                  <label for="email">EMAIL</label>
+                  <input type="email" id="email" name="email">
+                </div>
+              </div>
+            </div>
+            
+            <!-- Advice to Institution -->
+            <div class="assessment-section">
+              <h4>ADVICE TO INSTITUTION ON AREAS OF IMPROVEMENT</h4>
+              <p class="instruction-text">Please make any suggestions on the areas in which you feel the University should improve its presentation and organization for practical attachment (Use the space provided below or a separate paper)</p>
+              <div class="advice-section">
+                <textarea id="institution_advice" name="institution_advice" rows="6" placeholder="Provide your suggestions and recommendations for the University's improvement in practical attachment organization and presentation"></textarea>
+                  </div>
+                </div>
+                
+            <!-- Additional Comments -->
+            <div class="assessment-section">
+              <h4>Additional Comments</h4>
+              <div class="feedback-grid">
+                <div class="feedback-item">
+                  <label for="student_strengths">Student's Strengths</label>
+                  <textarea id="student_strengths" name="student_strengths" rows="4" placeholder="Describe the student's key strengths and positive attributes"></textarea>
+                </div>
+                
+                <div class="feedback-item">
+                  <label for="areas_improvement">Areas for Improvement</label>
+                  <textarea id="areas_improvement" name="areas_improvement" rows="4" placeholder="Identify areas where the student can improve"></textarea>
+                </div>
+                
+                <div class="feedback-item full-width">
+                  <label for="overall_assessment">Overall Assessment</label>
+                  <textarea id="overall_assessment" name="overall_assessment" rows="4" placeholder="Provide a comprehensive assessment of the student's performance"></textarea>
+                </div>
+                
+                <div class="feedback-item full-width">
+                  <label for="recommendations">Recommendations</label>
+                  <textarea id="recommendations" name="recommendations" rows="4" placeholder="Provide recommendations for the student's future development"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Final Evaluation -->
+            <div class="assessment-section">
+              <h4>Final Evaluation</h4>
+              <div class="evaluation-grid">
+                <div class="evaluation-item">
+                  <label for="overall_rating">Overall Rating *</label>
+                  <select id="overall_rating" name="overall_rating" required>
+                    <option value="">Select Rating</option>
+                    <option value="excellent">Excellent (90-100%)</option>
+                    <option value="very_good">Very Good (80-89%)</option>
+                    <option value="good">Good (70-79%)</option>
+                    <option value="satisfactory">Satisfactory (60-69%)</option>
+                    <option value="needs_improvement">Needs Improvement (Below 60%)</option>
+                  </select>
+                </div>
+                
+                <div class="evaluation-item">
+                  <label for="recommendation_type">Recommendation *</label>
+                  <select id="recommendation_type" name="recommendation_type" required>
+                    <option value="">Select Recommendation</option>
+                    <option value="strongly_recommend">Strongly Recommend</option>
+                    <option value="recommend">Recommend</option>
+                    <option value="recommend_with_reservations">Recommend with Reservations</option>
+                    <option value="do_not_recommend">Do Not Recommend</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Form Actions -->
+            <div class="form-actions">
+              <button type="button" class="btn-secondary" onclick="saveDraft()">
+                <i class="fas fa-save"></i>
+                Save Draft
+              </button>
+              <button type="submit" class="btn-primary">
+                <i class="fas fa-paper-plane"></i>
+                Submit Assessment
+              </button>
+            </div>
+  </form>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="dashboard-right">
+        <!-- Assessment Progress -->
+        <div class="info-card info-card-blue">
+          <div class="info-card-icon">
+            <i class="fas fa-clipboard-check"></i>
+          </div>
+          <div class="info-card-content">
+            <h3>Assessment Progress</h3>
+            <div class="amount">67%</div>
+            <div class="program">2 of 3 completed</div>
+          </div>
+        </div>
+
+        <div class="info-card info-card-purple">
+          <div class="info-card-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="info-card-content">
+            <h3>Pending Assessments</h3>
+            <div class="amount">1</div>
+            <div class="program">Due this week</div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-icon" style="background: #28a745;">
+            <i class="fas fa-calendar-check"></i>
+          </div>
+          <div class="info-card-content">
+            <h3>Deadline</h3>
+            <div class="amount">18 days</div>
+            <div class="program">Until August 30</div>
+          </div>
+        </div>
+
+        <!-- Student List -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Students to Assess</h3>
+          </div>
+          <div class="student-list">
+            <div class="student-item completed">
+              <div class="student-avatar">S</div>
+              <div class="student-info">
+                <div class="student-name">Sarah Kimani</div>
+                <div class="student-status">✓ Completed</div>
+              </div>
+              <button class="btn-view" onclick="viewAssessment('sarah')">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+            
+            <div class="student-item completed">
+              <div class="student-avatar">J</div>
+              <div class="student-info">
+                <div class="student-name">John Otieno</div>
+                <div class="student-status">✓ Completed</div>
+              </div>
+              <button class="btn-view" onclick="viewAssessment('john')">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+            
+            <div class="student-item pending">
+              <div class="student-avatar">K</div>
+              <div class="student-info">
+                <div class="student-name">Kyalo Mwangi</div>
+                <div class="student-status">⏳ Pending</div>
+              </div>
+              <button class="btn-edit" onclick="editAssessment('kyalo')">
+                <i class="fas fa-edit"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Quick Actions</h3>
+          </div>
+          <div class="quick-actions">
+            <button class="quick-action-btn" onclick="exportAssessments()">
+              <i class="fas fa-download"></i>
+              Export All Assessments
+            </button>
+            <button class="quick-action-btn" onclick="generateReport()">
+              <i class="fas fa-chart-bar"></i>
+              Generate Summary Report
+            </button>
+            <button class="quick-action-btn" onclick="sendReminders()">
+              <i class="fas fa-bell"></i>
+              Send Assessment Reminders
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .student-info-section {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      margin-bottom: 30px;
+    }
+    
+    .student-avatar {
+      width: 60px;
+      height: 60px;
+      background: #1e4d2b;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 1.5rem;
+    }
+    
+    .student-details h4 {
+      margin: 0 0 5px 0;
+      color: #1e4d2b;
+      font-size: 1.2rem;
+    }
+    
+    .student-details p {
+      margin: 0 0 3px 0;
+      color: #6c757d;
+      font-size: 0.9rem;
+    }
+    
+    .assessment-section {
+      margin-bottom: 30px;
+      padding: 20px;
+      background: white;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+    }
+    
+    .assessment-section h4 {
+      color: #1e4d2b;
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+      border-bottom: 2px solid #e9ecef;
+      padding-bottom: 10px;
+    }
+    
+    .form-code {
+      color: #6c757d;
+      font-size: 0.9rem;
+      font-style: italic;
+      margin-bottom: 20px;
+      text-align: center;
+      background: #f8f9fa;
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #e9ecef;
+    }
+    
+    .instruction-text {
+      color: #495057;
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+      padding: 10px;
+      background: #e3f2fd;
+      border-left: 4px solid #2196f3;
+      border-radius: 4px;
+    }
+    
+    .assessment-table {
+      overflow-x: auto;
+    }
+
+    .assessment-table table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    .assessment-table th, .assessment-table td {
+      border: 1px solid #dee2e6;
+      padding: 10px;
+      text-align: left;
+    }
+
+    .assessment-table th {
+      background-color: #f8f9fa;
+      font-weight: 600;
+      color: #495057;
+    }
+
+    .assessment-table .sub-item {
+      padding-left: 20px;
+    }
+
+    .assessment-table .total-row {
+      background-color: #f8f9fa;
+      font-weight: 600;
+      color: #1e4d2b;
+    }
+
+    .assessment-table .marks-input,
+    .assessment-table .remarks-input {
+      width: 80px;
+      padding: 8px;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+    
+    .assessment-table .total-marks-input {
+      width: 80px;
+      padding: 8px;
+      border: 2px solid #1e4d2b;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      background: #f8f9fa;
+      color: #1e4d2b;
+    }
+
+    .assessment-table .marks-input:focus,
+    .assessment-table .remarks-input:focus {
+      outline: none;
+      border-color: #1e4d2b;
+      box-shadow: 0 0 0 3px rgba(30, 77, 43, 0.1);
+    }
+
+    .supervisor-details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .detail-item label {
+      font-weight: 600;
+      color: #495057;
+      font-size: 0.9rem;
+      margin-bottom: 5px;
+    }
+
+    .detail-item input[type="text"],
+    .detail-item input[type="date"],
+    .detail-item input[type="tel"],
+    .detail-item input[type="email"] {
+      padding: 10px;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    .detail-item input[type="text"]:focus,
+    .detail-item input[type="date"]:focus,
+    .detail-item input[type="tel"]:focus,
+    .detail-item input[type="email"]:focus {
+      outline: none;
+      border-color: #1e4d2b;
+      box-shadow: 0 0 0 3px rgba(30, 77, 43, 0.1);
+    }
+
+    .advice-section {
+      padding: 15px;
+      border: 1px solid #e9ecef;
+      border-radius: 6px;
+      background: #f8f9fa;
+    }
+
+    .advice-section textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .advice-section textarea:focus {
+      outline: none;
+      border-color: #1e4d2b;
+      box-shadow: 0 0 0 3px rgba(30, 77, 43, 0.1);
+    }
+    
+    .feedback-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    .feedback-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .feedback-item.full-width {
+      grid-column: 1 / -1;
+    }
+    
+    .feedback-item label {
+      font-weight: 600;
+      color: #495057;
+      font-size: 0.9rem;
+    }
+    
+    .feedback-item textarea {
+      padding: 12px;
+      border: 2px solid #e9ecef;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      resize: vertical;
+      min-height: 80px;
+      transition: all 0.3s ease;
+    }
+    
+    .feedback-item textarea:focus {
+      outline: none;
+      border-color: #1e4d2b;
+      box-shadow: 0 0 0 3px rgba(30, 77, 43, 0.1);
+    }
+    
+    .evaluation-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    .evaluation-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .evaluation-item label {
+      font-weight: 600;
+      color: #495057;
+      font-size: 0.9rem;
+    }
+    
+    .evaluation-item select {
+      padding: 12px;
+      border: 2px solid #e9ecef;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+    
+    .evaluation-item select:focus {
+      outline: none;
+      border-color: #1e4d2b;
+      box-shadow: 0 0 0 3px rgba(30, 77, 43, 0.1);
+    }
+    
+    .form-actions {
+      display: flex;
+      gap: 15px;
+      justify-content: flex-end;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #e9ecef;
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+      background: #1e4d2b;
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: #2d5a3d;
+      transform: translateY(-1px);
+    }
+    
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+    
+    .btn-secondary:hover {
+      background: #5a6268;
+      transform: translateY(-1px);
+    }
+    
+    .student-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .student-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #e9ecef;
+    }
+    
+    .student-item.completed {
+      border-left-color: #28a745;
+    }
+    
+    .student-item.pending {
+      border-left-color: #ffc107;
+    }
+    
+    .student-item .student-avatar {
+      width: 40px;
+      height: 40px;
+      font-size: 1.1rem;
+    }
+    
+    .student-item .student-info {
+      flex: 1;
+    }
+    
+    .student-item .student-name {
+      font-weight: 600;
+      color: #1e4d2b;
+      margin-bottom: 2px;
+    }
+    
+    .student-item .student-status {
+      font-size: 0.8rem;
+      color: #6c757d;
+    }
+    
+    .btn-view,
+    .btn-edit {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border: 1px solid #e9ecef;
+      border-radius: 6px;
+      background: white;
+      color: #495057;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-view:hover,
+    .btn-edit:hover {
+      background: #1e4d2b;
+      color: white;
+      border-color: #1e4d2b;
+    }
+    
+    .quick-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .quick-action-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      color: #1e4d2b;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .quick-action-btn:hover {
+      background: #1e4d2b;
+      color: white;
+      transform: translateY(-1px);
+    }
+    
+    @media (max-width: 768px) {
+      .feedback-grid,
+      .evaluation-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .assessment-table table {
+        font-size: 0.8rem;
+      }
+
+      .assessment-table th, .assessment-table td {
+        padding: 8px;
+      }
+
+      .assessment-table .sub-item {
+        padding-left: 15px;
+      }
+
+      .assessment-table .marks-input,
+      .assessment-table .remarks-input {
+        width: 60px;
+        padding: 6px;
+      }
+
+      .supervisor-details-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-item label {
+        margin-bottom: 3px;
+      }
+
+      .detail-item input[type="text"],
+      .detail-item input[type="date"],
+      .detail-item input[type="tel"],
+      .detail-item input[type="email"] {
+        padding: 8px;
+      }
+
+      .advice-section textarea {
+        min-height: 80px;
+      }
+      
+      .rating-item {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+      }
+      
+      .form-actions {
+        flex-direction: column;
+      }
+      
+      .supervisor-details-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .assessment-table {
+        font-size: 0.8rem;
+      }
+      
+      .assessment-table th, 
+      .assessment-table td {
+        padding: 6px;
+      }
+      
+      .assessment-table .marks-input,
+      .assessment-table .remarks-input,
+      .assessment-table .total-marks-input {
+        width: 60px;
+        padding: 4px;
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+
+  <script>
+    function saveDraft() {
+      const formData = new FormData(document.querySelector('form'));
+      const data = {};
+      for (let [key, value] of formData.entries()) {
+        data[key] = value;
+      }
+      localStorage.setItem('assessmentDraft', JSON.stringify(data));
+      alert('Draft saved successfully!');
+    }
+    
+    function viewAssessment(student) {
+      alert('Viewing assessment for ' + student);
+    }
+    
+    function editAssessment(student) {
+      alert('Editing assessment for ' + student);
+    }
+    
+    function exportAssessments() {
+      alert('Exporting all assessments...\nThis will be available for download shortly.');
+    }
+    
+    function generateReport() {
+      alert('Generating assessment summary report...\nThis will be available for download shortly.');
+    }
+    
+    function sendReminders() {
+      if (confirm('Send assessment reminders to students?')) {
+        alert('Reminders sent successfully!');
+      }
+    }
+    
+    // Calculate total marks
+    function calculateTotalMarks() {
+      const markInputs = document.querySelectorAll('.marks-input');
+      let total = 0;
+      
+      markInputs.forEach(input => {
+        const value = parseInt(input.value) || 0;
+        total += value;
+      });
+      
+      document.querySelector('.total-marks-input').value = total;
+    }
+    
+    // Add event listeners to all mark inputs
+    document.addEventListener('DOMContentLoaded', function() {
+      const markInputs = document.querySelectorAll('.marks-input');
+      markInputs.forEach(input => {
+        input.addEventListener('input', calculateTotalMarks);
+      });
+    });
+    
+    // Load draft on page load
+    window.onload = function() {
+      const draft = localStorage.getItem('assessmentDraft');
+      if (draft) {
+        const data = JSON.parse(draft);
+        for (let key in data) {
+          const element = document.querySelector(`[name="${key}"]`);
+          if (element) {
+            if (element.type === 'radio') {
+              const radio = document.querySelector(`[name="${key}"][value="${data[key]}"]`);
+              if (radio) radio.checked = true;
+            } else {
+              element.value = data[key];
+            }
+          }
+        }
+        // Calculate total after loading draft
+        calculateTotalMarks();
+      }
+    };
+  </script>
+</body>
+</html> 

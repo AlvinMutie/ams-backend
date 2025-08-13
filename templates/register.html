@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMS Registration - JKUAT</title>
+  <link rel="stylesheet" href="shared/theme-styles.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="login-styles.css">
+  <link rel="stylesheet" href="register-styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="login-page">
+  <div class="login-container">
+    <!-- Left Section - University Branding -->
+    <div class="login-left">
+      <div class="university-branding">
+        <div class="university-logo">
+          <div class="logo-placeholder">Logo Section</div>
+        </div>
+        <h1 class="university-name">JOMO KENYATTA UNIVERSITY OF AGRICULTURE AND TECHNOLOGY</h1>
+        <div class="university-motto">
+          <h2>TECHNOLOGY FOR DEVELOPMENT</h2>
+        </div>
+        <div class="university-entrance">
+          <div class="entrance-placeholder">
+            <i class="fas fa-university"></i>
+            <p>University Entrance</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Section - Registration Form -->
+    <div class="login-right">
+      <div class="login-form-container register-form-container">
+        <div class="form-header">
+          <div class="form-logo">
+            <div class="logo-placeholder">Logo Section</div>
+          </div>
+          <h2 class="welcome-text">Create Account</h2>
+          <p class="login-subtitle">Join the Attachment Management System</p>
+        </div>
+
+        <form action="register.php" method="POST" id="registerForm" class="login-form">
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" name="name" id="name" placeholder="Enter your full name" required>
+          </div>
+
+          <div class="form-group">
+            <label for="email">University/Work Email</label>
+            <input type="email" name="email" id="email" placeholder="Enter your email address" required>
+            <div class="role-preview">
+              <strong>Role:</strong> <span id="rolePreview">Student</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="password-input-container">
+              <input type="password" name="password" id="password" placeholder="Create a strong password" required>
+              <button type="button" class="password-toggle" onclick="togglePassword()">
+                <i class="fas fa-eye" id="passwordIcon"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group" id="studentLevelRow">
+            <label for="student_level">Student Level</label>
+            <select name="student_level" id="student_level">
+              <option value="">Select your level</option>
+              <option value="diploma">Diploma</option>
+              <option value="degree">Degree</option>
+            </select>
+          </div>
+
+          <div class="form-options">
+            <label class="checkbox-container">
+              <input type="checkbox" name="terms" id="terms" required>
+              <span class="checkmark"></span>
+              I agree to the Terms & Conditions
+            </label>
+          </div>
+
+          <button type="submit" class="signin-btn">
+            <span>Create Account</span>
+          </button>
+        </form>
+
+        <div class="form-footer">
+          <p>Already have an account? <a href="login.html" class="signup-link">Sign In</a></p>
+        </div>
+
+        <div class="role-info">
+          <h4>Registration Guidelines</h4>
+          <ul>
+            <li><strong>Students:</strong> Use your <code>@students.jkuat.ac.ke</code> email</li>
+            <li><strong>University Supervisors:</strong> Use your <code>@itc.jkuat.ac.ke</code> email</li>
+            <li><strong>Industrial Supervisors:</strong> Use your official work email</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="copyright">
+        <p>Copyright © 2025 - Alvin and Dominic</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function getRole(email) {
+      if (/@students\.jkuat\.ac\.ke$/i.test(email)) return 'Student';
+      if (/@itc\.jkuat\.ac\.ke$/i.test(email)) return 'University Supervisor';
+      return 'Industrial Supervisor (Pending Approval)';
+    }
+
+    function handleEmailInput() {
+      const email = document.getElementById('email').value;
+      const studentLevel = document.getElementById('studentLevelRow');
+      const rolePreview = document.getElementById('rolePreview');
+      const role = getRole(email);
+      
+      rolePreview.textContent = role;
+      
+      if (role === 'Student') {
+        studentLevel.style.display = 'flex';
+      } else {
+        studentLevel.style.display = 'none';
+      }
+    }
+
+    function togglePassword() {
+      const passwordInput = document.getElementById('password');
+      const passwordIcon = document.getElementById('passwordIcon');
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        passwordIcon.classList.remove('fa-eye');
+        passwordIcon.classList.add('fa-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        passwordIcon.classList.remove('fa-eye-slash');
+        passwordIcon.classList.add('fa-eye');
+      }
+    }
+
+    window.onload = function() {
+      handleEmailInput();
+      document.getElementById('email').addEventListener('input', handleEmailInput);
+    };
+  </script>
+</body>
+</html> 

@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coordinator Dashboard - JKUAT</title>
+  <link rel="stylesheet" href="../dashboard-styles.css">
+  <link rel="stylesheet" href="../shared/theme-styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    /* Custom styles for coordinator dashboard */
+    
+    /* Notification panel improvements */
+    .notification-panel {
+      background: var(--card-background);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow);
+    }
+    
+    .notification-header {
+      background: var(--primary-color);
+      color: white;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .notification-item {
+      border-bottom: 1px solid var(--border-color);
+      transition: background 0.2s ease;
+    }
+    
+    .notification-item:hover {
+      background: var(--background-color);
+    }
+    
+    .notification-item.unread {
+      background: rgba(30, 77, 43, 0.05);
+      border-left: 4px solid var(--primary-color);
+    }
+    
+    /* Improved layout and alignment */
+    .page-title {
+      color: var(--text-primary);
+      margin-bottom: 30px;
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-align: center;
+    }
+    
+    .welcome-section {
+      flex-direction: column;
+      text-align: center;
+      gap: 20px;
+    }
+    
+    .welcome-text {
+      flex: 1;
+    }
+    
+    .welcome-illustration {
+      width: 120px;
+      height: 120px;
+      background: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      margin: 0 auto;
+    }
+    
+    /* Better stats grid alignment */
+    .stats-grid {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+    }
+    
+    .stat-card {
+      padding: 30px 25px;
+    }
+    
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin: 0 auto 20px;
+    }
+    
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 10px;
+    }
+    
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    
+    /* Improved quick actions */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+    
+    .action-card {
+      background: var(--card-background);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+    
+    .action-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--hover-shadow);
+    }
+    
+    .action-header {
+      margin-bottom: 20px;
+    }
+    
+    .action-icon {
+      width: 70px;
+      height: 70px;
+      background: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      margin: 0 auto 15px;
+    }
+    
+    .action-title {
+      color: var(--text-primary);
+      margin: 0 0 15px 0;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+    
+    .action-description {
+      color: var(--text-secondary);
+      margin: 0 0 25px 0;
+      line-height: 1.6;
+    }
+    
+    .action-button {
+      background: var(--primary-color);
+      color: white;
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: background 0.3s ease;
+      display: inline-block;
+    }
+    
+    .action-button:hover {
+      background: var(--button-hover);
+      color: white;
+    }
+    
+    /* Recent activity improvements */
+    .recent-activity {
+      background: var(--card-background);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: var(--shadow);
+    }
+    
+    .recent-activity h3 {
+      color: var(--text-primary);
+      margin-bottom: 25px;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    
+    .activity-item {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+    
+    .activity-icon {
+      width: 50px;
+      height: 50px;
+      background: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    
+    .activity-content {
+      flex: 1;
+    }
+    
+    .activity-title {
+      color: var(--text-primary);
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    
+    .activity-time {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+    
+    /* Mobile menu toggle improvements */
+    .menu-toggle {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1001;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      box-shadow: var(--shadow);
+    }
+    
+    /* Responsive improvements */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+      
+      .page-title {
+        font-size: 2rem;
+        text-align: center;
+        margin-top: 60px;
+      }
+      
+      .welcome-section {
+        padding: 25px 20px;
+      }
+      
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+      
+      .quick-actions {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      
+      .action-card {
+        padding: 25px 20px;
+      }
+      
+      .recent-activity {
+        padding: 25px 20px;
+      }
+      
+      .activity-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+        text-align: left;
+      }
+      
+      .activity-icon {
+        align-self: flex-start;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .page-title {
+        font-size: 1.8rem;
+        margin-top: 70px;
+      }
+      
+      .welcome-illustration {
+        width: 100px;
+        height: 100px;
+        font-size: 2.5rem;
+      }
+      
+      .action-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+      }
+    }
+    
+    /* Ensure sidebar is properly positioned on mobile */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+      
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      
+      .main-content {
+        margin-left: 0;
+        padding: 20px 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Mobile Menu Toggle -->
+  <button class="menu-toggle" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      Logo Section
+    </div>
+    <div class="top-bar-center">
+      Jomo Kenyatta University of Agriculture and Technology
+    </div>
+    <div class="top-bar-right">
+      <div class="utility-controls">
+        <!-- Google Translate will be added here by theme-utils.js -->
+      </div>
+      
+      <div class="notification-bell" onclick="toggleNotifications()">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge">4</span>
+      </div>
+      <div class="user-menu">
+        <span>Hi, Dr. Coordinator</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Left Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      Logo Section
+    </div>
+    
+    <div class="sidebar-menu">
+      <a href="dashboard.html" class="menu-item active">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="assign_clusters.html" class="menu-item">
+        <i class="fas fa-users"></i>
+        <span>Assign Clusters</span>
+      </a>
+      <a href="assign_supervisors.html" class="menu-item">
+        <i class="fas fa-user-tie"></i>
+        <span>Assign Supervisors</span>
+      </a>
+      <a href="approve_supervisors.html" class="menu-item">
+        <i class="fas fa-check-circle"></i>
+        <span>Approve Supervisors</span>
+      </a>
+      <a href="student_progress.html" class="menu-item">
+        <i class="fas fa-chart-line"></i>
+        <span>Student Progress</span>
+      </a>
+      <a href="assessment_management.html" class="menu-item">
+        <i class="fas fa-clipboard-check"></i>
+        <span>Assessment Management</span>
+      </a>
+      <a href="compile_report.html" class="menu-item">
+        <i class="fas fa-chart-bar"></i>
+        <span>Compile Report</span>
+      </a>
+      <a href="communication.html" class="menu-item">
+        <i class="fas fa-comments"></i>
+        <span>Communication</span>
+      </a>
+      <a href="../login.html" class="menu-item">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+    
+    <div class="sidebar-footer">
+      ©2025 - Alvin and Dominic
+    </div>
+  </div>
+
+  <!-- Notification Panel -->
+  <div class="notification-panel" id="notificationPanel">
+    <div class="notification-header">
+      <h3>Notifications</h3>
+      <button class="notification-close" onclick="toggleNotifications()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="notification-list">
+      <div class="notification-item unread">
+        <div class="notification-title">New industrial supervisor registered</div>
+        <div class="notification-message">Dr. Sarah Kimani from Microsoft Kenya has applied for approval</div>
+        <div class="notification-time">2 hours ago</div>
+      </div>
+      <div class="notification-item unread">
+        <div class="notification-title">Cluster assignment completed</div>
+        <div class="notification-message">Zone A cluster assignment completed for 24 students</div>
+        <div class="notification-time">4 hours ago</div>
+      </div>
+      <div class="notification-item unread">
+        <div class="notification-title">Supervisor approval</div>
+        <div class="notification-message">Supervisor approval for Sarah Kimani completed</div>
+        <div class="notification-time">1 day ago</div>
+      </div>
+      <div class="notification-item">
+        <div class="notification-title">Monthly report due</div>
+        <div class="notification-message">Monthly progress report is due in 3 days</div>
+        <div class="notification-time">2 days ago</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlay for mobile -->
+  <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1 class="page-title">Attachment Coordinator Dashboard</h1>
+    
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+      <div class="welcome-text">
+        <h2>Welcome to the Coordinator Portal</h2>
+        <p>Manage student clusters, assign supervisors, and monitor the overall progress of industrial attachments across all departments.</p>
+      </div>
+      <div class="welcome-illustration">
+        <i class="fas fa-user-tie"></i>
+      </div>
+    </div>
+    
+    <!-- Statistics Overview -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-number">156</div>
+        <div class="stat-label">Total Students</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-clock"></i>
+        </div>
+        <div class="stat-number">12</div>
+        <div class="stat-label">Pending Approvals</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-map-marker-alt"></i>
+        </div>
+        <div class="stat-number">8</div>
+        <div class="stat-label">Active Clusters</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="stat-number">89%</div>
+        <div class="stat-label">Completion Rate</div>
+      </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <div class="action-card">
+        <div class="action-header">
+          <div class="action-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <h3 class="action-title">Assign Students to Clusters</h3>
+        </div>
+        <p class="action-description">Organize students into geographical clusters for efficient supervision and coordination.</p>
+        <a href="assign_clusters.html" class="action-button">Manage Clusters</a>
+      </div>
+      
+      <div class="action-card">
+        <div class="action-header">
+          <div class="action-icon">
+            <i class="fas fa-user-tie"></i>
+          </div>
+          <h3 class="action-title">Assign Supervisors</h3>
+        </div>
+        <p class="action-description">Assign university and industrial supervisors to students based on their clusters and specializations.</p>
+        <a href="assign_supervisors.html" class="action-button">Assign Supervisors</a>
+      </div>
+      
+      <div class="action-card">
+        <div class="action-header">
+          <div class="action-icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <h3 class="action-title">Approve Supervisors</h3>
+        </div>
+        <p class="action-description">Review and approve pending industrial supervisor registrations and qualifications.</p>
+        <a href="approve_supervisors.html" class="action-button">Review Applications</a>
+      </div>
+      
+      <div class="action-card">
+        <div class="action-header">
+          <div class="action-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h3 class="action-title">Track Student Progress</h3>
+        </div>
+        <p class="action-description">Monitor individual student progress, identify at-risk students, and track performance across all clusters.</p>
+        <a href="student_progress.html" class="action-button">View Progress</a>
+      </div>
+      
+      <div class="action-card">
+        <div class="action-header">
+          <div class="action-icon">
+            <i class="fas fa-clipboard-check"></i>
+          </div>
+          <h3 class="action-title">Manage Assessments</h3>
+        </div>
+        <p class="action-description">Track assessment progress, manage deadlines, and ensure timely completion of student evaluations.</p>
+        <a href="assessment_management.html" class="action-button">Manage Assessments</a>
+      </div>
+      
+      <div class="action-card">
+        <div class="action-header">
+          <div class="action-icon">
+            <i class="fas fa-chart-bar"></i>
+          </div>
+          <h3 class="action-title">Generate Reports</h3>
+        </div>
+        <p class="action-description">Compile comprehensive reports on student progress, supervisor performance, and departmental statistics.</p>
+        <a href="compile_report.html" class="action-button">Generate Report</a>
+      </div>
+    </div>
+    
+    <!-- Recent Activity -->
+    <div class="recent-activity">
+      <h3>Recent Activity</h3>
+      
+      <div class="activity-item">
+        <div class="activity-icon">
+          <i class="fas fa-user-plus"></i>
+        </div>
+        <div class="activity-content">
+          <div class="activity-title">New industrial supervisor registered</div>
+          <div class="activity-time">2 hours ago</div>
+        </div>
+      </div>
+      
+      <div class="activity-item">
+        <div class="activity-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="activity-content">
+          <div class="activity-title">Cluster assignment completed for Zone A</div>
+          <div class="activity-time">4 hours ago</div>
+        </div>
+      </div>
+      
+      <div class="activity-item">
+        <div class="activity-icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="activity-content">
+          <div class="activity-title">Supervisor approval for Sarah Kimani</div>
+          <div class="activity-time">1 day ago</div>
+        </div>
+      </div>
+      
+      <div class="activity-item">
+        <div class="activity-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="activity-content">
+          <div class="activity-title">Monthly progress report generated</div>
+          <div class="activity-time">2 days ago</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../shared/theme-utils.js"></script>
+  <script>
+    // Additional page-specific functionality can be added here
+    // All theme and language functionality is handled by theme-utils.js
+  </script>
+</body>
+</html> 

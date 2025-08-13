@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - University Supervisor - JKUAT</title>
+  <link rel="stylesheet" href="../dashboard-styles.css">
+  <link rel="stylesheet" href="../shared/theme-styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    /* Light/Dark Mode Variables */
+    :root {
+      --primary-color: #0057b8;
+      --secondary-color: #6c757d;
+      --background-color: #f8f9fa;
+      --card-background: #ffffff;
+      --text-primary: #333333;
+      --text-secondary: #666666;
+      --border-color: #e0e0e0;
+      --shadow: 0 4px 6px rgba(0,0,0,0.1);
+      --hover-shadow: 0 8px 15px rgba(0,0,0,0.1);
+      --success-color: #28a745;
+      --warning-color: #ffc107;
+      --danger-color: #dc3545;
+      --info-color: #007bff;
+    }
+
+
+
+    body {
+      background-color: var(--background-color);
+      color: var(--text-primary);
+      transition: all 0.3s ease;
+    }
+
+    .main-content {
+      background-color: var(--background-color);
+    }
+
+    .welcome-section,
+    .stats-grid,
+    .recent-activity,
+    .quick-actions {
+      background-color: var(--card-background);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow);
+    }
+
+    .stat-card {
+      background-color: var(--card-background);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+    }
+
+    .action-card {
+      background-color: var(--card-background);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+    }
+
+    .activity-item {
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+
+
+
+    /* Language Selector */
+    .language-selector {
+      background: var(--card-background);
+      border: 1px solid var(--border-color);
+      padding: 8px 12px;
+      border-radius: 6px;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .language-selector:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    /* Enhanced Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      padding: 24px;
+      border-radius: 12px;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--primary-color);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--hover-shadow);
+    }
+
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin: 0 auto 15px;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover .stat-icon {
+      transform: scale(1.1);
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    /* Enhanced Quick Actions */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .action-card {
+      padding: 24px;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .action-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--info-color));
+    }
+
+    .action-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--hover-shadow);
+    }
+
+    .action-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .action-icon {
+      width: 50px;
+      height: 50px;
+      background: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+    }
+
+    .action-card:hover .action-icon {
+      transform: scale(1.1);
+    }
+
+    .action-title {
+      color: var(--text-primary);
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    .action-description {
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .action-button {
+      background: var(--primary-color);
+      color: white;
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+
+    .action-button:hover {
+      background: var(--primary-color);
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    /* Enhanced Recent Activity */
+    .recent-activity {
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+    }
+
+    .activity-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px 0;
+      transition: all 0.3s ease;
+    }
+
+    .activity-item:hover {
+      background-color: var(--background-color);
+      border-radius: 8px;
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+
+    .activity-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    .activity-content {
+      flex: 1;
+    }
+
+    .activity-title {
+      color: var(--text-primary);
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+
+    .activity-time {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+    }
+
+    /* Top Bar Enhancements */
+    .top-bar-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .utility-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .quick-actions {
+        grid-template-columns: 1fr;
+      }
+      
+      .utility-controls {
+        flex-direction: column;
+        gap: 5px;
+      }
+      
+      .language-selector {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Mobile Menu Toggle -->
+  <button class="menu-toggle" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      Logo Section
+    </div>
+    <div class="top-bar-center">
+      Jomo Kenyatta University of Agriculture and Technology
+    </div>
+    <div class="top-bar-right">
+      <div class="utility-controls">
+        <!-- Google Translate will be added here by theme-utils.js -->
+      </div>
+      
+      <div class="notification-bell" onclick="toggleNotifications()">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge">4</span>
+      </div>
+      <div class="user-menu">
+        <span>Hi, Prof. Kamau</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Left Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      Logo Section
+    </div>
+    
+    <div class="sidebar-menu">
+      <a href="dashboard.html" class="menu-item active">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="logbook_approval.html" class="menu-item">
+        <i class="fas fa-check-circle"></i>
+        <span>Logbook Approval</span>
+      </a>
+      <a href="assessment_forms.html" class="menu-item">
+        <i class="fas fa-clipboard-list"></i>
+        <span>Assessment Forms</span>
+      </a>
+      <a href="communication.html" class="menu-item">
+        <i class="fas fa-comments"></i>
+        <span>Communication</span>
+      </a>
+      <a href="../shared/reporting-system.html" class="menu-item">
+        <i class="fas fa-chart-line"></i>
+        <span>Reports</span>
+      </a>
+      <a href="../login.html" class="menu-item">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+    
+    <div class="sidebar-footer">
+      ©2025 - Alvin and Dominic
+    </div>
+  </div>
+
+  <!-- Notification Panel -->
+  <div class="notification-panel" id="notificationPanel">
+    <div class="notification-header">
+      <h3>Notifications</h3>
+      <button class="notification-close" onclick="toggleNotifications()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="notification-list">
+      <div class="notification-item unread">
+        <div class="notification-title">New Assessment Submission</div>
+        <div class="notification-message">Industrial supervisor Dr. Smith submitted assessment for Sarah Kimani.</div>
+        <div class="notification-time">1 hour ago</div>
+      </div>
+      <div class="notification-item unread">
+        <div class="notification-title">Logbook Review Required</div>
+        <div class="notification-message">5 student logbook entries require academic review.</div>
+        <div class="notification-time">3 hours ago</div>
+      </div>
+      <div class="notification-item unread">
+        <div class="notification-title">Final Report Due</div>
+        <div class="notification-message">Final reports for 3 students are due this week.</div>
+        <div class="notification-time">1 day ago</div>
+      </div>
+      <div class="notification-item">
+        <div class="notification-title">Meeting Reminder</div>
+        <div class="notification-message">Department meeting scheduled for tomorrow at 10 AM.</div>
+        <div class="notification-time">2 days ago</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlay for mobile -->
+  <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1 class="page-title">University Supervisor Dashboard</h1>
+    
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+      <div class="welcome-text">
+        <h2>Welcome to the Academic Supervision Portal</h2>
+        <p>Monitor student progress, review logbook entries, and provide academic guidance for industrial attachments.</p>
+      </div>
+      <div class="welcome-illustration">
+        <img src="https://via.placeholder.com/200x150/0057b8/ffffff?text=Academic+Portal" alt="Academic Portal" style="border-radius: 12px;">
+      </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-number">24</div>
+        <div class="stat-label">Assigned Students</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-clock"></i>
+        </div>
+        <div class="stat-number">12</div>
+        <div class="stat-label">Pending Reviews</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="stat-number">8</div>
+        <div class="stat-label">Approved Today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-undo"></i>
+        </div>
+        <div class="stat-number">3</div>
+        <div class="stat-label">Returned for Revision</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+              <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="stat-number">85.2%</div>
+        <div class="stat-label">Approval Rate</div>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+    <div class="recent-activity">
+      <h3 style="margin-bottom: 20px; color: var(--text-primary);">Recent Activity</h3>
+      
+            <div class="activity-item">
+        <div class="activity-icon" style="background: var(--success-color);">
+                <i class="fas fa-check-circle"></i>
+              </div>
+              <div class="activity-content">
+          <div class="activity-title">Logbook approved for Week 7 - Sarah Kimani</div>
+                <div class="activity-time">2 hours ago</div>
+              </div>
+            </div>
+            
+            <div class="activity-item">
+        <div class="activity-icon" style="background: var(--warning-color);">
+          <i class="fas fa-clock"></i>
+        </div>
+        <div class="activity-content">
+          <div class="activity-title">Assessment form submitted for John Doe</div>
+          <div class="activity-time">4 hours ago</div>
+        </div>
+      </div>
+      
+      <div class="activity-item">
+        <div class="activity-icon" style="background: var(--danger-color);">
+          <i class="fas fa-undo"></i>
+              </div>
+              <div class="activity-content">
+          <div class="activity-title">Logbook returned for revision - Mike Johnson</div>
+                <div class="activity-time">1 day ago</div>
+              </div>
+            </div>
+            
+            <div class="activity-item">
+        <div class="activity-icon" style="background: var(--info-color);">
+          <i class="fas fa-comment"></i>
+              </div>
+              <div class="activity-content">
+          <div class="activity-title">Feedback added to Week 6 - Jane Smith</div>
+          <div class="activity-time">2 days ago</div>
+        </div>
+              </div>
+            </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <div class="action-card">
+        <div class="action-header">
+          <div class="action-icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <h3 class="action-title">Review Logbook Entries</h3>
+        </div>
+        <p class="action-description">Review and approve pending student logbook entries for academic validation.</p>
+        <a href="logbook_approval.html" class="action-button">Review Logbooks</a>
+        </div>
+
+      <div class="action-card">
+        <div class="action-header">
+          <div class="action-icon">
+            <i class="fas fa-clipboard-list"></i>
+          </div>
+          <h3 class="action-title">Complete Assessment Forms</h3>
+              </div>
+        <p class="action-description">Fill out academic assessment forms and review industrial supervisor evaluations.</p>
+        <a href="assessment_forms.html" class="action-button">Manage Assessments</a>
+            </div>
+            
+      <div class="action-card">
+        <div class="action-header">
+          <div class="action-icon">
+            <i class="fas fa-comments"></i>
+              </div>
+          <h3 class="action-title">Communicate with Supervisors</h3>
+              </div>
+        <p class="action-description">Chat with industrial supervisors and coordinators about student progress.</p>
+        <a href="communication.html" class="action-button">Open Communication</a>
+            </div>
+      
+      <div class="action-card">
+        <div class="action-header">
+          <div class="action-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h3 class="action-title">View Progress Reports</h3>
+        </div>
+        <p class="action-description">Access detailed reports on student progress and attachment completion rates.</p>
+        <a href="../shared/reporting-system.html" class="action-button">View Reports</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../shared/theme-utils.js"></script>
+  <script>
+    // Additional page-specific functionality can be added here
+    // All theme and language functionality is handled by theme-utils.js
+  </script>
+</body>
+</html> 

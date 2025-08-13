@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compile Report - Coordinator - JKUAT</title>
+  <link rel="stylesheet" href="../dashboard-styles.css">
+  <link rel="stylesheet" href="../shared/theme-styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .report-controls {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    
+    .control-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      gap: 20px;
+      align-items: end;
+      margin-bottom: 20px;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .form-group label {
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 8px;
+    }
+    
+    .form-group select {
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    
+    .form-group select:focus {
+      outline: none;
+      border-color: #0057b8;
+    }
+    
+    .btn-primary {
+      background: #0057b8;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+      font-size: 1rem;
+    }
+    
+    .btn-primary:hover {
+      background: #004494;
+    }
+    
+    .report-preview {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .preview-title {
+      color: #333;
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    
+    .metric-item {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    
+    .metric-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #0057b8;
+      margin-bottom: 8px;
+    }
+    
+    .metric-label {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .export-options {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    .export-buttons {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    
+    .btn-export {
+      padding: 15px 25px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-pdf {
+      background: #dc3545;
+      color: white;
+    }
+    
+    .btn-pdf:hover {
+      background: #c82333;
+    }
+    
+    .btn-excel {
+      background: #28a745;
+      color: white;
+    }
+    
+    .btn-excel:hover {
+      background: #218838;
+    }
+    
+    .btn-word {
+      background: #007bff;
+      color: white;
+    }
+    
+    .btn-word:hover {
+      background: #0056b3;
+    }
+    
+    @media (max-width: 768px) {
+      .control-row {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+      
+      .export-buttons {
+        flex-direction: column;
+      }
+      
+      .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Mobile Menu Toggle -->
+  <button class="menu-toggle" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <img src="https://www.jkuat.ac.ke/wp-content/uploads/2020/01/jkuat-logo.png" alt="JKUAT" height="40">
+    </div>
+    <div class="top-bar-center">
+      Jomo Kenyatta University of Agriculture and Technology
+    </div>
+    <div class="top-bar-right">
+      <div class="utility-controls">
+        <!-- Theme Toggle -->
+        
+        
+        <!-- Google Translate will be added here by theme-utils.js -->
+      </div>
+      
+      <div class="notification-bell" onclick="toggleNotifications()">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge">4</span>
+      </div>
+      <div class="user-menu">
+        <span>Hi, Dr. Coordinator</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Left Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="https://www.jkuat.ac.ke/wp-content/uploads/2020/01/jkuat-logo.png" alt="JKUAT Logo">
+    </div>
+    
+    <div class="sidebar-menu">
+      <a href="dashboard.html" class="menu-item">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="assign_clusters.html" class="menu-item">
+        <i class="fas fa-users"></i>
+        <span>Assign Clusters</span>
+      </a>
+      <a href="assign_supervisors.html" class="menu-item">
+        <i class="fas fa-user-tie"></i>
+        <span>Assign Supervisors</span>
+      </a>
+      <a href="approve_supervisors.html" class="menu-item">
+        <i class="fas fa-check-circle"></i>
+        <span>Approve Supervisors</span>
+      </a>
+      <a href="compile_report.html" class="menu-item active">
+        <i class="fas fa-chart-bar"></i>
+        <span>Compile Report</span>
+      </a>
+      <a href="communication.html" class="menu-item">
+        <i class="fas fa-comments"></i>
+        <span>Communication</span>
+      </a>
+      <a href="../login.html" class="menu-item">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+    
+    <div class="sidebar-footer">
+      ©2025 - Alvin and Dominic
+    </div>
+  </div>
+
+  <!-- Notification Panel -->
+  <div class="notification-panel" id="notificationPanel">
+    <div class="notification-header">
+      <h3>Notifications</h3>
+      <button class="notification-close" onclick="toggleNotifications()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="notification-list">
+      <div class="notification-item unread">
+        <div class="notification-title">New industrial supervisor registered</div>
+        <div class="notification-message">Dr. Sarah Kimani from Microsoft Kenya has applied for approval</div>
+        <div class="notification-time">2 hours ago</div>
+      </div>
+      <div class="notification-item unread">
+        <div class="notification-title">Cluster assignment completed</div>
+        <div class="notification-message">Zone A cluster assignment completed for 24 students</div>
+        <div class="notification-time">4 hours ago</div>
+      </div>
+      <div class="notification-item unread">
+        <div class="notification-title">Supervisor approval</div>
+        <div class="notification-message">Supervisor approval for Sarah Kimani completed</div>
+        <div class="notification-time">1 day ago</div>
+      </div>
+      <div class="notification-item">
+        <div class="notification-title">Monthly report due</div>
+        <div class="notification-message">Monthly progress report is due in 3 days</div>
+        <div class="notification-time">2 days ago</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlay for mobile -->
+  <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1 class="page-title">Compile Departmental Report</h1>
+    
+    <!-- Report Generation Controls -->
+    <div class="report-controls">
+      <h3 style="margin-bottom: 20px; color: #333;">Generate Comprehensive Report</h3>
+      
+      <div class="control-row">
+        <div class="form-group">
+          <label for="reportType">Report Type</label>
+          <select id="reportType" onchange="updateReportPreview()">
+            <option value="comprehensive">Comprehensive Report</option>
+            <option value="student_progress">Student Progress Report</option>
+            <option value="supervisor_performance">Supervisor Performance Report</option>
+            <option value="cluster_analysis">Cluster Analysis Report</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="dateRange">Date Range</label>
+          <select id="dateRange" onchange="updateReportPreview()">
+            <option value="current_semester">Current Semester</option>
+            <option value="last_semester">Last Semester</option>
+            <option value="current_year">Current Academic Year</option>
+            <option value="custom">Custom Range</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="clusterFilter">Cluster Filter</label>
+          <select id="clusterFilter" onchange="updateReportPreview()">
+            <option value="all">All Clusters</option>
+            <option value="nairobi">Nairobi Central</option>
+            <option value="mombasa">Mombasa Coast</option>
+            <option value="kisumu">Kisumu Western</option>
+          </select>
+        </div>
+        
+        <button class="btn-primary" onclick="generateReport()">
+          <i class="fas fa-chart-bar"></i> Generate Report
+        </button>
+      </div>
+    </div>
+    
+    <!-- Report Preview -->
+    <div class="report-preview">
+      <div class="preview-header">
+        <h3 class="preview-title">Report Preview</h3>
+      </div>
+      
+      <div class="metrics-grid">
+        <div class="metric-item">
+          <div class="metric-number">156</div>
+          <div class="metric-label">Total Students</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-number">142</div>
+          <div class="metric-label">Active Students</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-number">89%</div>
+          <div class="metric-label">Completion Rate</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-number">24</div>
+          <div class="metric-label">Supervisors</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Export Options -->
+    <div class="export-options">
+      <h3 style="margin-bottom: 20px; color: #333;">Export & Share Report</h3>
+      <p style="color: #666; margin-bottom: 20px;">Generate and distribute your report in various formats</p>
+      
+      <div class="export-buttons">
+        <button class="btn-export btn-pdf" onclick="exportReport('pdf')">
+          <i class="fas fa-file-pdf"></i> Export as PDF
+        </button>
+        <button class="btn-export btn-excel" onclick="exportReport('excel')">
+          <i class="fas fa-file-excel"></i> Export as Excel
+        </button>
+        <button class="btn-export btn-word" onclick="exportReport('word')">
+          <i class="fas fa-file-word"></i> Export as Word
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <script src="../shared/theme-utils.js"></script>
+  <script>
+    // Additional page-specific functionality can be added here
+    // All theme and language functionality is handled by theme-utils.js
+  </script>
+</body>
+</html> 

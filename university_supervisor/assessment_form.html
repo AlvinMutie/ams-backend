@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Assessment Form for Lecturers - AMS</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    .supervisor-nav { display: flex; gap: 18px; background: #e9f0fa; padding: 12px 0 12px 24px; margin-bottom: 24px; }
+    .supervisor-nav a { color: #0057b8; text-decoration: none; font-weight: bold; }
+    .supervisor-nav a.active { color: #fff; background: #0057b8; border-radius: 4px; padding: 4px 12px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }
+    th { background: #f4f6fa; }
+    .section-title { margin-top: 24px; font-weight: bold; }
+    .btn-row { display: flex; gap: 10px; align-items: center; margin-bottom: 16px; }
+    .total-cell { font-weight: bold; text-align: center; }
+    .print-btn { float: right; margin: 10px 0 10px 10px; background: #0057b8; color: #fff; border: none; border-radius: 4px; padding: 8px 16px; font-weight: bold; cursor: pointer; }
+    .print-btn:hover { background: #003974; }
+    @media print { .print-btn, .btn-row, a[href*='dashboard.html'] { display: none !important; } }
+  </style>
+</head>
+<body>
+  <nav class="supervisor-nav">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="approve_logbook.html">Approve Logbook</a>
+    <a href="assessment_form.html" class="active">Assessment Form</a>
+    <a href="../login.html">Logout</a>
+  </nav>
+  <button class="print-btn" type="button" onclick="window.print()">Print / Export PDF</button>
+  <h2>Assessment Form for Lecturers (University Supervisors)</h2>
+  <form id="assessmentForm" action="#" method="POST">
+    <div class="section-title">Student Details</div>
+    <label>Student Name:
+      <input type="text" name="student_name" required>
+    </label>
+    <label>Year of Study:
+      <input type="text" name="year_of_study" required>
+    </label>
+    <label>Department:
+      <input type="text" name="department" required>
+    </label>
+    <label>Phone:
+      <input type="text" name="phone">
+    </label>
+    <label>Reg No.:
+      <input type="text" name="reg_no" required>
+    </label>
+    <label>Assessed by (Prof/Dr/Mr/Mrs/Miss):
+      <input type="text" name="assessor_title" required>
+    </label>
+    <label>Date of Assessment:
+      <input type="date" name="assessment_date" required>
+    </label>
+    <table>
+      <tr>
+        <th>ATTRIBUTE TO BE ASSESSED</th>
+        <th>MAXIMUM MARKS</th>
+        <th>MARKS AWARDED</th>
+        <th>REMARKS</th>
+      </tr>
+      <tr><td>Practical orientation of the chosen task</td><td>5</td><td><input type="number" name="practical_orientation" min="0" max="5" required></td><td><input type="text" name="practical_orientation_remarks"></td></tr>
+      <tr><td>Intellectual activity utilized in the task</td><td>4</td><td><input type="number" name="intellectual_activity" min="0" max="4" required></td><td><input type="text" name="intellectual_activity_remarks"></td></tr>
+      <tr><td>Independence</td><td>4</td><td><input type="number" name="independence" min="0" max="4" required></td><td><input type="text" name="independence_remarks"></td></tr>
+      <tr><td>Communication</td><td>4</td><td><input type="number" name="communication" min="0" max="4" required></td><td><input type="text" name="communication_remarks"></td></tr>
+      <tr><td>Innovativeness in relation to project</td><td>4</td><td><input type="number" name="innovativeness" min="0" max="4" required></td><td><input type="text" name="innovativeness_remarks"></td></tr>
+      <tr><td>Extension</td><td>4</td><td><input type="number" name="extension" min="0" max="4" required></td><td><input type="text" name="extension_remarks"></td></tr>
+      <tr><td>Application of technology in work</td><td>5</td><td><input type="number" name="application_technology" min="0" max="5" required></td><td><input type="text" name="application_technology_remarks"></td></tr>
+      <tr>
+        <th>TOTAL</th>
+        <th>30</th>
+        <th class="total-cell" id="totalMarks">-</th>
+        <th></th>
+      </tr>
+    </table>
+    <div class="btn-row">
+      <button type="button" onclick="showTotal()">Show Total</button>
+      <button type="submit">Submit</button>
+    </div>
+    <div class="section-title">Signatures</div>
+    <label>Industry Supervisor's Name and Signature:
+      <input type="text" name="industry_supervisor_name">
+    </label>
+    <label>Date:
+      <input type="date" name="industry_supervisor_date">
+    </label>
+    <label>Assessor's Name and Signature:
+      <input type="text" name="assessor_name" required>
+    </label>
+    <label>Date:
+      <input type="date" name="assessor_date" required>
+    </label>
+    <p><a href="dashboard.html">Back to Dashboard</a></p>
+  </form>
+  <script>
+    function showTotal() {
+      const fields = [
+        'practical_orientation','intellectual_activity','independence','communication','innovativeness','extension','application_technology'
+      ];
+      let total = 0;
+      fields.forEach(f => {
+        const val = parseInt(document.querySelector(`[name="${f}"]`).value) || 0;
+        total += val;
+      });
+      document.getElementById('totalMarks').textContent = total;
+    }
+  </script>
+</body>
+</html> 

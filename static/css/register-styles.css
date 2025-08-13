@@ -1,0 +1,108 @@
+/* Registration Page Specific Styles */
+.register-form-container {
+  max-width: 450px;
+}
+
+.role-preview {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: #f8f9fa;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #1e4d2b;
+  border-left: 3px solid #1e4d2b;
+}
+
+.role-preview strong {
+  color: #495057;
+}
+
+.role-info {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #1e4d2b;
+}
+
+.role-info h4 {
+  margin: 0 0 1rem 0;
+  color: #1e4d2b;
+  font-size: 1rem;
+}
+
+.role-info ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  font-size: 0.9rem;
+  color: #495057;
+}
+
+.role-info li {
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.role-info code {
+  background: #e9ecef;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.8rem;
+  color: #1e4d2b;
+}
+
+.role-info strong {
+  color: #1e4d2b;
+}
+
+/* Form group spacing for registration */
+.register-form-container .form-group {
+  margin-bottom: 1rem;
+}
+
+.register-form-container select {
+  padding: 12px 16px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: white;
+  cursor: pointer;
+}
+
+.register-form-container select:focus {
+  outline: none;
+  border-color: #1e4d2b;
+  box-shadow: 0 0 0 3px rgba(30, 77, 43, 0.1);
+}
+
+/* Terms checkbox styling */
+.register-form-container .checkbox-container {
+  font-size: 0.9rem;
+  color: #495057;
+}
+
+.register-form-container .checkbox-container a {
+  color: #1e4d2b;
+  text-decoration: none;
+}
+
+.register-form-container .checkbox-container a:hover {
+  text-decoration: underline;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .register-form-container {
+    padding: 1.5rem;
+  }
+  
+  .role-info {
+    margin-top: 1.5rem;
+    padding: 1rem;
+  }
+  
+  .role-info ul {
+    font-size: 0.85rem;
+  }
+} 

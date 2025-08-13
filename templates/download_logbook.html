@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download Logbook - Student Dashboard</title>
+  <link rel="stylesheet" href="../shared/theme-styles.css">
+  <link rel="stylesheet" href="../dashboard-styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      Logo Section
+    </div>
+    <div class="top-bar-center">
+      Jomo Kenyatta University of Agriculture and Technology
+    </div>
+    <div class="top-bar-right">
+      <div class="notification-bell">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge">0</span>
+      </div>
+      <div class="user-menu">
+        <span>Hi, Kyalo</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Left Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      Logo Section
+    </div>
+    
+    <div class="sidebar-menu">
+      <a href="dashboard.html" class="menu-item">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="return_form.html" class="menu-item">
+        <i class="fas fa-file-alt"></i>
+        <span>Return Form</span>
+      </a>
+      <a href="logbook.html" class="menu-item">
+        <i class="fas fa-book"></i>
+        <span>Logbook</span>
+      </a>
+      <a href="final_report.html" class="menu-item">
+        <i class="fas fa-upload"></i>
+        <span>Final Report</span>
+      </a>
+      <a href="deferral_request.html" class="menu-item">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Deferral Request</span>
+      </a>
+      <a href="download_logbook.html" class="menu-item active">
+        <i class="fas fa-download"></i>
+        <span>Download Logbook</span>
+      </a>
+      <a href="../login.html" class="menu-item">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+    
+    <div class="sidebar-footer">
+      ©2025 - Alvin and Dominic
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1 class="page-title">Download Logbook</h1>
+    
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+      <div class="welcome-text">
+        <h2>Verified Logbook Download</h2>
+        <p>Download your verified and approved logbook entries. The logbook is available in PDF format and includes all approved entries with supervisor comments.</p>
+      </div>
+      <div class="welcome-illustration">
+        <i class="fas fa-download"></i>
+      </div>
+    </div>
+
+    <!-- Logbook Status -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Logbook Status</h3>
+      </div>
+      <div class="status-info">
+        <div class="status-item">
+          <i class="fas fa-check-circle" style="color: #28a745;"></i>
+          <span>Total Entries: 45 entries</span>
+        </div>
+        <div class="status-item">
+          <i class="fas fa-check-circle" style="color: #28a745;"></i>
+          <span>Approved Entries: 42 entries</span>
+        </div>
+        <div class="status-item">
+          <i class="fas fa-clock" style="color: var(--warning-color);"></i>
+          <span>Pending Approval: 3 entries</span>
+        </div>
+        <div class="status-item">
+          <i class="fas fa-calendar" style="color: var(--info-color);"></i>
+          <span>Last Updated: August 12, 2024</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Download Options -->
+    <div class="dashboard-grid">
+      <!-- Left Column -->
+      <div class="dashboard-left">
+        <!-- Download Options -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Download Options</h3>
+          </div>
+          
+          <div class="download-options">
+            <div class="download-option">
+              <div class="option-header">
+                <i class="fas fa-file-pdf" style="color: var(--danger-color);"></i>
+                <div class="option-info">
+                  <h4>Complete Logbook (PDF)</h4>
+                  <p>All approved entries with supervisor comments</p>
+                </div>
+              </div>
+              <div class="option-actions">
+                <span class="file-size">2.3 MB</span>
+                <button class="btn-download" onclick="downloadLogbook('complete')">
+                  <i class="fas fa-download"></i>
+                  Download
+                </button>
+              </div>
+            </div>
+            
+            <div class="download-option">
+              <div class="option-header">
+                <i class="fas fa-file-pdf" style="color: var(--info-color);"></i>
+                <div class="option-info">
+                  <h4>Weekly Summary (PDF)</h4>
+                  <p>Weekly summaries of activities and learning outcomes</p>
+                </div>
+              </div>
+              <div class="option-actions">
+                <span class="file-size">1.1 MB</span>
+                <button class="btn-download" onclick="downloadLogbook('weekly')">
+                  <i class="fas fa-download"></i>
+                  Download
+                </button>
+              </div>
+            </div>
+            
+            <div class="download-option">
+              <div class="option-header">
+                <i class="fas fa-file-excel" style="color: var(--success-color);"></i>
+                <div class="option-info">
+                  <h4>Logbook Data (Excel)</h4>
+                  <p>Raw data in Excel format for analysis</p>
+                </div>
+              </div>
+              <div class="option-actions">
+                <span class="file-size">0.8 MB</span>
+                <button class="btn-download" onclick="downloadLogbook('excel')">
+                  <i class="fas fa-download"></i>
+                  Download
+                </button>
+              </div>
+            </div>
+            
+            <div class="download-option">
+              <div class="option-header">
+                <i class="fas fa-file-archive" style="color: var(--secondary-color);"></i>
+                <div class="option-info">
+                  <h4>Complete Package (ZIP)</h4>
+                  <p>All documents including attachments and certificates</p>
+                </div>
+              </div>
+              <div class="option-actions">
+                <span class="file-size">15.2 MB</span>
+                <button class="btn-download" onclick="downloadLogbook('package')">
+                  <i class="fas fa-download"></i>
+                  Download
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Downloads -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Recent Downloads</h3>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>File Type</th>
+                  <th>Size</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Aug 12, 2024</td>
+                  <td>Complete Logbook (PDF)</td>
+                  <td>2.3 MB</td>
+                  <td><span class="status-completed">✓ Downloaded</span></td>
+                </tr>
+                <tr>
+                  <td>Aug 10, 2024</td>
+                  <td>Weekly Summary (PDF)</td>
+                  <td>1.1 MB</td>
+                  <td><span class="status-completed">✓ Downloaded</span></td>
+                </tr>
+                <tr>
+                  <td>Aug 8, 2024</td>
+                  <td>Logbook Data (Excel)</td>
+                  <td>0.8 MB</td>
+                  <td><span class="status-completed">✓ Downloaded</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="dashboard-right">
+        <!-- Quick Stats -->
+        <div class="info-card info-card-blue">
+          <div class="info-card-icon">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <div class="info-card-content">
+            <h3>Total Entries</h3>
+            <div class="amount">45</div>
+            <div class="program">Logbook entries</div>
+          </div>
+        </div>
+
+        <div class="info-card info-card-purple">
+          <div class="info-card-icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <div class="info-card-content">
+            <h3>Approved Entries</h3>
+            <div class="amount">42</div>
+            <div class="program">93% approval rate</div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-icon" style="background: var(--success-color);">
+            <i class="fas fa-calendar-check"></i>
+          </div>
+          <div class="info-card-content">
+            <h3>Coverage Period</h3>
+            <div class="amount">12 weeks</div>
+            <div class="program">May 2024 - August 2024</div>
+          </div>
+        </div>
+
+        <!-- Print Options -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Print Options</h3>
+          </div>
+          <div class="print-options">
+            <button class="btn-print" onclick="printLogbook('complete')">
+              <i class="fas fa-print"></i>
+              Print Complete Logbook
+            </button>
+            <button class="btn-print" onclick="printLogbook('summary')">
+              <i class="fas fa-print"></i>
+              Print Summary
+            </button>
+            <button class="btn-print" onclick="printLogbook('certificate')">
+              <i class="fas fa-certificate"></i>
+              Print Certificate
+            </button>
+          </div>
+        </div>
+
+        <!-- Help Section -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Need Help?</h3>
+          </div>
+          <div class="help-content">
+            <p>If you're having trouble downloading your logbook:</p>
+            <ul>
+              <li>Check your internet connection</li>
+              <li>Try using a different browser</li>
+              <li>Contact your supervisor for assistance</li>
+              <li>Email support: ams-support@jkuat.ac.ke</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .download-options {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .download-option {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 12px;
+      border: 2px solid #e9ecef;
+      transition: all 0.3s ease;
+    }
+    
+    .download-option:hover {
+      border-color: var(--primary-color);
+      background: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .option-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .option-header i {
+      font-size: 2rem;
+    }
+    
+    .option-info h4 {
+      margin: 0 0 5px 0;
+      color: #1e4d2b;
+      font-size: 1.1rem;
+    }
+    
+    .option-info p {
+      margin: 0;
+      color: #6c757d;
+      font-size: 0.9rem;
+    }
+    
+    .option-actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .file-size {
+      color: #6c757d;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    
+    .btn-download {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: #1e4d2b;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-download:hover {
+      background: #2d5a3d;
+      transform: translateY(-1px);
+    }
+    
+    .status-completed {
+      color: var(--success-color);
+      font-weight: 600;
+    }
+    
+    .print-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .btn-print {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      color: #1e4d2b;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-print:hover {
+      background: #1e4d2b;
+      color: white;
+      transform: translateY(-1px);
+    }
+    
+    .help-content {
+      padding: 10px 0;
+    }
+    
+    .help-content p {
+      margin-bottom: 15px;
+      color: #495057;
+    }
+    
+    .help-content ul {
+      margin: 0;
+      padding-left: 20px;
+      color: #6c757d;
+    }
+    
+    .help-content li {
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 768px) {
+      .download-option {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+      
+      .option-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+  </style>
+
+  <script>
+    function downloadLogbook(type) {
+      // Simulate download process
+      const downloadTypes = {
+        'complete': 'Complete_Logbook_Kyalo_2024.pdf',
+        'weekly': 'Weekly_Summary_Kyalo_2024.pdf',
+        'excel': 'Logbook_Data_Kyalo_2024.xlsx',
+        'package': 'Complete_Package_Kyalo_2024.zip'
+      };
+      
+      const fileName = downloadTypes[type];
+      
+      // Show download notification
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--success-color);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+      `;
+      notification.innerHTML = `
+        <i class="fas fa-download"></i>
+        Downloading ${fileName}...
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // Remove notification after 3 seconds
+      setTimeout(() => {
+        notification.remove();
+      }, 3000);
+      
+      // Simulate actual download
+      setTimeout(() => {
+        const link = document.createElement('a');
+        link.href = '#';
+        link.download = fileName;
+        link.click();
+      }, 1000);
+    }
+    
+    function printLogbook(type) {
+      const printTypes = {
+        'complete': 'Complete Logbook',
+        'summary': 'Logbook Summary',
+        'certificate': 'Completion Certificate'
+      };
+      
+      alert(`Printing ${printTypes[type]}...\nThis will open the print dialog.`);
+      
+      // In a real implementation, this would open a print-friendly version
+      // window.open(`print_logbook.php?type=${type}`, '_blank');
+    }
+    
+    // Add CSS animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html> 

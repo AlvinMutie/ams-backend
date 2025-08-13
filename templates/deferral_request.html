@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deferral Request - Student Dashboard</title>
+  <link rel="stylesheet" href="../shared/theme-styles.css">
+  <link rel="stylesheet" href="../dashboard-styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      Logo Section
+    </div>
+    <div class="top-bar-center">
+      Jomo Kenyatta University of Agriculture and Technology
+    </div>
+    <div class="top-bar-right">
+      <div class="notification-bell">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge">0</span>
+      </div>
+      <div class="user-menu">
+        <span>Hi, Kyalo</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Left Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      Logo Section
+    </div>
+    
+    <div class="sidebar-menu">
+      <a href="dashboard.html" class="menu-item">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="return_form.html" class="menu-item">
+        <i class="fas fa-file-alt"></i>
+        <span>Return Form</span>
+      </a>
+      <a href="logbook.html" class="menu-item">
+        <i class="fas fa-book"></i>
+        <span>Logbook</span>
+      </a>
+      <a href="final_report.html" class="menu-item">
+        <i class="fas fa-upload"></i>
+        <span>Final Report</span>
+      </a>
+      <a href="deferral_request.html" class="menu-item active">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Deferral Request</span>
+      </a>
+      <a href="download_logbook.html" class="menu-item">
+        <i class="fas fa-download"></i>
+        <span>Download Logbook</span>
+      </a>
+      <a href="../login.html" class="menu-item">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+    
+    <div class="sidebar-footer">
+      ©2025 - Alvin and Dominic
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1 class="page-title">Deferral Request</h1>
+    
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+      <div class="welcome-text">
+        <h2>Request Attachment Deferral</h2>
+        <p>Submit a request to defer your industrial attachment to a later date. Please provide valid reasons and supporting documentation.</p>
+      </div>
+      <div class="welcome-illustration">
+        <i class="fas fa-calendar-times"></i>
+      </div>
+    </div>
+
+    <!-- Current Status -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Current Attachment Status</h3>
+      </div>
+      <div class="status-info">
+        <div class="status-item">
+          <i class="fas fa-info-circle" style="color: var(--info-color);"></i>
+          <span>Current Period: May 2024 - August 2024</span>
+        </div>
+        <div class="status-item">
+          <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
+          <span>Status: Active</span>
+        </div>
+        <div class="status-item">
+          <i class="fas fa-clock" style="color: var(--warning-color);"></i>
+          <span>Progress: 75% Complete</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deferral Form -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Deferral Request Form</h3>
+      </div>
+      
+      <form action="submit_deferral.php" method="POST" class="form-container">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="request_type">Request Type *</label>
+            <select id="request_type" name="request_type" required>
+              <option value="">Select Request Type</option>
+              <option value="deferral">Deferral (Postpone to later date)</option>
+              <option value="extension">Extension (Extend current period)</option>
+              <option value="change_placement">Change of Placement</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="proposed_start_date">Proposed Start Date *</label>
+            <input type="date" id="proposed_start_date" name="proposed_start_date" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="proposed_end_date">Proposed End Date *</label>
+            <input type="date" id="proposed_end_date" name="proposed_end_date" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="reason_category">Reason Category *</label>
+            <select id="reason_category" name="reason_category" required>
+              <option value="">Select Reason Category</option>
+              <option value="health">Health Issues</option>
+              <option value="family">Family Emergency</option>
+              <option value="academic">Academic Commitments</option>
+              <option value="employment">Employment Opportunities</option>
+              <option value="personal">Personal Reasons</option>
+              <option value="other">Other</option>
+    </select>
+          </div>
+        </div>
+        
+        <div class="form-group full-width">
+          <label for="detailed_reason">Detailed Reason *</label>
+          <textarea id="detailed_reason" name="detailed_reason" rows="4" required placeholder="Please provide a detailed explanation for your deferral request"></textarea>
+        </div>
+        
+        <div class="form-group full-width">
+          <label for="impact_assessment">Impact Assessment *</label>
+          <textarea id="impact_assessment" name="impact_assessment" rows="4" required placeholder="How will this deferral affect your academic progress and career goals?"></textarea>
+        </div>
+        
+        <div class="form-group full-width">
+          <label for="mitigation_plan">Mitigation Plan *</label>
+          <textarea id="mitigation_plan" name="mitigation_plan" rows="4" required placeholder="What steps will you take to ensure successful completion of your attachment?"></textarea>
+        </div>
+        
+        <!-- Supporting Documents -->
+        <div class="upload-section">
+          <h4>Supporting Documents</h4>
+          <div class="upload-grid">
+            <div class="upload-item">
+              <label for="medical_certificate">Medical Certificate (if applicable)</label>
+              <div class="file-upload">
+                <input type="file" id="medical_certificate" name="medical_certificate" accept=".pdf,.jpg,.png">
+                <div class="upload-placeholder">
+                  <i class="fas fa-file-medical"></i>
+                  <p>Click to upload medical certificate</p>
+                  <span>PDF, JPG, or PNG</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="upload-item">
+              <label for="supporting_letter">Supporting Letter</label>
+              <div class="file-upload">
+                <input type="file" id="supporting_letter" name="supporting_letter" accept=".pdf,.doc,.docx">
+                <div class="upload-placeholder">
+                  <i class="fas fa-file-alt"></i>
+                  <p>Click to upload supporting letter</p>
+                  <span>PDF, DOC, or DOCX</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="upload-item">
+              <label for="other_documents">Other Supporting Documents</label>
+              <div class="file-upload">
+                <input type="file" id="other_documents" name="other_documents" accept=".pdf,.doc,.docx,.jpg,.png">
+                <div class="upload-placeholder">
+                  <i class="fas fa-folder-open"></i>
+                  <p>Click to upload additional documents</p>
+                  <span>PDF, DOC, DOCX, JPG, or PNG</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" onclick="saveDraft()">
+            <i class="fas fa-save"></i>
+            Save Draft
+          </button>
+          <button type="submit" class="btn-primary">
+            <i class="fas fa-paper-plane"></i>
+            Submit Request
+          </button>
+        </div>
+  </form>
+    </div>
+
+    <!-- Previous Requests -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Previous Requests</h3>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Reason</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Jul 15, 2024</td>
+              <td>Extension</td>
+              <td>Additional project completion time needed</td>
+              <td><span class="status-approved">✓ Approved</span></td>
+              <td>
+                <button class="btn-action" onclick="viewRequest(1)">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .form-container {
+      padding: 20px 0;
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+    
+    .form-group label {
+      font-weight: 600;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      padding: 12px 16px;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: white;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(30, 77, 43, 0.1);
+    }
+    
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    
+    .status-info {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      padding: 20px 0;
+    }
+    
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: var(--background-color);
+      border-radius: 8px;
+      border-left: 4px solid var(--primary-color);
+    }
+    
+    .status-item i {
+      font-size: 1.2rem;
+    }
+    
+    .upload-section {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+    }
+    
+    .upload-section h4 {
+      color: var(--primary-color);
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+    }
+    
+    .upload-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    
+    .upload-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .upload-item label {
+      font-weight: 600;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+    }
+    
+    .file-upload {
+      position: relative;
+      border: 2px dashed var(--border-color);
+      border-radius: 8px;
+      padding: 30px;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .file-upload:hover {
+      border-color: var(--primary-color);
+      background: var(--background-color);
+    }
+    
+    .file-upload input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+    
+    .upload-placeholder {
+      pointer-events: none;
+    }
+    
+    .upload-placeholder i {
+      font-size: 2rem;
+      color: var(--secondary-color);
+      margin-bottom: 10px;
+    }
+    
+    .upload-placeholder p {
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 5px;
+    }
+    
+    .upload-placeholder span {
+      font-size: 0.8rem;
+      color: var(--secondary-color);
+    }
+    
+    .form-actions {
+      display: flex;
+      gap: 15px;
+      justify-content: flex-end;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+      background: var(--primary-color);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: var(--button-hover);
+      transform: translateY(-1px);
+    }
+    
+    .btn-secondary {
+      background: var(--secondary-color);
+      color: white;
+    }
+    
+    .btn-secondary:hover {
+      background: #495057;
+      transform: translateY(-1px);
+    }
+    
+    .status-approved {
+      color: var(--success-color);
+      font-weight: 600;
+    }
+    
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: white;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-action:hover {
+      background: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+    
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+
+  <script>
+    function saveDraft() {
+      const formData = new FormData(document.querySelector('form'));
+      const data = {};
+      for (let [key, value] of formData.entries()) {
+        if (!key.includes('certificate') && !key.includes('letter') && !key.includes('documents')) {
+          data[key] = value;
+        }
+      }
+      localStorage.setItem('deferralDraft', JSON.stringify(data));
+      alert('Draft saved successfully!');
+    }
+    
+    function viewRequest(id) {
+      alert('Viewing request ' + id);
+    }
+    
+    // File upload preview
+    document.querySelectorAll('input[type="file"]').forEach(input => {
+      input.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+          const placeholder = this.parentElement.querySelector('.upload-placeholder');
+          placeholder.innerHTML = `
+            <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
+            <p>${file.name}</p>
+            <span>${(file.size / 1024 / 1024).toFixed(2)} MB</span>
+          `;
+        }
+      });
+    });
+    
+    // Load draft on page load
+    window.onload = function() {
+      const draft = localStorage.getItem('deferralDraft');
+      if (draft) {
+        const data = JSON.parse(draft);
+        for (let key in data) {
+          const element = document.getElementById(key);
+          if (element) {
+            element.value = data[key];
+          }
+        }
+      }
+    };
+  </script>
+</body>
+</html> 

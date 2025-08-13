@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Final Report - Student Dashboard</title>
+  <link rel="stylesheet" href="../shared/theme-styles.css">
+  <link rel="stylesheet" href="../dashboard-styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      Logo Section
+    </div>
+    <div class="top-bar-center">
+      Jomo Kenyatta University of Agriculture and Technology
+    </div>
+    <div class="top-bar-right">
+      <div class="notification-bell">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge">1</span>
+      </div>
+      <div class="user-menu">
+        <span>Hi, Kyalo</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Left Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      Logo Section
+    </div>
+    
+    <div class="sidebar-menu">
+      <a href="dashboard.html" class="menu-item">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="return_form.html" class="menu-item">
+        <i class="fas fa-file-alt"></i>
+        <span>Return Form</span>
+      </a>
+      <a href="logbook.html" class="menu-item">
+        <i class="fas fa-book"></i>
+        <span>Logbook</span>
+      </a>
+      <a href="final_report.html" class="menu-item active">
+        <i class="fas fa-upload"></i>
+        <span>Final Report</span>
+      </a>
+      <a href="deferral_request.html" class="menu-item">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Deferral Request</span>
+      </a>
+      <a href="download_logbook.html" class="menu-item">
+        <i class="fas fa-download"></i>
+        <span>Download Logbook</span>
+      </a>
+      <a href="../login.html" class="menu-item">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+    
+    <div class="sidebar-footer">
+      ©2025 - Alvin and Dominic
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1 class="page-title">Final Report</h1>
+    
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+      <div class="welcome-text">
+        <h2>Final Report Submission</h2>
+        <p>Submit your final industrial attachment report. This comprehensive report should summarize your entire attachment experience, achievements, and learning outcomes.</p>
+      </div>
+      <div class="welcome-illustration">
+        <i class="fas fa-file-alt"></i>
+      </div>
+    </div>
+
+    <!-- Report Status -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Report Status</h3>
+      </div>
+      <div class="status-info">
+        <div class="status-item">
+          <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
+          <span>Logbook entries completed</span>
+        </div>
+        <div class="status-item">
+          <i class="fas fa-clock" style="color: var(--warning-color);"></i>
+          <span>Final report pending submission</span>
+        </div>
+        <div class="status-item">
+          <i class="fas fa-calendar" style="color: var(--danger-color);"></i>
+          <span>Deadline: August 30, 2024</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Report Form -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Final Report Details</h3>
+      </div>
+      
+      <form action="submit_final_report.php" method="POST" enctype="multipart/form-data" class="form-container">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="report_title">Report Title *</label>
+            <input type="text" id="report_title" name="report_title" required placeholder="Enter report title">
+          </div>
+          
+          <div class="form-group">
+            <label for="attachment_period">Attachment Period *</label>
+            <input type="text" id="attachment_period" name="attachment_period" required placeholder="e.g., May 2024 - August 2024">
+          </div>
+        </div>
+        
+        <div class="form-group full-width">
+          <label for="executive_summary">Executive Summary *</label>
+          <textarea id="executive_summary" name="executive_summary" rows="4" required placeholder="Provide a brief overview of your attachment experience and key achievements"></textarea>
+        </div>
+        
+        <div class="form-group full-width">
+          <label for="project_overview">Project Overview *</label>
+          <textarea id="project_overview" name="project_overview" rows="4" required placeholder="Describe the main project you worked on during your attachment"></textarea>
+        </div>
+        
+        <div class="form-group full-width">
+          <label for="technical_skills">Technical Skills Acquired *</label>
+          <textarea id="technical_skills" name="technical_skills" rows="4" required placeholder="List and describe the technical skills you developed during your attachment"></textarea>
+        </div>
+        
+        <div class="form-group full-width">
+          <label for="soft_skills">Soft Skills Developed *</label>
+          <textarea id="soft_skills" name="soft_skills" rows="4" required placeholder="Describe the soft skills (communication, teamwork, etc.) you developed"></textarea>
+        </div>
+        
+        <div class="form-group full-width">
+          <label for="challenges_overcome">Challenges and Solutions *</label>
+          <textarea id="challenges_overcome" name="challenges_overcome" rows="4" required placeholder="Describe major challenges you faced and how you overcame them"></textarea>
+        </div>
+        
+        <div class="form-group full-width">
+          <label for="recommendations">Recommendations *</label>
+          <textarea id="recommendations" name="recommendations" rows="4" required placeholder="Provide recommendations for future students and the organization"></textarea>
+        </div>
+        
+        <div class="form-group full-width">
+          <label for="conclusion">Conclusion *</label>
+          <textarea id="conclusion" name="conclusion" rows="4" required placeholder="Summarize your overall experience and its impact on your career goals"></textarea>
+        </div>
+        
+        <!-- File Upload Section -->
+        <div class="upload-section">
+          <h4>Attachments</h4>
+          <div class="upload-grid">
+            <div class="upload-item">
+              <label for="report_pdf">Final Report (PDF) *</label>
+              <div class="file-upload">
+                <input type="file" id="report_pdf" name="report_pdf" accept=".pdf" required>
+                <div class="upload-placeholder">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  <p>Click to upload PDF report</p>
+                  <span>Maximum size: 10MB</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="upload-item">
+              <label for="presentation">Presentation Slides (Optional)</label>
+              <div class="file-upload">
+                <input type="file" id="presentation" name="presentation" accept=".ppt,.pptx,.pdf">
+                <div class="upload-placeholder">
+                  <i class="fas fa-presentation"></i>
+                  <p>Click to upload presentation</p>
+                  <span>PPT, PPTX, or PDF</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="upload-item">
+              <label for="certificate">Completion Certificate (Optional)</label>
+              <div class="file-upload">
+                <input type="file" id="certificate" name="certificate" accept=".pdf,.jpg,.png">
+                <div class="upload-placeholder">
+                  <i class="fas fa-certificate"></i>
+                  <p>Click to upload certificate</p>
+                  <span>PDF, JPG, or PNG</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" onclick="saveDraft()">
+            <i class="fas fa-save"></i>
+            Save Draft
+          </button>
+          <button type="submit" class="btn-primary">
+            <i class="fas fa-paper-plane"></i>
+            Submit Report
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <style>
+    .form-container {
+      padding: 20px 0;
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+    
+    .form-group label {
+      font-weight: 600;
+      color: #495057;
+      font-size: 0.9rem;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      padding: 12px 16px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: white;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #1e4d2b;
+      box-shadow: 0 0 0 3px rgba(30, 77, 43, 0.1);
+    }
+    
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    
+    .status-info {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      padding: 20px 0;
+    }
+    
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #1e4d2b;
+    }
+    
+    .status-item i {
+      font-size: 1.2rem;
+    }
+    
+    .upload-section {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #e9ecef;
+    }
+    
+    .upload-section h4 {
+      color: #1e4d2b;
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+    }
+    
+    .upload-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    
+    .upload-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .upload-item label {
+      font-weight: 600;
+      color: #495057;
+      font-size: 0.9rem;
+    }
+    
+    .file-upload {
+      position: relative;
+      border: 2px dashed #e9ecef;
+      border-radius: 8px;
+      padding: 30px;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .file-upload:hover {
+      border-color: #1e4d2b;
+      background: #f8f9fa;
+    }
+    
+    .file-upload input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+    
+    .upload-placeholder {
+      pointer-events: none;
+    }
+    
+    .upload-placeholder i {
+      font-size: 2rem;
+      color: #6c757d;
+      margin-bottom: 10px;
+    }
+    
+    .upload-placeholder p {
+      font-weight: 600;
+      color: #495057;
+      margin-bottom: 5px;
+    }
+    
+    .upload-placeholder span {
+      font-size: 0.8rem;
+      color: #6c757d;
+    }
+    
+    .form-actions {
+      display: flex;
+      gap: 15px;
+      justify-content: flex-end;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #e9ecef;
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+      background: #1e4d2b;
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: #2d5a3d;
+      transform: translateY(-1px);
+    }
+    
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+    
+    .btn-secondary:hover {
+      background: #5a6268;
+      transform: translateY(-1px);
+    }
+    
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+
+  <script>
+    function saveDraft() {
+      const formData = new FormData(document.querySelector('form'));
+      const data = {};
+      for (let [key, value] of formData.entries()) {
+        if (key !== 'report_pdf' && key !== 'presentation' && key !== 'certificate') {
+          data[key] = value;
+        }
+      }
+      localStorage.setItem('finalReportDraft', JSON.stringify(data));
+      alert('Draft saved successfully!');
+    }
+    
+    // File upload preview
+    document.querySelectorAll('input[type="file"]').forEach(input => {
+      input.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+          const placeholder = this.parentElement.querySelector('.upload-placeholder');
+          placeholder.innerHTML = `
+            <i class="fas fa-check-circle" style="color: #28a745;"></i>
+            <p>${file.name}</p>
+            <span>${(file.size / 1024 / 1024).toFixed(2)} MB</span>
+          `;
+        }
+      });
+    });
+    
+    // Load draft on page load
+    window.onload = function() {
+      const draft = localStorage.getItem('finalReportDraft');
+      if (draft) {
+        const data = JSON.parse(draft);
+        for (let key in data) {
+          const element = document.getElementById(key);
+          if (element) {
+            element.value = data[key];
+          }
+        }
+      }
+    };
+  </script>
+</body>
+</html> 
