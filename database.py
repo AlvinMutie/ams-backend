@@ -31,6 +31,7 @@ class Database:
                 email TEXT UNIQUE NOT NULL,
                 password TEXT NOT NULL,
                 role TEXT NOT NULL CHECK (role IN ('student', 'industry_supervisor', 'school_supervisor', 'admin')),
+                google_id TEXT UNIQUE,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         ''')
@@ -181,6 +182,78 @@ class Database:
             raise Exception("User with this email already exists")
         finally:
             conn.close()
+    
+    def get_user_by_google_id(self, google_id: str) -> dict:
+        """Get user by Google ID"""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            SELECT * FROM users WHERE google_id = ?
+        ''', (google_id,))
+        
+        user = cursor.fetchone()
+        conn.close()
+        
+        if user:
+            return dict(user)
+        return None
+    
+    def create_google_user(self, google_id: str, name: str, email: str, role: str = None) -> int:
+        """Create a new user from Google OAuth"""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        
+        try:
+            cursor.execute('''
+                INSERT INTO users (google_id, name, email, role, password)
+                VALUES (?, ?, ?, ?, ?)
+            ''', (google_id, name, email, role, ''))  # Empty password for Google users
+            
+            user_id = cursor.lastrowid
+            conn.commit()
+            conn.close()
+            return user_id
+            
+        except sqlite3.IntegrityError:
+            conn.close()
+            raise Exception("User with this email already exists")
+    
+    def update_user_role(self, user_id: int, role: str) -> bool:
+        """Update user role"""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        
+        try:
+            cursor.execute('''
+                UPDATE users SET role = ? WHERE id = ?
+            ''', (role, user_id))
+            
+            conn.commit()
+            conn.close()
+            return True
+            
+        except Exception as e:
+            conn.close()
+            raise Exception(f"Failed to update user role: {str(e)}")
+    
+    def update_user_google_id(self, user_id: int, google_id: str) -> bool:
+        """Update user's Google ID for account linking"""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        
+        try:
+            cursor.execute('''
+                UPDATE users SET google_id = ? WHERE id = ?
+            ''', (google_id, user_id))
+            
+            conn.commit()
+            conn.close()
+            return True
+            
+        except Exception as e:
+            conn.close()
+            raise Exception(f"Failed to update Google ID: {str(e)}")
     
     def get_user_by_email(self, email: str) -> Optional[Dict]:
         """Get user by email"""

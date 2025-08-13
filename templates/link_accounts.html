@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Link Account - AMS</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 50px; }
+        .link-form { max-width: 400px; margin: 0 auto; }
+        .form-group { margin: 20px 0; }
+        label { display: block; margin-bottom: 5px; }
+        input { width: 100%; padding: 10px; border: 1px solid #ddd; }
+        .submit-btn { padding: 15px; background: #1e4d2b; color: white; border: none; cursor: pointer; width: 100%; }
+    </style>
+</head>
+<body>
+    <div class="link-form">
+        <h1>Link Your Account</h1>
+        <p>We found an existing account with email: <strong>{{ email }}</strong></p>
+        <p>Please enter your password to link this Google account:</p>
+        
+        <form id="linkForm">
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <button type="submit" class="submit-btn">Link Account</button>
+        </form>
+        
+        <p><a href="/">Back to Login</a></p>
+    </div>
+
+    <script>
+        document.getElementById('linkForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('password').value;
+            
+            fetch('/api/link-google-account', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    email: '{{ email }}', 
+                    password: password 
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === 'Account linked successfully') {
+                    // Redirect based on role
+                    const role = data.user.role;
+                    if (role === 'student') window.location.href = '/student';
+                    else if (role === 'industry_supervisor') window.location.href = '/industry';
+                    else if (role === 'school_supervisor') window.location.href = '/supervisor';
+                    else if (role === 'admin') window.location.href = '/admin';
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

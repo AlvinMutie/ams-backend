@@ -1,14 +1,18 @@
-from flask import Flask, request, jsonify, render_template, render_template_string
+from flask import Flask, request, jsonify, render_template, render_template_string, session, redirect, url_for
 from flask_cors import CORS
 import sqlite3
 import hashlib
 import datetime
 from database import Database
+from config import Config
+from google_oauth import GoogleOAuthService
 
 app = Flask(__name__)
+app.config.from_object(Config)
 CORS(app)
 
 db = Database()
+google_oauth = GoogleOAuthService()
 
 # Frontend Routes
 @app.route('/')
@@ -377,7 +381,7 @@ def admin_view():
             <h2>Attendance ({len(attendance)})</h2>
             <table>
                 <tr><th>ID</th><th>User ID</th><th>Slot ID</th><th>Date</th><th>Status</th></tr>
-                {''.join([f'<tr><td>{a["id"]}</td><td>{a["user_id"]}</td><td>{a["slot_id"]}</td><td>{a["date"]}</td><td>{a["status"]}</td></tr>' for a in attendance])}
+                {''.join([f'<tr><td>{a["id"]}</td><td>{a["user_id"]}</td><td>{a["date"]}</td><td>{a["status"]}</td></tr>' for a in attendance])}
             </table>
         </body>
         </html>
@@ -387,6 +391,186 @@ def admin_view():
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+# Google OAuth Routes
+@app.route('/auth/google')
+def google_login():
+    """Initiate Google OAuth login"""
+    try:
+        authorization_url, state = google_oauth.get_authorization_url()
+        session['oauth_state'] = state
+        return redirect(authorization_url)
+    except Exception as e:
+        return jsonify({'error': f'Failed to initiate Google login: {str(e)}'}), 500
+
+@app.route('/auth/google/callback')
+def google_callback():
+    """Handle Google OAuth callback"""
+    try:
+        # Get authorization code from callback
+        authorization_code = request.args.get('code')
+        if not authorization_code:
+            return jsonify({'error': 'Authorization code not received'}), 400
+        
+        # Exchange code for tokens
+        credentials = google_oauth.exchange_code_for_tokens(authorization_code)
+        
+        # Get user info from Google
+        user_info = google_oauth.get_user_info(credentials.token)
+        
+        google_id = user_info.get('id')
+        email = user_info.get('email')
+        name = user_info.get('name')
+        
+        if not all([google_id, email, name]):
+            return jsonify({'error': 'Incomplete user information from Google'}), 400
+        
+        # Check if user already exists
+        existing_user = db.get_user_by_email(email)
+        
+        if existing_user:
+            # User exists, log them in
+            if existing_user.get('google_id'):
+                # This is a Google user, proceed with login
+                session['user_id'] = existing_user['id']
+                session['user_email'] = existing_user['email']
+                session['user_role'] = existing_user['role']
+                
+                # Redirect based on role
+                if existing_user['role'] == 'student':
+                    return redirect('/student')
+                elif existing_user['role'] == 'industry_supervisor':
+                    return redirect('/industry')
+                elif existing_user['role'] == 'school_supervisor':
+                    return redirect('/supervisor')
+                elif existing_user['role'] == 'admin':
+                    return redirect('/admin')
+                else:
+                    return redirect('/')
+            else:
+                # This is a manual user, need to link accounts or handle differently
+                return render_template('link_accounts.html', email=email, name=name)
+        else:
+            # New user, store in session and redirect to role selection
+            session['google_user'] = {
+                'google_id': google_id,
+                'email': email,
+                'name': name
+            }
+            return redirect('/select-role')
+            
+    except Exception as e:
+        return jsonify({'error': f'Google OAuth callback failed: {str(e)}'}), 500
+
+@app.route('/select-role')
+def select_role():
+    """Page for new Google users to select their role"""
+    if 'google_user' not in session:
+        return redirect('/')
+    
+    return render_template('select_role.html', user=session['google_user'])
+
+@app.route('/api/set-role', methods=['POST'])
+def set_user_role():
+    """Set role for new Google user"""
+    try:
+        if 'google_user' not in session:
+            return jsonify({'error': 'No Google user in session'}), 400
+        
+        data = request.get_json()
+        role = data.get('role')
+        
+        if not role or role not in ['student', 'industry_supervisor', 'school_supervisor', 'admin']:
+            return jsonify({'error': 'Invalid role'}), 400
+        
+        google_user = session['google_user']
+        
+        # Create the user in database
+        user_id = db.create_google_user(
+            google_user['google_id'],
+            google_user['name'],
+            google_user['email'],
+            role
+        )
+        
+        # Clear session and set user session
+        session.pop('google_user', None)
+        session['user_id'] = user_id
+        session['user_email'] = google_user['email']
+        session['user_role'] = role
+        
+        return jsonify({
+            'message': 'Role set successfully',
+            'user_id': user_id,
+            'role': role
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'error': f'Failed to set role: {str(e)}'}), 500
+
+@app.route('/api/google-login-status')
+def google_login_status():
+    """Check if user is logged in via Google OAuth"""
+    if 'user_id' in session:
+        return jsonify({
+            'logged_in': True,
+            'user_id': session['user_id'],
+            'email': session['user_email'],
+            'role': session['user_role']
+        }), 200
+    else:
+        return jsonify({'logged_in': False}), 200
+
+@app.route('/api/link-google-account', methods=['POST'])
+def link_google_account():
+    """Link Google account with existing manual account"""
+    try:
+        data = request.get_json()
+        email = data.get('email')
+        password = data.get('password')
+        
+        if not email or not password:
+            return jsonify({'error': 'Email and password are required'}), 400
+        
+        # Hash password for comparison
+        hashed_password = hashlib.sha256(password.encode()).hexdigest()
+        
+        # Get user from database
+        user = db.get_user_by_email(email)
+        
+        if not user:
+            return jsonify({'error': 'User not found'}), 401
+        
+        if user['password'] != hashed_password:
+            return jsonify({'error': 'Invalid password'}), 401
+        
+        # Update user with Google ID from session
+        if 'google_user' in session:
+            google_id = session['google_user']['google_id']
+            db.update_user_google_id(user['id'], google_id)
+            
+            # Set user session
+            session['user_id'] = user['id']
+            session['user_email'] = user['email']
+            session['user_role'] = user['role']
+            
+            # Clear Google user session
+            session.pop('google_user', None)
+            
+            return jsonify({
+                'message': 'Account linked successfully',
+                'user': {
+                    'id': user['id'],
+                    'name': user['name'],
+                    'email': user['email'],
+                    'role': user['role']
+                }
+            }), 200
+        else:
+            return jsonify({'error': 'No Google user in session'}), 400
+            
+    except Exception as e:
+        return jsonify({'error': f'Failed to link account: {str(e)}'}), 500
 
 if __name__ == '__main__':
     # Initialize database only once when starting the app

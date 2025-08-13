@@ -1,197 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AMS Registration - JKUAT</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/theme-styles.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/login-styles.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/register-styles.css') }}">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Attachment Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/register-styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme-styles.css') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/logo.svg') }}">
 </head>
-<body class="login-page">
-  <div class="login-container">
-    <!-- Left Section - University Branding -->
-    <div class="login-left">
-      <div class="university-branding">
-        <div class="university-logo">
-          <div class="logo-placeholder">Logo Section</div>
+<body>
+    <div class="register-container">
+        <div class="register-header">
+            <div class="logo-section">
+                <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="AMS Logo" class="logo">
+            </div>
+            <div class="university-info">
+                <h1 class="university-name">Attachment Management System</h1>
+                <div class="university-motto">
+                    <h2>Join Our Community</h2>
+                    <p>Students • Supervisors • Administrators</p>
+                </div>
+            </div>
         </div>
-        <h1 class="university-name">JOMO KENYATTA UNIVERSITY OF AGRICULTURE AND TECHNOLOGY</h1>
-        <div class="university-motto">
-          <h2>TECHNOLOGY FOR DEVELOPMENT</h2>
+
+        <div class="register-form-container">
+            <div class="register-form-wrapper">
+                <h2>Create Account</h2>
+                <p class="register-subtitle">Sign up to get started</p>
+                
+                <form action="{{ url_for('register_page') }}" method="POST" id="registerForm" class="register-form">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required placeholder="Enter your email">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required placeholder="Create a password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="role">Select Your Role</label>
+                        <select id="role" name="role" required>
+                            <option value="">Choose your role</option>
+                            <option value="student">Student</option>
+                            <option value="industry_supervisor">Industry Supervisor</option>
+                            <option value="school_supervisor">School Supervisor</option>
+                            <option value="admin">Administrator</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="register-btn">Create Account</button>
+                </form>
+                
+                <div class="alternative-register">
+                    <div class="divider">
+                        <span>or</span>
+                    </div>
+                    <a href="{{ url_for('google_login') }}" class="google-register-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        Sign up with Google
+                    </a>
+                </div>
+                
+                <p class="login-link-text">Already have an account? <a href="{{ url_for('login_page') }}" class="login-link">Sign In</a></p>
+            </div>
         </div>
-        <div class="university-entrance">
-          <div class="entrance-placeholder">
-            <i class="fas fa-university"></i>
-            <p>University Entrance</p>
-          </div>
-        </div>
-      </div>
     </div>
 
-    <!-- Right Section - Registration Form -->
-    <div class="login-right">
-      <div class="login-form-container register-form-container">
-        <div class="form-header">
-          <div class="form-logo">
-            <div class="logo-placeholder">Logo Section</div>
-          </div>
-          <h2 class="welcome-text">Create Account</h2>
-          <p class="login-subtitle">Join the Attachment Management System</p>
-        </div>
-
-        <form action="{{ url_for('register_page') }}" method="POST" id="registerForm" class="login-form">
-          <div class="form-group">
-            <label for="name">Full Name</label>
-            <input type="text" name="name" id="name" placeholder="Enter your full name" required>
-          </div>
-
-          <div class="form-group">
-            <label for="email">University/Work Email</label>
-            <input type="email" name="email" id="email" placeholder="Enter your email address" required>
-            <div class="role-preview">
-              <strong>Role:</strong> <span id="rolePreview">Student</span>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="password">Password</label>
-            <div class="password-input-container">
-              <input type="password" name="password" id="password" placeholder="Create a strong password" required>
-              <button type="button" class="password-toggle" onclick="togglePassword()">
-                <i class="fas fa-eye" id="passwordIcon"></i>
-              </button>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="role">Role</label>
-            <select name="role" id="role" required>
-              <option value="">Select your role</option>
-              <option value="student">Student</option>
-              <option value="industry_supervisor">Industrial Supervisor</option>
-              <option value="school_supervisor">University Supervisor</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
-
-          <div class="form-group" id="studentLevelRow" style="display: none;">
-            <label for="student_level">Student Level</label>
-            <select name="student_level" id="student_level">
-              <option value="">Select your level</option>
-              <option value="diploma">Diploma</option>
-              <option value="degree">Degree</option>
-            </select>
-          </div>
-
-          <div class="form-options">
-            <label class="checkbox-container">
-              <input type="checkbox" name="terms" id="terms" required>
-              <span class="checkmark"></span>
-              I agree to the Terms & Conditions
-            </label>
-          </div>
-
-          <button type="submit" class="signin-btn">
-            <span>Create Account</span>
-          </button>
-        </form>
-
-        <div class="form-footer">
-          <p>Already have an account? <a href="{{ url_for('login_page') }}" class="signup-link">Sign In</a></p>
-        </div>
-
-        <div class="role-info">
-          <h4>Registration Guidelines</h4>
-          <ul>
-            <li><strong>Students:</strong> Use your <code>@students.jkuat.ac.ke</code> email</li>
-            <li><strong>University Supervisors:</strong> Use your <code>@itc.jkuat.ac.ke</code> email</li>
-            <li><strong>Industrial Supervisors:</strong> Use your official work email</li>
-            <li><strong>Admins:</strong> Use your <code>@jkuat.ac.ke</code> email</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="copyright">
-        <p>Copyright © 2025 - Alvin and Dominic</p>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    function togglePassword() {
-      const passwordInput = document.getElementById('password');
-      const passwordIcon = document.getElementById('passwordIcon');
-      
-      if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        passwordIcon.classList.remove('fa-eye');
-        passwordIcon.classList.add('fa-eye-slash');
-      } else {
-        passwordInput.type = 'password';
-        passwordIcon.classList.remove('fa-eye-slash');
-        passwordIcon.classList.add('fa-eye');
-      }
-    }
-
-    // Show/hide student level based on role selection
-    document.getElementById('role').addEventListener('change', function() {
-      const studentLevelRow = document.getElementById('studentLevelRow');
-      const rolePreview = document.getElementById('rolePreview');
-      
-      if (this.value === 'student') {
-        studentLevelRow.style.display = 'block';
-        rolePreview.textContent = 'Student';
-      } else {
-        studentLevelRow.style.display = 'none';
-        if (this.value === 'industry_supervisor') {
-          rolePreview.textContent = 'Industrial Supervisor';
-        } else if (this.value === 'school_supervisor') {
-          rolePreview.textContent = 'University Supervisor';
-        } else if (this.value === 'admin') {
-          rolePreview.textContent = 'Admin';
-        } else {
-          rolePreview.textContent = 'Select Role';
-        }
-      }
-    });
-
-    // Handle form submission
-    document.getElementById('registerForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const formData = new FormData(this);
-      const data = {
-        name: formData.get('name'),
-        email: formData.get('email'),
-        password: formData.get('password'),
-        role: formData.get('role')
-      };
-
-      // Send registration request to Flask API
-      fetch('/api/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.message === 'User registered successfully') {
-          alert('Registration successful! Please log in.');
-          window.location.href = '{{ url_for("login_page") }}';
-        } else {
-          alert('Registration failed: ' + data.error);
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('Registration failed. Please try again.');
-      });
-    });
-  </script>
+    <script src="{{ url_for('static', filename='js/theme-utils.js') }}"></script>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                password: formData.get('password'),
+                role: formData.get('role')
+            };
+            
+            fetch('/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === 'User registered successfully') {
+                    alert('Registration successful! You can now login.');
+                    window.location.href = '{{ url_for("login_page") }}';
+                } else {
+                    alert('Registration failed: ' + data.error);
+                }
+            })
+            .catch(error => { console.error('Error:', error); alert('Registration failed. Please try again.'); });
+        });
+    </script>
 </body>
 </html> 
