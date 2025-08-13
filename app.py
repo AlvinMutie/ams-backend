@@ -1,143 +1,48 @@
-from flask import Flask, request, jsonify, render_template, render_template_string, session, redirect, url_for
+from flask import Flask, request, jsonify, render_template, session, redirect, url_for
 from flask_cors import CORS
-import sqlite3
-import hashlib
-import datetime
 from database import Database
-from config import Config
-from google_oauth import GoogleOAuthService
+import hashlib
+from datetime import datetime
 
 app = Flask(__name__)
-app.config.from_object(Config)
+app.secret_key = 'your-super-secret-key-change-this-in-production'
+
+# Enable CORS
 CORS(app)
 
+# Initialize database
 db = Database()
-google_oauth = GoogleOAuthService()
 
 # Frontend Routes
 @app.route('/')
-def home():
-    return render_template('login.html')
-
-@app.route('/login', methods=['GET', 'POST'])
 def login_page():
-    if request.method == 'POST':
-        # Handle form submission (this will be handled by JavaScript)
-        return render_template('login.html')
     return render_template('login.html')
 
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/login')
+def login_page_alt():
+    return render_template('login.html')
+
+@app.route('/register')
 def register_page():
-    if request.method == 'POST':
-        # Handle form submission (this will be handled by JavaScript)
-        return render_template('register.html')
     return render_template('register.html')
 
 @app.route('/student')
 def student_dashboard():
     return render_template('dashboard.html')
 
-@app.route('/student/logbook')
-def student_logbook():
-    return render_template('logbook.html')
-
-@app.route('/student/final-report')
-def student_final_report():
-    return render_template('final_report.html')
-
-@app.route('/student/deferral-request')
-def student_deferral_request():
-    return render_template('deferral_request.html')
-
-@app.route('/student/download-logbook')
-def student_download_logbook():
-    return render_template('download_logbook.html')
-
-@app.route('/student/return-form')
-def student_return_form():
-    return render_template('return_form.html')
-
-@app.route('/student/placement-details')
-def student_placement_details():
-    return render_template('placement_details.html')
-
-@app.route('/student/analytics')
-def student_analytics():
-    return render_template('analytics.html')
-
-@app.route('/student/analytics-dashboard')
-def student_analytics_dashboard():
-    return render_template('analytics-dashboard.html')
-
 @app.route('/supervisor')
 def university_supervisor_dashboard():
     return render_template('dashboard.html')
-
-@app.route('/supervisor/assessment-forms')
-def university_supervisor_assessment_forms():
-    return render_template('assessment_forms.html')
-
-@app.route('/supervisor/logbook-approval')
-def university_supervisor_logbook_approval():
-    return render_template('logbook_approval.html')
-
-@app.route('/supervisor/approve-logbook')
-def university_supervisor_approve_logbook():
-    return render_template('approve_logbook.html')
 
 @app.route('/industry')
 def industrial_supervisor_dashboard():
     return render_template('dashboard.html')
 
-@app.route('/industry/assessment-form')
-def industrial_supervisor_assessment_form():
-    return render_template('assessment_form.html')
-
-@app.route('/industry/confirm-logbook')
-def industrial_supervisor_confirm_logbook():
-    return render_template('confirm_logbook.html')
-
-@app.route('/industry/analytics-dashboard')
-def industrial_supervisor_analytics_dashboard():
-    return render_template('analytics-dashboard.html')
-
 @app.route('/admin')
 def coordinator_dashboard():
     return render_template('dashboard.html')
 
-@app.route('/admin/student-progress')
-def coordinator_student_progress():
-    return render_template('student_progress.html')
-
-@app.route('/admin/assessment-management')
-def coordinator_assessment_management():
-    return render_template('assessment_management.html')
-
-@app.route('/admin/assign-clusters')
-def coordinator_assign_clusters():
-    return render_template('assign_clusters.html')
-
-@app.route('/admin/assign-supervisors')
-def coordinator_assign_supervisors():
-    return render_template('assign_supervisors.html')
-
-@app.route('/admin/approve-supervisors')
-def coordinator_approve_supervisors():
-    return render_template('approve_supervisors.html')
-
-@app.route('/admin/communication')
-def coordinator_communication():
-    return render_template('communication.html')
-
-@app.route('/admin/compile-report')
-def coordinator_compile_report():
-    return render_template('compile_report.html')
-
-@app.route('/admin/reporting-system')
-def coordinator_reporting_system():
-    return render_template('reporting-system.html')
-
-# API Routes (keep all existing functionality)
+# API Routes
 @app.route('/api/register', methods=['POST'])
 def register():
     try:
@@ -150,21 +55,11 @@ def register():
         if not all([name, email, password, role]):
             return jsonify({'error': 'All fields are required'}), 400
         
-        if role not in ['student', 'industry_supervisor', 'school_supervisor', 'admin']:
-            return jsonify({'error': 'Invalid role'}), 400
-        
-        # Hash password
+        # Hash the password
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
         
-        # Debug logging
-        print(f"Registration attempt for email: {email}")
-        print(f"Password: {password}")
-        print(f"Hashed password: {hashed_password}")
-        print(f"Role: {role}")
-        
+        # Create user
         user_id = db.create_user(name, email, hashed_password, role)
-        
-        print(f"User created with ID: {user_id}")
         
         return jsonify({
             'message': 'User registered successfully',
@@ -172,7 +67,6 @@ def register():
         }), 201
         
     except Exception as e:
-        print(f"Registration error: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/login', methods=['POST'])
@@ -182,28 +76,26 @@ def login():
         email = data.get('email')
         password = data.get('password')
         
-        if not email or not password:
+        if not all([email, password]):
             return jsonify({'error': 'Email and password are required'}), 400
         
-        # Hash password for comparison
+        # Hash the password
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
         
-        # Get user from database
+        # Get user
         user = db.get_user_by_email(email)
         
-        # Debug logging
-        print(f"Login attempt for email: {email}")
-        print(f"User found: {user is not None}")
-        if user:
-            print(f"Stored password hash: {user['password']}")
-            print(f"Input password hash: {hashed_password}")
-            print(f"Password match: {user['password'] == hashed_password}")
-        
         if not user:
-            return jsonify({'error': 'User not found'}), 401
+            return jsonify({'error': 'Invalid credentials'}), 401
         
+        # Check password
         if user['password'] != hashed_password:
-            return jsonify({'error': 'Invalid password'}), 401
+            return jsonify({'error': 'Invalid credentials'}), 401
+        
+        # Set session
+        session['user_id'] = user['id']
+        session['user_email'] = user['email']
+        session['user_role'] = user['role']
         
         return jsonify({
             'message': 'Login successful',
@@ -216,14 +108,13 @@ def login():
         }), 200
         
     except Exception as e:
-        print(f"Login error: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/slots', methods=['GET'])
 def get_slots():
     try:
         slots = db.get_available_slots()
-        return jsonify({'slots': slots}), 200
+        return jsonify(slots), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -234,7 +125,7 @@ def book_slot():
         user_id = data.get('user_id')
         slot_id = data.get('slot_id')
         
-        if not user_id or not slot_id:
+        if not all([user_id, slot_id]):
             return jsonify({'error': 'User ID and slot ID are required'}), 400
         
         # Check if slot is available
@@ -243,13 +134,10 @@ def book_slot():
             return jsonify({'error': 'Slot not found'}), 404
         
         if slot['booked_count'] >= slot['max_capacity']:
-            return jsonify({'error': 'Slot is full'}), 409
+            return jsonify({'error': 'Slot is full'}), 400
         
-        # Create booking
+        # Book the slot
         booking_id = db.create_booking(user_id, slot_id)
-        
-        # Update slot booked count
-        db.update_slot_booked_count(slot_id)
         
         return jsonify({
             'message': 'Slot booked successfully',
@@ -265,18 +153,14 @@ def mark_attendance():
         data = request.get_json()
         user_id = data.get('user_id')
         slot_id = data.get('slot_id')
-        status = data.get('status')  # 'present', 'absent', 'late'
+        date = data.get('date')
+        status = data.get('status', 'present')
         
-        if not all([user_id, slot_id, status]):
-            return jsonify({'error': 'User ID, slot ID, and status are required'}), 400
+        if not all([user_id, slot_id, date]):
+            return jsonify({'error': 'User ID, slot ID, and date are required'}), 400
         
-        if status not in ['present', 'absent', 'late']:
-            return jsonify({'error': 'Invalid status'}), 400
-        
-        # Get current date
-        current_date = datetime.datetime.now().strftime('%Y-%m-%d')
-        
-        attendance_id = db.create_attendance(user_id, slot_id, current_date, status)
+        # Mark attendance
+        attendance_id = db.mark_attendance(user_id, slot_id, date, status)
         
         return jsonify({
             'message': 'Attendance marked successfully',
@@ -289,290 +173,83 @@ def mark_attendance():
 @app.route('/api/reports', methods=['GET'])
 def get_reports():
     try:
-        # Get various statistics
-        total_users = db.get_total_users()
-        total_slots = db.get_total_slots()
-        total_bookings = db.get_total_bookings()
-        total_attendance = db.get_total_attendance()
-        
-        # Get recent data
-        recent_bookings = db.get_recent_bookings(5)
-        recent_attendance = db.get_recent_attendance(5)
-        
-        report = {
-            'summary': {
-                'total_users': total_users,
-                'total_slots': total_slots,
-                'total_bookings': total_bookings,
-                'total_attendance': total_attendance
-            },
-            'recent_bookings': recent_bookings,
-            'recent_attendance': recent_attendance
-        }
-        
-        return jsonify(report), 200
-        
+        reports = db.get_reports()
+        return jsonify(reports), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/test-db')
 def test_database():
-    """Test endpoint to check database functionality"""
     try:
-        # Get all users
         users = db.get_all_users()
-        
-        # Get total count
-        total_users = db.get_total_users()
-        
         return jsonify({
             'message': 'Database test successful',
-            'total_users': total_users,
+            'total_users': len(users),
             'users': users
         }), 200
-        
     except Exception as e:
         return jsonify({'error': f'Database test failed: {str(e)}'}), 500
 
-@app.route('/api/admin-view')
+@app.route('/admin-view')
 def admin_view():
+    email = request.args.get('email')
+    if email != 'admin@example.com':
+        return "Access denied", 403
+    
     try:
-        # Get all data for admin view
         users = db.get_all_users()
         slots = db.get_all_slots()
         bookings = db.get_all_bookings()
         attendance = db.get_all_attendance()
         
-        # Create HTML table view
-        html_content = f"""
+        html = f"""
         <!DOCTYPE html>
         <html>
         <head>
-            <title>AMS Admin View</title>
+            <title>Database Admin View</title>
             <style>
                 body {{ font-family: Arial, sans-serif; margin: 20px; }}
-                table {{ border-collapse: collapse; width: 100%; margin-bottom: 20px; }}
+                table {{ border-collapse: collapse; width: 100%; margin-bottom: 30px; }}
                 th, td {{ border: 1px solid #ddd; padding: 8px; text-align: left; }}
                 th {{ background-color: #f2f2f2; }}
-                h1, h2 {{ color: #333; }}
+                h2 {{ color: #333; }}
             </style>
         </head>
         <body>
-            <h1>Attachment Management System - Admin View</h1>
+            <h1>Database Admin View</h1>
             
-            <h2>Users ({len(users)})</h2>
+            <h2>Users ({len(users)} total)</h2>
             <table>
                 <tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Created</th></tr>
                 {''.join([f'<tr><td>{u["id"]}</td><td>{u["name"]}</td><td>{u["email"]}</td><td>{u["role"]}</td><td>{u["created_at"]}</td></tr>' for u in users])}
             </table>
             
-            <h2>Slots ({len(slots)})</h2>
+            <h2>Slots ({len(slots)} total)</h2>
             <table>
-                <tr><th>ID</th><th>Name</th><th>Date</th><th>Time</th><th>Capacity</th><th>Booked</th></tr>
+                <tr><th>ID</th><th>Name</th><th>Date</th><th>Time</th><th>Max Capacity</th><th>Booked Count</th></tr>
                 {''.join([f'<tr><td>{s["id"]}</td><td>{s["name"]}</td><td>{s["date"]}</td><td>{s["time"]}</td><td>{s["max_capacity"]}</td><td>{s["booked_count"]}</td></tr>' for s in slots])}
             </table>
             
-            <h2>Bookings ({len(bookings)})</h2>
+            <h2>Bookings ({len(bookings)} total)</h2>
             <table>
                 <tr><th>ID</th><th>User ID</th><th>Slot ID</th><th>Booked At</th></tr>
                 {''.join([f'<tr><td>{b["id"]}</td><td>{b["user_id"]}</td><td>{b["slot_id"]}</td><td>{b["booked_at"]}</td></tr>' for b in bookings])}
             </table>
             
-            <h2>Attendance ({len(attendance)})</h2>
+            <h2>Attendance ({len(attendance)} total)</h2>
             <table>
                 <tr><th>ID</th><th>User ID</th><th>Slot ID</th><th>Date</th><th>Status</th></tr>
-                {''.join([f'<tr><td>{a["id"]}</td><td>{a["user_id"]}</td><td>{a["date"]}</td><td>{a["status"]}</td></tr>' for a in attendance])}
+                {''.join([f'<tr><td>{a["id"]}</td><td>{a["user_id"]}</td><td>{a["slot_id"]}</td><td>{a["date"]}</td><td>{a["status"]}</td></tr>' for a in attendance])}
             </table>
         </body>
         </html>
         """
         
-        return html_content
+        return html
         
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-# Google OAuth Routes
-@app.route('/auth/google')
-def google_login():
-    """Initiate Google OAuth login"""
-    try:
-        authorization_url, state = google_oauth.get_authorization_url()
-        session['oauth_state'] = state
-        return redirect(authorization_url)
-    except Exception as e:
-        return jsonify({'error': f'Failed to initiate Google login: {str(e)}'}), 500
-
-@app.route('/auth/google/callback')
-def google_callback():
-    """Handle Google OAuth callback"""
-    try:
-        # Get authorization code from callback
-        authorization_code = request.args.get('code')
-        if not authorization_code:
-            return jsonify({'error': 'Authorization code not received'}), 400
-        
-        # Exchange code for tokens
-        credentials = google_oauth.exchange_code_for_tokens(authorization_code)
-        
-        # Get user info from Google
-        user_info = google_oauth.get_user_info(credentials.token)
-        
-        google_id = user_info.get('id')
-        email = user_info.get('email')
-        name = user_info.get('name')
-        
-        if not all([google_id, email, name]):
-            return jsonify({'error': 'Incomplete user information from Google'}), 400
-        
-        # Check if user already exists
-        existing_user = db.get_user_by_email(email)
-        
-        if existing_user:
-            # User exists, log them in
-            if existing_user.get('google_id'):
-                # This is a Google user, proceed with login
-                session['user_id'] = existing_user['id']
-                session['user_email'] = existing_user['email']
-                session['user_role'] = existing_user['role']
-                
-                # Redirect based on role
-                if existing_user['role'] == 'student':
-                    return redirect('/student')
-                elif existing_user['role'] == 'industry_supervisor':
-                    return redirect('/industry')
-                elif existing_user['role'] == 'school_supervisor':
-                    return redirect('/supervisor')
-                elif existing_user['role'] == 'admin':
-                    return redirect('/admin')
-                else:
-                    return redirect('/')
-            else:
-                # This is a manual user, need to link accounts or handle differently
-                return render_template('link_accounts.html', email=email, name=name)
-        else:
-            # New user, store in session and redirect to role selection
-            session['google_user'] = {
-                'google_id': google_id,
-                'email': email,
-                'name': name
-            }
-            return redirect('/select-role')
-            
-    except Exception as e:
-        return jsonify({'error': f'Google OAuth callback failed: {str(e)}'}), 500
-
-@app.route('/select-role')
-def select_role():
-    """Page for new Google users to select their role"""
-    if 'google_user' not in session:
-        return redirect('/')
-    
-    return render_template('select_role.html', user=session['google_user'])
-
-@app.route('/api/set-role', methods=['POST'])
-def set_user_role():
-    """Set role for new Google user"""
-    try:
-        if 'google_user' not in session:
-            return jsonify({'error': 'No Google user in session'}), 400
-        
-        data = request.get_json()
-        role = data.get('role')
-        
-        if not role or role not in ['student', 'industry_supervisor', 'school_supervisor', 'admin']:
-            return jsonify({'error': 'Invalid role'}), 400
-        
-        google_user = session['google_user']
-        
-        # Create the user in database
-        user_id = db.create_google_user(
-            google_user['google_id'],
-            google_user['name'],
-            google_user['email'],
-            role
-        )
-        
-        # Clear session and set user session
-        session.pop('google_user', None)
-        session['user_id'] = user_id
-        session['user_email'] = google_user['email']
-        session['user_role'] = role
-        
-        return jsonify({
-            'message': 'Role set successfully',
-            'user_id': user_id,
-            'role': role
-        }), 200
-        
-    except Exception as e:
-        return jsonify({'error': f'Failed to set role: {str(e)}'}), 500
-
-@app.route('/api/google-login-status')
-def google_login_status():
-    """Check if user is logged in via Google OAuth"""
-    if 'user_id' in session:
-        return jsonify({
-            'logged_in': True,
-            'user_id': session['user_id'],
-            'email': session['user_email'],
-            'role': session['user_role']
-        }), 200
-    else:
-        return jsonify({'logged_in': False}), 200
-
-@app.route('/api/link-google-account', methods=['POST'])
-def link_google_account():
-    """Link Google account with existing manual account"""
-    try:
-        data = request.get_json()
-        email = data.get('email')
-        password = data.get('password')
-        
-        if not email or not password:
-            return jsonify({'error': 'Email and password are required'}), 400
-        
-        # Hash password for comparison
-        hashed_password = hashlib.sha256(password.encode()).hexdigest()
-        
-        # Get user from database
-        user = db.get_user_by_email(email)
-        
-        if not user:
-            return jsonify({'error': 'User not found'}), 401
-        
-        if user['password'] != hashed_password:
-            return jsonify({'error': 'Invalid password'}), 401
-        
-        # Update user with Google ID from session
-        if 'google_user' in session:
-            google_id = session['google_user']['google_id']
-            db.update_user_google_id(user['id'], google_id)
-            
-            # Set user session
-            session['user_id'] = user['id']
-            session['user_email'] = user['email']
-            session['user_role'] = user['role']
-            
-            # Clear Google user session
-            session.pop('google_user', None)
-            
-            return jsonify({
-                'message': 'Account linked successfully',
-                'user': {
-                    'id': user['id'],
-                    'name': user['name'],
-                    'email': user['email'],
-                    'role': user['role']
-                }
-            }), 200
-        else:
-            return jsonify({'error': 'No Google user in session'}), 400
-            
-    except Exception as e:
-        return jsonify({'error': f'Failed to link account: {str(e)}'}), 500
+        return f"Error: {str(e)}", 500
 
 if __name__ == '__main__':
-    # Initialize database only once when starting the app
     db.initialize_database()
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0')

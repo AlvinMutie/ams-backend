@@ -1,25 +1,16 @@
 import sqlite3
-import datetime
-from typing import List, Dict, Optional
+import hashlib
+from datetime import datetime
 
 class Database:
-    def __init__(self, db_path: str = 'database.db'):
+    def __init__(self, db_path='database.db'):
         self.db_path = db_path
-        # Don't automatically create tables here - let Flask app control this
-    
-    def initialize_database(self):
-        """Initialize database with tables and sample data - call this once"""
-        self.create_tables()
-        self.add_sample_data()
+        self.initialize_database()
     
     def get_connection(self):
-        """Get database connection"""
-        conn = sqlite3.connect(self.db_path)
-        conn.row_factory = sqlite3.Row  # This allows accessing columns by name
-        return conn
+        return sqlite3.connect(self.db_path)
     
     def create_tables(self):
-        """Create all required tables if they don't exist"""
         conn = self.get_connection()
         cursor = conn.cursor()
         
@@ -30,22 +21,20 @@ class Database:
                 name TEXT NOT NULL,
                 email TEXT UNIQUE NOT NULL,
                 password TEXT NOT NULL,
-                role TEXT NOT NULL CHECK (role IN ('student', 'industry_supervisor', 'school_supervisor', 'admin')),
-                google_id TEXT UNIQUE,
+                role TEXT NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         ''')
         
-        # Slots table - updated to match Flask app expectations
+        # Slots table
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS slots (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL DEFAULT 'Attachment Slot',
+                name TEXT NOT NULL,
                 date TEXT NOT NULL,
-                time TEXT NOT NULL DEFAULT '09:00-17:00',
-                max_capacity INTEGER NOT NULL DEFAULT 10,
-                booked_count INTEGER NOT NULL DEFAULT 0,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                time TEXT NOT NULL,
+                max_capacity INTEGER NOT NULL,
+                booked_count INTEGER DEFAULT 0
             )
         ''')
         
@@ -57,20 +46,18 @@ class Database:
                 slot_id INTEGER NOT NULL,
                 booked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES users (id),
-                FOREIGN KEY (slot_id) REFERENCES slots (id),
-                UNIQUE(user_id)
+                FOREIGN KEY (slot_id) REFERENCES slots (id)
             )
         ''')
         
-        # Attendance table - updated to match Flask app expectations
+        # Attendance table
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS attendance (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER NOT NULL,
                 slot_id INTEGER NOT NULL,
                 date TEXT NOT NULL,
-                status TEXT NOT NULL DEFAULT 'present' CHECK (status IN ('present', 'absent', 'late')),
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                status TEXT NOT NULL,
                 FOREIGN KEY (user_id) REFERENCES users (id),
                 FOREIGN KEY (slot_id) REFERENCES slots (id),
                 UNIQUE(user_id, slot_id, date)
@@ -81,182 +68,60 @@ class Database:
         conn.close()
     
     def add_sample_data(self):
-        """Add sample data for testing"""
         conn = self.get_connection()
         cursor = conn.cursor()
         
-        # Check if data already exists
-        cursor.execute("SELECT COUNT(*) FROM users")
-        if cursor.fetchone()[0] > 0:
-            conn.close()
-            return
-        
-        # Add sample users
+        # Add sample users if they don't exist
         sample_users = [
-            ('John Doe', 'john@student.com', 'password123', 'student'),
-            ('Jane Smith', 'jane@student.com', 'password123', 'student'),
-            ('Bob Johnson', 'bob@student.com', 'password123', 'student'),
-            ('Dr. Alice Brown', 'alice@supervisor.com', 'password123', 'industry_supervisor'),
-            ('Prof. Charlie Wilson', 'charlie@school.com', 'password123', 'school_supervisor'),
-            ('Admin User', 'admin@example.com', 'password123', 'admin')
+            ('John Doe', 'john@student.com', hashlib.sha256('password123'.encode()).hexdigest(), 'student'),
+            ('Jane Smith', 'jane@supervisor.com', hashlib.sha256('password123'.encode()).hexdigest(), 'school_supervisor'),
+            ('Bob Johnson', 'bob@industry.com', hashlib.sha256('password123'.encode()).hexdigest(), 'industry_supervisor'),
+            ('Admin User', 'admin@example.com', hashlib.sha256('admin123'.encode()).hexdigest(), 'admin')
         ]
         
         for user in sample_users:
-            hashed_password = self._hash_password(user[2])
             cursor.execute('''
-                INSERT INTO users (name, email, password, role)
+                INSERT OR IGNORE INTO users (name, email, password, role)
                 VALUES (?, ?, ?, ?)
-            ''', (user[0], user[1], hashed_password, user[3]))
+            ''', user)
         
-        # Add sample slots - updated to match new schema
+        # Add sample slots if they don't exist
         sample_slots = [
-            ('Morning Slot', '2024-01-15', '09:00-12:00', 5),
-            ('Afternoon Slot', '2024-01-16', '13:00-17:00', 5),
-            ('Full Day Slot', '2024-01-17', '09:00-17:00', 5),
-            ('Morning Slot', '2024-01-18', '09:00-12:00', 5),
-            ('Afternoon Slot', '2024-01-19', '13:00-17:00', 5)
+            ('Morning Session', '2025-08-15', '09:00-12:00', 20),
+            ('Afternoon Session', '2025-08-15', '14:00-17:00', 15),
+            ('Evening Session', '2025-08-16', '18:00-21:00', 10)
         ]
         
         for slot in sample_slots:
             cursor.execute('''
-                INSERT INTO slots (name, date, time, max_capacity)
+                INSERT OR IGNORE INTO slots (name, date, time, max_capacity)
                 VALUES (?, ?, ?, ?)
             ''', slot)
-        
-        # Add sample bookings
-        sample_bookings = [
-            (1, 1),  # John Doe -> Slot 1
-            (2, 2),  # Jane Smith -> Slot 2
-            (3, 3)   # Bob Johnson -> Slot 3
-        ]
-        
-        for booking in sample_bookings:
-            cursor.execute('''
-                INSERT INTO bookings (user_id, slot_id, booked_at)
-                VALUES (?, ?, ?)
-            ''', (booking[0], booking[1], datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
-            
-            # Update slot booked count
-            cursor.execute('''
-                UPDATE slots SET booked_count = booked_count + 1
-                WHERE id = ?
-            ''', (booking[1],))
-        
-        # Add sample attendance - updated to match new schema
-        sample_attendance = [
-            (1, 1, '2024-01-15', 'present'),  # John Doe present on Jan 15
-            (2, 2, '2024-01-16', 'present'),  # Jane Smith present on Jan 16
-            (3, 3, '2024-01-17', 'present')   # Bob Johnson present on Jan 17
-        ]
-        
-        for attendance in sample_attendance:
-            cursor.execute('''
-                INSERT INTO attendance (user_id, slot_id, date, status)
-                VALUES (?, ?, ?, ?)
-            ''', attendance)
         
         conn.commit()
         conn.close()
     
-    def _hash_password(self, password: str) -> str:
-        """Hash password using SHA-256"""
-        import hashlib
-        return hashlib.sha256(password.encode()).hexdigest()
+    def initialize_database(self):
+        """Initialize database with tables and sample data"""
+        self.create_tables()
+        self.add_sample_data()
     
-    # User operations
-    def create_user(self, name: str, email: str, password: str, role: str) -> int:
-        """Create a new user and return user ID"""
-        conn = self.get_connection()
-        cursor = conn.cursor()
-        
-        try:
-            cursor.execute('''
-                INSERT INTO users (name, email, password, role)
-                VALUES (?, ?, ?, ?)
-            ''', (name, email, password, role))
-            
-            user_id = cursor.lastrowid
-            conn.commit()
-            return user_id
-        except sqlite3.IntegrityError:
-            raise Exception("User with this email already exists")
-        finally:
-            conn.close()
-    
-    def get_user_by_google_id(self, google_id: str) -> dict:
-        """Get user by Google ID"""
+    # User methods
+    def create_user(self, name, email, password, role):
         conn = self.get_connection()
         cursor = conn.cursor()
         
         cursor.execute('''
-            SELECT * FROM users WHERE google_id = ?
-        ''', (google_id,))
+            INSERT INTO users (name, email, password, role)
+            VALUES (?, ?, ?, ?)
+        ''', (name, email, password, role))
         
-        user = cursor.fetchone()
+        user_id = cursor.lastrowid
+        conn.commit()
         conn.close()
-        
-        if user:
-            return dict(user)
-        return None
+        return user_id
     
-    def create_google_user(self, google_id: str, name: str, email: str, role: str = None) -> int:
-        """Create a new user from Google OAuth"""
-        conn = self.get_connection()
-        cursor = conn.cursor()
-        
-        try:
-            cursor.execute('''
-                INSERT INTO users (google_id, name, email, role, password)
-                VALUES (?, ?, ?, ?, ?)
-            ''', (google_id, name, email, role, ''))  # Empty password for Google users
-            
-            user_id = cursor.lastrowid
-            conn.commit()
-            conn.close()
-            return user_id
-            
-        except sqlite3.IntegrityError:
-            conn.close()
-            raise Exception("User with this email already exists")
-    
-    def update_user_role(self, user_id: int, role: str) -> bool:
-        """Update user role"""
-        conn = self.get_connection()
-        cursor = conn.cursor()
-        
-        try:
-            cursor.execute('''
-                UPDATE users SET role = ? WHERE id = ?
-            ''', (role, user_id))
-            
-            conn.commit()
-            conn.close()
-            return True
-            
-        except Exception as e:
-            conn.close()
-            raise Exception(f"Failed to update user role: {str(e)}")
-    
-    def update_user_google_id(self, user_id: int, google_id: str) -> bool:
-        """Update user's Google ID for account linking"""
-        conn = self.get_connection()
-        cursor = conn.cursor()
-        
-        try:
-            cursor.execute('''
-                UPDATE users SET google_id = ? WHERE id = ?
-            ''', (google_id, user_id))
-            
-            conn.commit()
-            conn.close()
-            return True
-            
-        except Exception as e:
-            conn.close()
-            raise Exception(f"Failed to update Google ID: {str(e)}")
-    
-    def get_user_by_email(self, email: str) -> Optional[Dict]:
-        """Get user by email"""
+    def get_user_by_email(self, email):
         conn = self.get_connection()
         cursor = conn.cursor()
         
@@ -264,70 +129,66 @@ class Database:
         user = cursor.fetchone()
         
         conn.close()
-        return dict(user) if user else None
+        
+        if user:
+            return {
+                'id': user[0],
+                'name': user[1],
+                'email': user[2],
+                'password': user[3],
+                'role': user[4],
+                'created_at': user[5]
+            }
+        return None
     
-    def get_user_by_id(self, user_id: int) -> Optional[Dict]:
-        """Get user by ID"""
+    def get_all_users(self):
         conn = self.get_connection()
         cursor = conn.cursor()
         
-        cursor.execute('SELECT * FROM users WHERE id = ?', (user_id,))
-        user = cursor.fetchone()
+        cursor.execute('SELECT * FROM users ORDER BY created_at DESC')
+        users = cursor.fetchall()
         
         conn.close()
-        return dict(user) if user else None
+        
+        return [
+            {
+                'id': user[0],
+                'name': user[1],
+                'email': user[2],
+                'password': user[3],
+                'role': user[4],
+                'created_at': user[5]
+            }
+            for user in users
+        ]
     
-    def get_users_by_role(self, role: str) -> int:
-        """Get count of users by role"""
-        conn = self.get_connection()
-        cursor = conn.cursor()
-        
-        cursor.execute('SELECT COUNT(*) FROM users WHERE role = ?', (role,))
-        count = cursor.fetchone()[0]
-        
-        conn.close()
-        return count
-    
-    def get_all_users(self) -> List[Dict]:
-        """Get all users"""
-        conn = self.get_connection()
-        cursor = conn.cursor()
-        
-        cursor.execute('SELECT id, name, email, role, created_at FROM users ORDER BY id')
-        users = [dict(row) for row in cursor.fetchall()]
-        
-        conn.close()
-        return users
-    
-    def get_total_users(self) -> int:
-        """Get total number of users"""
-        conn = self.get_connection()
-        cursor = conn.cursor()
-        
-        cursor.execute('SELECT COUNT(*) FROM users')
-        count = cursor.fetchone()[0]
-        
-        conn.close()
-        return count
-    
-    # Slot operations
-    def get_available_slots(self) -> List[Dict]:
-        """Get all available slots"""
+    # Slot methods
+    def get_available_slots(self):
         conn = self.get_connection()
         cursor = conn.cursor()
         
         cursor.execute('''
             SELECT * FROM slots 
             WHERE booked_count < max_capacity
-            ORDER BY date
+            ORDER BY date, time
         ''')
-        slots = [dict(row) for row in cursor.fetchall()]
+        slots = cursor.fetchall()
         
         conn.close()
-        return slots
+        
+        return [
+            {
+                'id': slot[0],
+                'name': slot[1],
+                'date': slot[2],
+                'time': slot[3],
+                'max_capacity': slot[4],
+                'booked_count': slot[5]
+            }
+            for slot in slots
+        ]
     
-    def get_slot_by_id(self, slot_id: int) -> Optional[Dict]:
-        """Get slot by ID"""
+    def get_slot_by_id(self, slot_id):
         conn = self.get_connection()
         cursor = conn.cursor()
         
@@ -335,219 +196,167 @@ class Database:
         slot = cursor.fetchone()
         
         conn.close()
-        return dict(slot) if slot else None
+        
+        if slot:
+            return {
+                'id': slot[0],
+                'name': slot[1],
+                'date': slot[2],
+                'time': slot[3],
+                'max_capacity': slot[4],
+                'booked_count': slot[5]
+            }
+        return None
     
-    def get_next_available_slot(self) -> Optional[Dict]:
-        """Get next available slot"""
+    def get_all_slots(self):
         conn = self.get_connection()
         cursor = conn.cursor()
         
-        cursor.execute('''
-            SELECT * FROM slots 
-            WHERE booked_count < max_capacity
-            ORDER BY date
-            LIMIT 1
-        ''')
-        slot = cursor.fetchone()
+        cursor.execute('SELECT * FROM slots ORDER BY date, time')
+        slots = cursor.fetchall()
         
         conn.close()
-        return dict(slot) if slot else None
+        
+        return [
+            {
+                'id': slot[0],
+                'name': slot[1],
+                'date': slot[2],
+                'time': slot[3],
+                'max_capacity': slot[4],
+                'booked_count': slot[5]
+            }
+            for slot in slots
+        ]
     
-    def update_slot_booked_count(self, slot_id: int):
-        """Update slot booked count"""
+    # Booking methods
+    def create_booking(self, user_id, slot_id):
         conn = self.get_connection()
         cursor = conn.cursor()
         
         cursor.execute('''
-            UPDATE slots SET booked_count = booked_count + 1
+            INSERT INTO bookings (user_id, slot_id)
+            VALUES (?, ?)
+        ''', (user_id, slot_id))
+        
+        booking_id = cursor.lastrowid
+        
+        # Update slot booked count
+        cursor.execute('''
+            UPDATE slots 
+            SET booked_count = booked_count + 1
             WHERE id = ?
         ''', (slot_id,))
         
         conn.commit()
         conn.close()
+        return booking_id
     
-    def get_all_slots(self) -> List[Dict]:
-        """Get all slots"""
+    def get_all_bookings(self):
         conn = self.get_connection()
         cursor = conn.cursor()
         
-        cursor.execute('SELECT * FROM slots ORDER BY date')
-        slots = [dict(row) for row in cursor.fetchall()]
+        cursor.execute('SELECT * FROM bookings ORDER BY booked_at DESC')
+        bookings = cursor.fetchall()
         
         conn.close()
-        return slots
+        
+        return [
+            {
+                'id': booking[0],
+                'user_id': booking[1],
+                'slot_id': booking[2],
+                'booked_at': booking[3]
+            }
+            for booking in bookings
+        ]
     
-    def get_total_slots(self) -> int:
-        """Get total number of slots"""
+    # Attendance methods
+    def mark_attendance(self, user_id, slot_id, date, status):
         conn = self.get_connection()
         cursor = conn.cursor()
+        
+        cursor.execute('''
+            INSERT OR REPLACE INTO attendance (user_id, slot_id, date, status)
+            VALUES (?, ?, ?, ?)
+        ''', (user_id, slot_id, date, status))
+        
+        attendance_id = cursor.lastrowid
+        conn.commit()
+        conn.close()
+        return attendance_id
+    
+    def get_all_attendance(self):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute('SELECT * FROM attendance ORDER BY date DESC')
+        attendance = cursor.fetchall()
+        
+        conn.close()
+        
+        return [
+            {
+                'id': record[0],
+                'user_id': record[1],
+                'slot_id': record[2],
+                'date': record[3],
+                'status': record[4]
+            }
+            for record in attendance
+        ]
+    
+    # Report methods
+    def get_reports(self):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        
+        # Get counts
+        cursor.execute('SELECT COUNT(*) FROM users')
+        total_users = cursor.fetchone()[0]
         
         cursor.execute('SELECT COUNT(*) FROM slots')
-        count = cursor.fetchone()[0]
-        
-        conn.close()
-        return count
-    
-    # Booking operations
-    def create_booking(self, user_id: int, slot_id: int) -> int:
-        """Create a new booking and return booking ID"""
-        conn = self.get_connection()
-        cursor = conn.cursor()
-        
-        try:
-            cursor.execute('''
-                INSERT INTO bookings (user_id, slot_id, booked_at)
-                VALUES (?, ?, ?)
-            ''', (user_id, slot_id, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
-            
-            booking_id = cursor.lastrowid
-            conn.commit()
-            return booking_id
-        except sqlite3.IntegrityError:
-            raise Exception("User already has a booking")
-        finally:
-            conn.close()
-    
-    def get_booking_by_user(self, user_id: int) -> Optional[Dict]:
-        """Get booking by user ID"""
-        conn = self.get_connection()
-        cursor = conn.cursor()
-        
-        cursor.execute('''
-            SELECT b.*, s.date as slot_date, s.name as slot_name
-            FROM bookings b
-            JOIN slots s ON b.slot_id = s.id
-            WHERE b.user_id = ?
-        ''', (user_id,))
-        booking = cursor.fetchone()
-        
-        conn.close()
-        return dict(booking) if booking else None
-    
-    def get_all_bookings(self) -> List[Dict]:
-        """Get all bookings with user and slot info"""
-        conn = self.get_connection()
-        cursor = conn.cursor()
-        
-        cursor.execute('''
-            SELECT b.*, u.name as user_name, s.date as slot_date, s.name as slot_name
-            FROM bookings b
-            JOIN users u ON b.user_id = u.id
-            JOIN slots s ON b.slot_id = s.id
-            ORDER BY b.booked_at DESC
-        ''')
-        bookings = [dict(row) for row in cursor.fetchall()]
-        
-        conn.close()
-        return bookings
-    
-    def get_total_bookings(self) -> int:
-        """Get total number of bookings"""
-        conn = self.get_connection()
-        cursor = conn.cursor()
+        total_slots = cursor.fetchone()[0]
         
         cursor.execute('SELECT COUNT(*) FROM bookings')
-        count = cursor.fetchone()[0]
-        
-        conn.close()
-        return count
-    
-    def get_recent_bookings(self, limit: int = 5) -> List[Dict]:
-        """Get recent bookings"""
-        conn = self.get_connection()
-        cursor = conn.cursor()
-        
-        cursor.execute('''
-            SELECT b.*, u.name as user_name, s.date as slot_date
-            FROM bookings b
-            JOIN users u ON b.user_id = u.id
-            JOIN slots s ON b.slot_id = s.id
-            ORDER BY b.booked_at DESC
-            LIMIT ?
-        ''', (limit,))
-        bookings = [dict(row) for row in cursor.fetchall()]
-        
-        conn.close()
-        return bookings
-    
-    # Attendance operations
-    def create_attendance(self, user_id: int, slot_id: int, date: str, status: str) -> int:
-        """Create attendance record and return attendance ID"""
-        conn = self.get_connection()
-        cursor = conn.cursor()
-        
-        try:
-            cursor.execute('''
-                INSERT INTO attendance (user_id, slot_id, date, status)
-                VALUES (?, ?, ?, ?)
-            ''', (user_id, slot_id, date, status))
-            
-            attendance_id = cursor.lastrowid
-            conn.commit()
-            return attendance_id
-        except sqlite3.IntegrityError:
-            raise Exception("Attendance already marked for this user, slot, and date")
-        finally:
-            conn.close()
-    
-    def get_attendance_by_booking_date(self, booking_id: int, date: str) -> Optional[Dict]:
-        """Get attendance by booking ID and date"""
-        conn = self.get_connection()
-        cursor = conn.cursor()
-        
-        cursor.execute('''
-            SELECT a.*, u.name as student_name
-            FROM attendance a
-            JOIN users u ON a.user_id = u.id
-            WHERE a.slot_id = ? AND a.date = ?
-        ''', (booking_id, date))
-        attendance = cursor.fetchone()
-        
-        conn.close()
-        return dict(attendance) if attendance else None
-    
-    def get_all_attendance(self) -> List[Dict]:
-        """Get all attendance records"""
-        conn = self.get_connection()
-        cursor = conn.cursor()
-        
-        cursor.execute('''
-            SELECT a.*, u.name as user_name, s.name as slot_name
-            FROM attendance a
-            JOIN users u ON a.user_id = u.id
-            JOIN slots s ON a.slot_id = s.id
-            ORDER BY a.date DESC
-        ''')
-        attendance = [dict(row) for row in cursor.fetchall()]
-        
-        conn.close()
-        return attendance
-    
-    def get_total_attendance(self) -> int:
-        """Get total number of attendance records"""
-        conn = self.get_connection()
-        cursor = conn.cursor()
+        total_bookings = cursor.fetchone()[0]
         
         cursor.execute('SELECT COUNT(*) FROM attendance')
-        count = cursor.fetchone()[0]
+        total_attendance = cursor.fetchone()[0]
+        
+        # Get recent data
+        cursor.execute('SELECT * FROM bookings ORDER BY booked_at DESC LIMIT 5')
+        recent_bookings = cursor.fetchall()
+        
+        cursor.execute('SELECT * FROM attendance ORDER BY date DESC LIMIT 5')
+        recent_attendance = cursor.fetchall()
         
         conn.close()
-        return count
-    
-    def get_recent_attendance(self, limit: int = 5) -> List[Dict]:
-        """Get recent attendance records"""
-        conn = self.get_connection()
-        cursor = conn.cursor()
         
-        cursor.execute('''
-            SELECT a.*, u.name as user_name, s.name as slot_name
-            FROM attendance a
-            JOIN users u ON a.user_id = u.id
-            JOIN slots s ON a.slot_id = s.id
-            ORDER BY a.date DESC
-            LIMIT ?
-        ''', (limit,))
-        attendance = [dict(row) for row in cursor.fetchall()]
-        
-        conn.close()
-        return attendance
+        return {
+            'summary': {
+                'total_users': total_users,
+                'total_slots': total_slots,
+                'total_bookings': total_bookings,
+                'total_attendance': total_attendance
+            },
+            'recent_bookings': [
+                {
+                    'id': booking[0],
+                    'user_id': booking[1],
+                    'slot_id': booking[2],
+                    'booked_at': booking[3]
+                }
+                for booking in recent_bookings
+            ],
+            'recent_attendance': [
+                {
+                    'id': record[0],
+                    'user_id': record[1],
+                    'slot_id': record[2],
+                    'date': record[3],
+                    'status': record[4]
+                }
+                for record in recent_attendance
+            ]
+        }
