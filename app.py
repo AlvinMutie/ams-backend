@@ -15,12 +15,18 @@ db = Database()
 def home():
     return render_template('login.html')
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login_page():
+    if request.method == 'POST':
+        # Handle form submission (this will be handled by JavaScript)
+        return render_template('login.html')
     return render_template('login.html')
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def register_page():
+    if request.method == 'POST':
+        # Handle form submission (this will be handled by JavaScript)
+        return render_template('register.html')
     return render_template('register.html')
 
 @app.route('/student')

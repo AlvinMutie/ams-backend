@@ -30,12 +30,14 @@ class Database:
             )
         ''')
         
-        # Slots table
+        # Slots table - updated to match Flask app expectations
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS slots (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL DEFAULT 'Attachment Slot',
                 date TEXT NOT NULL,
-                capacity INTEGER NOT NULL DEFAULT 10,
+                time TEXT NOT NULL DEFAULT '09:00-17:00',
+                max_capacity INTEGER NOT NULL DEFAULT 10,
                 booked_count INTEGER NOT NULL DEFAULT 0,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
@@ -47,23 +49,25 @@ class Database:
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER NOT NULL,
                 slot_id INTEGER NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                booked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES users (id),
                 FOREIGN KEY (slot_id) REFERENCES slots (id),
                 UNIQUE(user_id)
             )
         ''')
         
-        # Attendance table
+        # Attendance table - updated to match Flask app expectations
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS attendance (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                booking_id INTEGER NOT NULL,
+                user_id INTEGER NOT NULL,
+                slot_id INTEGER NOT NULL,
                 date TEXT NOT NULL,
-                status TEXT NOT NULL DEFAULT 'present' CHECK (status IN ('present', 'absent')),
+                status TEXT NOT NULL DEFAULT 'present' CHECK (status IN ('present', 'absent', 'late')),
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (booking_id) REFERENCES bookings (id),
-                UNIQUE(booking_id, date)
+                FOREIGN KEY (user_id) REFERENCES users (id),
+                FOREIGN KEY (slot_id) REFERENCES slots (id),
+                UNIQUE(user_id, slot_id, date)
             )
         ''')
         
@@ -98,19 +102,19 @@ class Database:
                 VALUES (?, ?, ?, ?)
             ''', (user[0], user[1], hashed_password, user[3]))
         
-        # Add sample slots
+        # Add sample slots - updated to match new schema
         sample_slots = [
-            ('2024-01-15', 5),
-            ('2024-01-16', 5),
-            ('2024-01-17', 5),
-            ('2024-01-18', 5),
-            ('2024-01-19', 5)
+            ('Morning Slot', '2024-01-15', '09:00-12:00', 5),
+            ('Afternoon Slot', '2024-01-16', '13:00-17:00', 5),
+            ('Full Day Slot', '2024-01-17', '09:00-17:00', 5),
+            ('Morning Slot', '2024-01-18', '09:00-12:00', 5),
+            ('Afternoon Slot', '2024-01-19', '13:00-17:00', 5)
         ]
         
         for slot in sample_slots:
             cursor.execute('''
-                INSERT INTO slots (date, capacity)
-                VALUES (?, ?)
+                INSERT INTO slots (name, date, time, max_capacity)
+                VALUES (?, ?, ?, ?)
             ''', slot)
         
         # Add sample bookings
@@ -122,9 +126,9 @@ class Database:
         
         for booking in sample_bookings:
             cursor.execute('''
-                INSERT INTO bookings (user_id, slot_id)
-                VALUES (?, ?)
-            ''', booking)
+                INSERT INTO bookings (user_id, slot_id, booked_at)
+                VALUES (?, ?, ?)
+            ''', (booking[0], booking[1], datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
             
             # Update slot booked count
             cursor.execute('''
@@ -132,17 +136,17 @@ class Database:
                 WHERE id = ?
             ''', (booking[1],))
         
-        # Add sample attendance
+        # Add sample attendance - updated to match new schema
         sample_attendance = [
-            (1, '2024-01-15', 'present'),  # John Doe present on Jan 15
-            (2, '2024-01-16', 'present'),  # Jane Smith present on Jan 16
-            (3, '2024-01-17', 'present')   # Bob Johnson present on Jan 17
+            (1, 1, '2024-01-15', 'present'),  # John Doe present on Jan 15
+            (2, 2, '2024-01-16', 'present'),  # Jane Smith present on Jan 16
+            (3, 3, '2024-01-17', 'present')   # Bob Johnson present on Jan 17
         ]
         
         for attendance in sample_attendance:
             cursor.execute('''
-                INSERT INTO attendance (booking_id, date, status)
-                VALUES (?, ?, ?)
+                INSERT INTO attendance (user_id, slot_id, date, status)
+                VALUES (?, ?, ?, ?)
             ''', attendance)
         
         conn.commit()
@@ -159,15 +163,19 @@ class Database:
         conn = self.get_connection()
         cursor = conn.cursor()
         
-        cursor.execute('''
-            INSERT INTO users (name, email, password, role)
-            VALUES (?, ?, ?, ?)
-        ''', (name, email, password, role))
-        
-        user_id = cursor.lastrowid
-        conn.commit()
-        conn.close()
-        return user_id
+        try:
+            cursor.execute('''
+                INSERT INTO users (name, email, password, role)
+                VALUES (?, ?, ?, ?)
+            ''', (name, email, password, role))
+            
+            user_id = cursor.lastrowid
+            conn.commit()
+            return user_id
+        except sqlite3.IntegrityError:
+            raise Exception("User with this email already exists")
+        finally:
+            conn.close()
     
     def get_user_by_email(self, email: str) -> Optional[Dict]:
         """Get user by email"""
@@ -207,7 +215,7 @@ class Database:
         conn = self.get_connection()
         cursor = conn.cursor()
         
-        cursor.execute('SELECT id, name, email, role FROM users ORDER BY id')
+        cursor.execute('SELECT id, name, email, role, created_at FROM users ORDER BY id')
         users = [dict(row) for row in cursor.fetchall()]
         
         conn.close()
@@ -232,7 +240,7 @@ class Database:
         
         cursor.execute('''
             SELECT * FROM slots 
-            WHERE booked_count < capacity
+            WHERE booked_count < max_capacity
             ORDER BY date
         ''')
         slots = [dict(row) for row in cursor.fetchall()]
@@ -258,7 +266,7 @@ class Database:
         
         cursor.execute('''
             SELECT * FROM slots 
-            WHERE booked_count < capacity
+            WHERE booked_count < max_capacity
             ORDER BY date
             LIMIT 1
         ''')
@@ -308,38 +316,47 @@ class Database:
         conn = self.get_connection()
         cursor = conn.cursor()
         
-        cursor.execute('''
-            INSERT INTO bookings (user_id, slot_id)
-            VALUES (?, ?)
-        ''', (user_id, slot_id))
-        
-        booking_id = cursor.lastrowid
-        conn.commit()
-        conn.close()
-        return booking_id
+        try:
+            cursor.execute('''
+                INSERT INTO bookings (user_id, slot_id, booked_at)
+                VALUES (?, ?, ?)
+            ''', (user_id, slot_id, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+            
+            booking_id = cursor.lastrowid
+            conn.commit()
+            return booking_id
+        except sqlite3.IntegrityError:
+            raise Exception("User already has a booking")
+        finally:
+            conn.close()
     
     def get_booking_by_user(self, user_id: int) -> Optional[Dict]:
         """Get booking by user ID"""
         conn = self.get_connection()
         cursor = conn.cursor()
         
-        cursor.execute('SELECT * FROM bookings WHERE user_id = ?', (user_id,))
+        cursor.execute('''
+            SELECT b.*, s.date as slot_date, s.name as slot_name
+            FROM bookings b
+            JOIN slots s ON b.slot_id = s.id
+            WHERE b.user_id = ?
+        ''', (user_id,))
         booking = cursor.fetchone()
         
         conn.close()
         return dict(booking) if booking else None
     
     def get_all_bookings(self) -> List[Dict]:
-        """Get all bookings with user and slot information"""
+        """Get all bookings with user and slot info"""
         conn = self.get_connection()
         cursor = conn.cursor()
         
         cursor.execute('''
-            SELECT b.id, b.user_id, b.slot_id, u.name as user_name, s.date as slot_date
+            SELECT b.*, u.name as user_name, s.date as slot_date, s.name as slot_name
             FROM bookings b
             JOIN users u ON b.user_id = u.id
             JOIN slots s ON b.slot_id = s.id
-            ORDER BY b.id
+            ORDER BY b.booked_at DESC
         ''')
         bookings = [dict(row) for row in cursor.fetchall()]
         
@@ -363,11 +380,11 @@ class Database:
         cursor = conn.cursor()
         
         cursor.execute('''
-            SELECT b.id, b.user_id, b.slot_id, u.name as user_name, s.date as slot_date
+            SELECT b.*, u.name as user_name, s.date as slot_date
             FROM bookings b
             JOIN users u ON b.user_id = u.id
             JOIN slots s ON b.slot_id = s.id
-            ORDER BY b.created_at DESC
+            ORDER BY b.booked_at DESC
             LIMIT ?
         ''', (limit,))
         bookings = [dict(row) for row in cursor.fetchall()]
@@ -376,20 +393,24 @@ class Database:
         return bookings
     
     # Attendance operations
-    def create_attendance(self, booking_id: int, date: str, status: str) -> int:
+    def create_attendance(self, user_id: int, slot_id: int, date: str, status: str) -> int:
         """Create attendance record and return attendance ID"""
         conn = self.get_connection()
         cursor = conn.cursor()
         
-        cursor.execute('''
-            INSERT INTO attendance (booking_id, date, status)
-            VALUES (?, ?, ?)
-        ''', (booking_id, date, status))
-        
-        attendance_id = cursor.lastrowid
-        conn.commit()
-        conn.close()
-        return attendance_id
+        try:
+            cursor.execute('''
+                INSERT INTO attendance (user_id, slot_id, date, status)
+                VALUES (?, ?, ?, ?)
+            ''', (user_id, slot_id, date, status))
+            
+            attendance_id = cursor.lastrowid
+            conn.commit()
+            return attendance_id
+        except sqlite3.IntegrityError:
+            raise Exception("Attendance already marked for this user, slot, and date")
+        finally:
+            conn.close()
     
     def get_attendance_by_booking_date(self, booking_id: int, date: str) -> Optional[Dict]:
         """Get attendance by booking ID and date"""
@@ -397,8 +418,10 @@ class Database:
         cursor = conn.cursor()
         
         cursor.execute('''
-            SELECT * FROM attendance 
-            WHERE booking_id = ? AND date = ?
+            SELECT a.*, u.name as student_name
+            FROM attendance a
+            JOIN users u ON a.user_id = u.id
+            WHERE a.slot_id = ? AND a.date = ?
         ''', (booking_id, date))
         attendance = cursor.fetchone()
         
@@ -406,16 +429,16 @@ class Database:
         return dict(attendance) if attendance else None
     
     def get_all_attendance(self) -> List[Dict]:
-        """Get all attendance records with student information"""
+        """Get all attendance records"""
         conn = self.get_connection()
         cursor = conn.cursor()
         
         cursor.execute('''
-            SELECT a.id, a.booking_id, a.date, a.status, u.name as student_name
+            SELECT a.*, u.name as user_name, s.name as slot_name
             FROM attendance a
-            JOIN bookings b ON a.booking_id = b.id
-            JOIN users u ON b.user_id = u.id
-            ORDER BY a.date DESC, a.id
+            JOIN users u ON a.user_id = u.id
+            JOIN slots s ON a.slot_id = s.id
+            ORDER BY a.date DESC
         ''')
         attendance = [dict(row) for row in cursor.fetchall()]
         
@@ -439,11 +462,11 @@ class Database:
         cursor = conn.cursor()
         
         cursor.execute('''
-            SELECT a.id, a.booking_id, a.date, a.status, u.name as student_name
+            SELECT a.*, u.name as user_name, s.name as slot_name
             FROM attendance a
-            JOIN bookings b ON a.booking_id = b.id
-            JOIN users u ON b.user_id = u.id
-            ORDER BY a.created_at DESC
+            JOIN users u ON a.user_id = u.id
+            JOIN slots s ON a.slot_id = s.id
+            ORDER BY a.date DESC
             LIMIT ?
         ''', (limit,))
         attendance = [dict(row) for row in cursor.fetchall()]

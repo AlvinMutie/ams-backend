@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AMS Login - JKUAT</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="login-styles.css">
-  <link rel="stylesheet" href="shared/theme-styles.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login-styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/theme-styles.css') }}">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body class="login-page">
@@ -48,7 +48,7 @@
           <p class="login-subtitle">Please fill in your details to log in</p>
         </div>
 
-        <form action="login.php" method="POST" id="loginForm" class="login-form">
+        <form action="{{ url_for('login_page') }}" method="POST" id="loginForm" class="login-form">
           <div class="form-group">
             <label for="email">Username</label>
             <input type="text" name="email" id="email" placeholder="Student No/ Employee No" required>
@@ -79,7 +79,7 @@
         </form>
 
         <div class="form-footer">
-          <p>Don't have an account? <a href="register.html" class="signup-link">Sign Up</a></p>
+          <p>Don't have an account? <a href="{{ url_for('register_page') }}" class="signup-link">Sign Up</a></p>
         </div>
       </div>
 
@@ -89,7 +89,7 @@
     </div>
   </div>
 
-  <script src="shared/theme-utils.js"></script>
+  <script src="{{ url_for('static', filename='js/theme-utils.js') }}"></script>
   <script>
     function togglePassword() {
       const passwordInput = document.getElementById('password');
@@ -106,29 +106,46 @@
       }
     }
 
-    // Form submission handling
+    // Handle form submission
     document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
       
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      
-      // Here you would typically make an API call to authenticate
-      console.log('Login attempt:', { email, password });
-      
-      // For demo purposes, redirect based on role
-      if (email.includes('student')) {
-        window.location.href = 'student/dashboard.html';
-      } else if (email.includes('coordinator')) {
-        window.location.href = 'coordinator/dashboard.html';
-      } else if (email.includes('supervisor')) {
-        window.location.href = 'university_supervisor/dashboard.html';
-      } else if (email.includes('industrial')) {
-        window.location.href = 'industrial_supervisor/dashboard.html';
-      } else {
-        // Default to student dashboard
-        window.location.href = 'student/dashboard.html';
-      }
+      const formData = new FormData(this);
+      const data = {
+        email: formData.get('email'),
+        password: formData.get('password')
+      };
+
+      // Send login request to Flask API
+      fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message === 'Login successful') {
+          // Redirect based on user role
+          const role = data.user.role;
+          if (role === 'student') {
+            window.location.href = '{{ url_for("student_dashboard") }}';
+          } else if (role === 'industry_supervisor') {
+            window.location.href = '{{ url_for("industrial_supervisor_dashboard") }}';
+          } else if (role === 'school_supervisor') {
+            window.location.href = '{{ url_for("university_supervisor_dashboard") }}';
+          } else if (role === 'admin') {
+            window.location.href = '{{ url_for("coordinator_dashboard") }}';
+          }
+        } else {
+          alert('Login failed: ' + data.error);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Login failed. Please try again.');
+      });
     });
   </script>
 </body>
