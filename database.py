@@ -5,7 +5,12 @@ from typing import List, Dict, Optional
 class Database:
     def __init__(self, db_path: str = 'database.db'):
         self.db_path = db_path
+        # Don't automatically create tables here - let Flask app control this
+    
+    def initialize_database(self):
+        """Initialize database with tables and sample data - call this once"""
         self.create_tables()
+        self.add_sample_data()
     
     def get_connection(self):
         """Get database connection"""

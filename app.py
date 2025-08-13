@@ -152,7 +152,15 @@ def register():
         # Hash password
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
         
+        # Debug logging
+        print(f"Registration attempt for email: {email}")
+        print(f"Password: {password}")
+        print(f"Hashed password: {hashed_password}")
+        print(f"Role: {role}")
+        
         user_id = db.create_user(name, email, hashed_password, role)
+        
+        print(f"User created with ID: {user_id}")
         
         return jsonify({
             'message': 'User registered successfully',
@@ -160,6 +168,7 @@ def register():
         }), 201
         
     except Exception as e:
+        print(f"Registration error: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/login', methods=['POST'])
@@ -175,10 +184,22 @@ def login():
         # Hash password for comparison
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
         
+        # Get user from database
         user = db.get_user_by_email(email)
         
-        if not user or user['password'] != hashed_password:
-            return jsonify({'error': 'Invalid credentials'}), 401
+        # Debug logging
+        print(f"Login attempt for email: {email}")
+        print(f"User found: {user is not None}")
+        if user:
+            print(f"Stored password hash: {user['password']}")
+            print(f"Input password hash: {hashed_password}")
+            print(f"Password match: {user['password'] == hashed_password}")
+        
+        if not user:
+            return jsonify({'error': 'User not found'}), 401
+        
+        if user['password'] != hashed_password:
+            return jsonify({'error': 'Invalid password'}), 401
         
         return jsonify({
             'message': 'Login successful',
@@ -191,6 +212,7 @@ def login():
         }), 200
         
     except Exception as e:
+        print(f"Login error: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/slots', methods=['GET'])
@@ -289,6 +311,25 @@ def get_reports():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/api/test-db')
+def test_database():
+    """Test endpoint to check database functionality"""
+    try:
+        # Get all users
+        users = db.get_all_users()
+        
+        # Get total count
+        total_users = db.get_total_users()
+        
+        return jsonify({
+            'message': 'Database test successful',
+            'total_users': total_users,
+            'users': users
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'error': f'Database test failed: {str(e)}'}), 500
+
 @app.route('/api/admin-view')
 def admin_view():
     try:
@@ -348,6 +389,6 @@ def admin_view():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    db.create_tables()
-    db.add_sample_data()
+    # Initialize database only once when starting the app
+    db.initialize_database()
     app.run(debug=True, host='0.0.0.0', port=5000)
